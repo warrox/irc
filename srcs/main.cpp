@@ -1,21 +1,24 @@
 #include "../includes/lib.hpp"
-
 #include <iostream>
 #include <cstring>
+#include <sys/socket.h>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <cstdlib>
-#define PORT 8080
-#define BACKLOG 5
+#include <poll.h>
 
-void start_server() {
+#define PORT 8080
+#define BACKLOG 5 // nombre de connexion simultanee a listen
+void start_server() 
+{
     int server_fd, new_socket;
     struct sockaddr_in address;
     socklen_t addrlen = sizeof(address);
     char buffer[1024] = {0};
 
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (server_fd == 0) {
+    if (server_fd == 0) 
+	{
         perror("socket failed");
         exit(EXIT_FAILURE);
     }
@@ -52,12 +55,13 @@ void start_server() {
     close(server_fd);
 }
 
-void start_client() {
+void start_client() 
+{
     int sock = 0;
     struct sockaddr_in serv_addr;
     char buffer[1024] = {0};
 
-    sock = socket(AF_INET, SOCK_STREAM, 0);
+    sock = socket(AF_UNIX, SOCK_STREAM, 0);
     if (sock < 0) {
         perror("Socket creation error");
         exit(EXIT_FAILURE);
@@ -85,34 +89,38 @@ void start_client() {
     close(sock);
 }
 
-int main(int argc, char *argv[]) {
-    if (argc < 2) {
-        std::cout << "Usage: " << argv[0] << " <server|client>" << std::endl;
-        return 1;
-    }
-    
-    std::string mode = argv[1];
-    if (mode == "server") {
-        start_server();
-    } else if (mode == "client") {
-        start_client();
-    } else {
-        std::cout << "Invalid option. Use 'server' or 'client'" << std::endl;
-        return 1;
-    }
-    
-    return 0;
-}
-
-// int main(int argc, char **argv)
-// {
-// 	if(argc < 3)
-// 	{
-// 		std::cout << "./ircserv <port> <password>" << std::endl;
-// 		return(1);	
-// 	}
-// 	int port = 	parserPort(argv[1]);
-// 	if(port == -1)
-// 		return(1);
-// 	return(0);
+// int main(int argc, char *argv[]) {
+//     if (argc < 2) {
+//         std::cout << "Usage: " << argv[0] << " <server|client>" << std::endl;
+//         return 1;
+//     }
+//     
+//     std::string mode = argv[1];
+//     if (mode == "server") {
+//         start_server();
+//     } else if (mode == "client") {
+//         start_client();
+//     } else {
+//         std::cout << "Invalid option. Use 'server' or 'client'" << std::endl;
+//         return 1;
+//     }
+//     
+//     return 0;
 // }
+
+int main(int argc, char **argv)
+{
+	if(argc < 3)
+	{
+		std::cout << "./ircserv <port> <password>" << std::endl;
+		return(1);	
+	}
+	int port = 	parserPort(argv[1]);
+	if(port == -1)
+		return(1);
+	else
+	{
+		start_server(); // modify the server to accept different port
+	}
+	return(0);
+}
