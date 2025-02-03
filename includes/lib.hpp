@@ -9,6 +9,7 @@
 #include <vector>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <functional>
 
 int parserPort(char *portInString);
 class server 
@@ -22,8 +23,10 @@ class server
 		server(std::string port, std::string password);
 		~server();
 		//todo
-		void listen();
-		void bind();
+		std::string getPort(void);
+		std::string getPass(void);
+		void listenClient();
+		void bindSocket();
 		void accept();
 		void read();
 		void send();

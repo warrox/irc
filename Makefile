@@ -7,7 +7,7 @@ CFLAGS = -Wall -Werror -Wextra -std=c++98 -g3
 SRC_DIR = srcs
 INCLUDE_DIR = includes
 
-SRC = $(SRC_DIR)/main.cpp $(SRC_DIR)/parser.cpp
+SRC = $(SRC_DIR)/main.cpp $(SRC_DIR)/parser.cpp $(SRC_DIR)/server.cpp
 
 #INCLUDES = $(INCLUDE_DIR)/lib.hpp
 

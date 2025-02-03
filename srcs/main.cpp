@@ -6,7 +6,6 @@
 #include <arpa/inet.h>
 #include <cstdlib>
 #include <poll.h>
-
 #define PORT 8080
 #define BACKLOG 5 // nombre de connexion simultanee a listen
 void start_server() 
@@ -121,6 +120,7 @@ int main(int argc, char **argv)
 	else
 	{
 		start_server(); // modify the server to accept different port
+		server server(argv[1],argv[2]);		
 	}
 	return(0);
 }
