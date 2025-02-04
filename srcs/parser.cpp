@@ -1,4 +1,9 @@
 #include "../includes/lib.hpp" 
+#include <cstdio>
+#include <iostream>
+#include <string.h>
+#include <sstream>
+
 
 int parserPort(char *portInString)
 {

@@ -1,16 +1,10 @@
 #ifndef LIB_HPP
 #define LIB_HPP
-#include <cctype>
-#include <cstdio>
-#include <cstring>
-#include <iostream>
-#include <sstream>
-#include <poll.h>
+#include <string>
 #include <vector>
-#include <arpa/inet.h>
 #include <sys/socket.h>
-#include <functional>
-
+#include <arpa/inet.h>
+#include <poll.h>
 int parserPort(char *portInString);
 class server 
 {
@@ -18,7 +12,11 @@ class server
 		std::string _port;
 		std::string _pass;
 		std::vector<pollfd> _pfds;
+		int _server_fd;
+		int _new_socket;
 		struct sockaddr_in _address;
+		socklen_t _addrlen;	
+		char _buffer[1024];
 	public :
 		server(std::string port, std::string password);
 		~server();
@@ -27,8 +25,8 @@ class server
 		std::string getPass(void);
 		void listenClient();
 		void bindSocket();
-		void accept();
-		void read();
-		void send();
+		void acceptClient();
+		void readInSocket();
+		void sendMessage(std::string message);
 };
 #endif // !LIB_HPP
