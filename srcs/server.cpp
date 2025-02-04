@@ -27,7 +27,7 @@
 		void read();
 		void send();
 */
-#define PORT 8080
+// #define PORT 8080
 #define BACKLOG 5
 server::server(std::string port, std::string password)
 {
