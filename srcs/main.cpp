@@ -89,39 +89,39 @@ void start_client()
     close(sock);
 }
 
-int main(int argc, char *argv[]) {
-    if (argc < 2) {
-        std::cout << "Usage: " << argv[0] << " <server|client>" << std::endl;
-        return 1;
-    }
-    
-    std::string mode = argv[1];
-    if (mode == "server") {
-        start_server();
-    } else if (mode == "client") {
-        start_client();
-    } else {
-        std::cout << "Invalid option. Use 'server' or 'client'" << std::endl;
-        return 1;
-    }
-    
-    return 0;
-}
-
-// int main(int argc, char **argv)
-// {
-// 	if(argc < 3)
-// 	{
-// 		std::cout << "./ircserv <port> <password>" << std::endl;
-// 		return(1);	
-// 	}
-// 	int port = 	parserPort(argv[1]);
-// 	if(port == -1)
-// 		return(1);
-// 	else
-// 	{
-// 		// start_server(); // modify the server to accept different port
-// 		server server(argv[1],argv[2]);		
-// 	}
-// 	return(0);
+// int main(int argc, char *argv[]) {
+//     if (argc < 2) {
+//         std::cout << "Usage: " << argv[0] << " <server|client>" << std::endl;
+//         return 1;
+//     }
+//     
+//     std::string mode = argv[1];
+//     if (mode == "server") {
+//         start_server();
+//     } else if (mode == "client") {
+//         start_client();
+//     } else {
+//         std::cout << "Invalid option. Use 'server' or 'client'" << std::endl;
+//         return 1;
+//     }
+//     
+//     return 0;
 // }
+
+int main(int argc, char **argv)
+{
+	if(argc < 3)
+	{
+		std::cout << "./ircserv <port> <password>" << std::endl;
+		return(1);	
+	}
+	int port = 	parserPort(argv[1]);
+	if(port == -1)
+		return(1);
+	else
+	{
+		// start_server(); // modify the server to accept different port
+		server server(argv[1],argv[2]);		
+	}
+	return(0);
+}

@@ -37,6 +37,12 @@ server::server(std::string port, std::string password)
 	this->_address = adress; 
 	socklen_t addrrlen = sizeof(adress);
 	this->_addrlen = addrrlen;
+	bindSocket();
+	listenClient();
+	acceptClient();
+	readInSocket();
+	sendMessage("Well done");
+
 }
 server::~server(){}
 std::string server::getPort(void)
@@ -46,7 +52,6 @@ std::string server::getPort(void)
 void server::bindSocket()
 {
     // char buffer[1024] = {0};
-
     this->_server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (this->_server_fd == 0) 
 	{
