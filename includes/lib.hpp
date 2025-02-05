@@ -28,5 +28,6 @@ class server
 		void acceptClient();
 		void readInSocket();
 		void sendMessage(std::string message);
+		void sendWelcomeMessage(int client_fd, std::string nick);
 };
 #endif // !LIB_HPP

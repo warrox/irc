@@ -92,6 +92,11 @@ void server::listenClient()
 
 }
 
+void server::sendWelcomeMessage(int client_fd, std::string nick)
+{
+    std::string welcome = ":localhost 001 " + nick + " :Bienvenue sur mon serveur IRC !\r\n";
+    send(client_fd, welcome.c_str(), welcome.length(), 0);
+}
 void server::acceptClient()
 {
     pollfd server_pollfd;
@@ -117,7 +122,6 @@ void server::acceptClient()
                 exit(EXIT_FAILURE);
             }
             std::cout << "New connection accepted!" << std::endl;
-
             pollfd client_pollfd;
             client_pollfd.fd = new_socket;
             client_pollfd.events = POLLIN;
@@ -134,7 +138,8 @@ void server::acceptClient()
                 {
                     buffer[valread] = '\0';
                     std::cout << "Received: " << buffer << std::endl;
-                    send(this->_pfds[i].fd, "Well done", 9, 0);
+                    // send(this->_pfds[i].fd, "Well done\r\n", 9, 0);
+					sendWelcomeMessage(this->_pfds[i].fd, "Guest");
                 }
                 else if (valread == 0)
                 {
