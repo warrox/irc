@@ -1,6 +1,7 @@
 #include "../includes/lib.hpp"
 #include <cstdlib>
 #include <exception>
+#include <sys/poll.h>
 #include <sys/socket.h>
 #include <cctype>
 #include <cstdio>
@@ -90,15 +91,67 @@ void server::listenClient()
     std::cout << "Server listening on port " << this->_port << std::endl;
 
 }
+
 void server::acceptClient()
 {
-	this->_new_socket = accept(this->_server_fd, (struct sockaddr*)&this->_address, &this->_addrlen);
-    if (this->_new_socket < 0) {
-        perror("accept failed");
-        exit(EXIT_FAILURE);
+    pollfd server_pollfd;
+    server_pollfd.fd = this->_server_fd;
+    server_pollfd.events = POLLIN;
+    this->_pfds.push_back(server_pollfd);
+
+    while (true)
+    {
+        int activity = poll(this->_pfds.data(), this->_pfds.size(), -1);
+        if (activity < 0)
+        {
+            perror("poll failed");
+            continue;
+        }
+
+        if (this->_pfds[0].revents & POLLIN)
+        {
+            int new_socket = accept(this->_server_fd, (struct sockaddr *)&this->_address, &this->_addrlen);
+            if (new_socket < 0)
+            {
+                perror("accept failed");
+                exit(EXIT_FAILURE);
+            }
+            std::cout << "New connection accepted!" << std::endl;
+
+            pollfd client_pollfd;
+            client_pollfd.fd = new_socket;
+            client_pollfd.events = POLLIN;
+            this->_pfds.push_back(client_pollfd);
+        }
+
+        for (size_t i = 1; i < this->_pfds.size(); ++i)
+        {
+            if (this->_pfds[i].revents & POLLIN)
+            {
+                char buffer[1024] = {0};
+                int valread = read(this->_pfds[i].fd, buffer, 1024);
+                if (valread > 0)
+                {
+                    buffer[valread] = '\0';
+                    std::cout << "Received: " << buffer << std::endl;
+                    send(this->_pfds[i].fd, "Well done", 9, 0);
+                }
+                else if (valread == 0)
+                {
+                    std::cout << "Client disconnected" << std::endl;
+                    close(this->_pfds[i].fd);
+                    this->_pfds.erase(this->_pfds.begin() + i);
+                    --i;
+                }
+                else
+                {
+                    perror("read failed");
+                }
+            }
+        }
     }
-    std::cout << "Connection accepted!" << std::endl;
 }
+
 void server::readInSocket()
 {
 	read(this->_new_socket, this->_buffer, 1024);
