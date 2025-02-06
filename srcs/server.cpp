@@ -93,11 +93,6 @@ void server::listenClient()
 
 }
 
-// void server::sendWelcomeMessage(int client_fd, std::string nick)
-// {
-//     std::string welcome = ":localhost 001 " + nick + " :Bienvenue sur mon serveur IRC !\r\n";
-//     send(client_fd, welcome.c_str(), welcome.length(), 0);
-// }
 void server::acceptClient()
 {
     pollfd server_pollfd;
