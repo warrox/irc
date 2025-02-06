@@ -14,6 +14,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <stdio.h>
+#include "../includes/msghandler.hpp"
 #include <functional>
 
 /* 	public :
@@ -92,11 +93,11 @@ void server::listenClient()
 
 }
 
-void server::sendWelcomeMessage(int client_fd, std::string nick)
-{
-    std::string welcome = ":localhost 001 " + nick + " :Bienvenue sur mon serveur IRC !\r\n";
-    send(client_fd, welcome.c_str(), welcome.length(), 0);
-}
+// void server::sendWelcomeMessage(int client_fd, std::string nick)
+// {
+//     std::string welcome = ":localhost 001 " + nick + " :Bienvenue sur mon serveur IRC !\r\n";
+//     send(client_fd, welcome.c_str(), welcome.length(), 0);
+// }
 void server::acceptClient()
 {
     pollfd server_pollfd;
@@ -106,6 +107,7 @@ void server::acceptClient()
 
     while (true)
     {
+		msgHandler handler;
         int activity = poll(this->_pfds.data(), this->_pfds.size(), -1);
         if (activity < 0)
         {
@@ -138,8 +140,7 @@ void server::acceptClient()
                 {
                     buffer[valread] = '\0';
                     std::cout << "Received: " << buffer << std::endl;
-                    // send(this->_pfds[i].fd, "Well done\r\n", 9, 0);
-					sendWelcomeMessage(this->_pfds[i].fd, "Guest");
+					handler.handlerMessage(this->_pfds[i].fd, buffer); // ici class handler qui va s'occuper de traiter les msg du client (check msghandler.cpp)
                 }
                 else if (valread == 0)
                 {
