@@ -1,4 +1,4 @@
-#include "../includes/lib.hpp"
+#include "../includes/server.hpp"
 #include <cstdlib>
 #include <exception>
 #include <sys/poll.h>
@@ -7,7 +7,6 @@
 #include <cstdio>
 #include <cstring>
 #include <iostream>
-#include <sstream>
 #include <poll.h>
 #include <vector>
 #include <arpa/inet.h>
@@ -15,7 +14,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include "../includes/msghandler.hpp"
-#include <functional>
+#include "../includes/colors.hpp"
 
 /* 	public :
 		server(std::string port, std::string password);
@@ -39,11 +38,16 @@ server::server(std::string port, std::string password)
 	this->_address = adress; 
 	socklen_t addrrlen = sizeof(adress);
 	this->_addrlen = addrrlen;
+    
+    this->_commands["NICK"] = &server::nick;
+
+
 	bindSocket();
 	listenClient();
 	acceptClient();
 	readInSocket();
-	sendMessage("Well done");
+
+	// sendMessage("Well done");
 
 }
 server::~server(){}
@@ -89,7 +93,7 @@ void server::listenClient()
         perror("listen failed");
         exit(EXIT_FAILURE);
     }
-    std::cout << "Server listening on port " << this->_port << std::endl;
+    std::cout << BOLD_ON BLUE << "[serveur]: " << BOLD_OFF BLUE << "server listening on port " << this->_port << BOLD_OFF << std::endl;
 
 }
 
@@ -102,7 +106,7 @@ void server::acceptClient()
 
     while (true)
     {
-		msgHandler handler;
+		
         int activity = poll(this->_pfds.data(), this->_pfds.size(), -1);
         if (activity < 0)
         {
@@ -118,28 +122,33 @@ void server::acceptClient()
                 perror("accept failed");
                 exit(EXIT_FAILURE);
             }
-            std::cout << "New connection accepted!" << std::endl;
+            this->_clients[new_socket] = Client();
+            std::cout << BOLD_ON BLUE << "[serveur]: " << BOLD_OFF BLUE << "new connection accepted!" << BOLD_OFF << std::endl;
             pollfd client_pollfd;
             client_pollfd.fd = new_socket;
             client_pollfd.events = POLLIN;
             this->_pfds.push_back(client_pollfd);
+	        // sendWelcomeMessage(new_socket, "guest");
+
         }
 
         for (size_t i = 1; i < this->_pfds.size(); ++i)
         {
             if (this->_pfds[i].revents & POLLIN)
             {
-                char buffer[1024] = {0};
-                int valread = read(this->_pfds[i].fd, buffer, 1024);
+                char message[1024] = {0};
+                int valread = read(this->_pfds[i].fd, message, 1024);
                 if (valread > 0)
                 {
-                    buffer[valread] = '\0';
-                    std::cout << "Received: " << buffer << std::endl;
-					handler.handlerMessage(this->_pfds[i].fd, buffer); // ici class handler qui va s'occuper de traiter les msg du client (check msghandler.cpp)
+                    message[valread] = '\0';
+                    std::cout << BOLD_ON BLUE << "[serveur]" << BOLD_OFF BLUE << "[received]: " << BOLD_OFF << message;
+
+                    std::string buffer = std::string(message);
+				    this->commandHandler(this->_pfds[i].fd, buffer);
                 }
                 else if (valread == 0)
                 {
-                    std::cout << "Client disconnected" << std::endl;
+                    std::cout << BOLD_ON BLUE << "[serveur]: " << BOLD_OFF BLUE << "client disconnected" << BOLD_OFF << std::endl;
                     close(this->_pfds[i].fd);
                     this->_pfds.erase(this->_pfds.begin() + i);
                     --i;
