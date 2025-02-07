@@ -9,7 +9,7 @@ INCLUDE_DIR = includes
 
 SRC = $(SRC_DIR)/main.cpp $(SRC_DIR)/parser.cpp $(SRC_DIR)/server.cpp $(SRC_DIR)/msghandler.cpp $(SRC_DIR)/Client.cpp
 
-#INCLUDES = $(INCLUDE_DIR)/lib.hpp
+#INCLUDES = $(INCLUDE_DIR)/server.hpp
 
 
 OBJ = $(SRC:.cpp=.o)

@@ -1,4 +1,4 @@
-#include "../includes/lib.hpp"
+#include "../includes/server.hpp"
 #include <iostream>
 #include <cstring>
 #include <sys/socket.h>
@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 	else
 	{
 		// start_server(); // modify the server to accept different port
-		server server(argv[1],argv[2]);		
+			server server(argv[1],argv[2]);		
 	}
 	return(0);
 }

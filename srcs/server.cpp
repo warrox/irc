@@ -40,7 +40,7 @@ server::server(std::string port, std::string password)
 	this->_addrlen = addrrlen;
     
     this->_commands["NICK"] = &server::nick;
-
+    this->_commands["PASS"] = &server::pass;
 
 	bindSocket();
 	listenClient();
@@ -97,6 +97,7 @@ void server::listenClient()
 
 }
 
+
 void server::acceptClient()
 {
     pollfd server_pollfd;
@@ -106,7 +107,6 @@ void server::acceptClient()
 
     while (true)
     {
-		
         int activity = poll(this->_pfds.data(), this->_pfds.size(), -1);
         if (activity < 0)
         {
@@ -128,8 +128,7 @@ void server::acceptClient()
             client_pollfd.fd = new_socket;
             client_pollfd.events = POLLIN;
             this->_pfds.push_back(client_pollfd);
-	        // sendWelcomeMessage(new_socket, "guest");
-
+	        this->sendWelcomeMessage(new_socket, "guest");
         }
 
         for (size_t i = 1; i < this->_pfds.size(); ++i)

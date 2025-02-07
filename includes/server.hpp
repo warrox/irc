@@ -42,7 +42,9 @@ class server
 		void sendWelcomeMessage(int client_fd, std::string nick);
  		void commandHandler(int clientFd, std::string cmd);
 
+		//-------------------- SERVER COMMANDS --------------- //
 		void nick(int, std::string);
+		void pass(int, std::string);
 
 
 };
