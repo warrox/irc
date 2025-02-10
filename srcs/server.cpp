@@ -1,13 +1,16 @@
 #include "../includes/server.hpp"
+#include <algorithm>
 #include <cstdlib>
 #include <exception>
+#include <iterator>
 #include <sys/poll.h>
 #include <sys/socket.h>
 #include <cctype>
 #include <cstdio>
 #include <cstring>
-#include <iostream>
+#include <iostream>		
 #include <poll.h>
+#include <utility>
 #include <vector>
 #include <arpa/inet.h>
 #include <sys/socket.h>
@@ -15,20 +18,9 @@
 #include <stdio.h>
 #include "../includes/msghandler.hpp"
 #include "../includes/colors.hpp"
-
-/* 	public :
-		server(std::string port, std::string password);
-		~server();
-		//todo
-		std::string getPort(void);
-		std::string getPass(void);
-		void listen();
-		void bind();
-		void accept();
-		void read();
-		void send();
-*/
-// #define PORT 8080
+#include "../includes/Channel.hpp"
+#include <sstream>
+#include "../includes/Channel.hpp"
 #define BACKLOG 5
 server::server(std::string port, std::string password)
 {
@@ -41,7 +33,7 @@ server::server(std::string port, std::string password)
     
     this->_commands["NICK"] = &server::nick;
     this->_commands["PASS"] = &server::pass;
-
+	this->_commands["JOIN"] = &server::join;
 	bindSocket();
 	listenClient();
 	acceptClient();
@@ -51,6 +43,27 @@ server::server(std::string port, std::string password)
 
 }
 server::~server(){}
+void server::join(int fd, std::string cmd)
+{
+	std::istringstream lineStream(cmd);
+	std::string cmdName; 
+	std::string chanName;
+	lineStream >> cmdName;
+	lineStream >> chanName;
+
+	// channelIterator it = std::find(this->_channels.begin(), this->_channels.end(),chanName);	
+    std::map<std::string, Channel>::iterator it = this->_channels.find(chanName);
+	if(it == this->_channels.end())
+	{
+		this->_channels.insert(std::make_pair(chanName, Channel(chanName, fd)));	
+	}
+	else
+	{
+		std::cout << "Added client to  " << chanName <<std::endl;
+		it->second.addUser(fd);
+	}
+	
+}
 std::string server::getPort(void)
 {
 	return(this->_port);

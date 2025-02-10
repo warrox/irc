@@ -7,14 +7,15 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <poll.h>
-
+#include "Channel.hpp"
 
 
 int parserPort(char *portInString);
 class server 
 {
 	typedef void (server::*CommandFunc)(int clientFd, std::string cmd);
-
+	typedef std::map<std::string, Channel>::iterator channelIterator;
+ 
 	private :
 		std::string _port;
 		std::string _pass;
@@ -24,7 +25,7 @@ class server
 		struct sockaddr_in _address;
 		socklen_t _addrlen;	
 		char _buffer[1024];
-
+		std::map<std::string, Channel> _channels;
 		std::map<int, Client> _clients;
 		std::map<std::string, CommandFunc> _commands;
 		
@@ -45,7 +46,7 @@ class server
 		//-------------------- SERVER COMMANDS --------------- //
 		void nick(int, std::string);
 		void pass(int, std::string);
-
+		void join(int,std::string);
 
 };
 

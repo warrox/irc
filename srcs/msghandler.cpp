@@ -27,7 +27,7 @@ void sendWelcomeMessage(int client_fd, std::string nick)
 
 void server::nick(int clientFd, std::string cmd) {
 	(void)clientFd; (void)cmd;
-	std::cout << "Hello from Nick" << std::endl;
+	std::cout << "Hello from " << cmd << std::endl;
 }
 
 void server::pass(int clientFd, std::string cmd) {
@@ -46,7 +46,7 @@ void server::pass(int clientFd, std::string cmd) {
 		{
 			if(commandArg == this->_pass)
 			{
-				std::cout << BLUE <<  "Password reconize" << RESET  <<  std::endl;
+				std::cout << BLUE <<  "Password recognize" << RESET  <<  std::endl;
 				return;
 			}
 			else
