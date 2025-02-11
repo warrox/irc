@@ -28,12 +28,17 @@ class Client {
 	public:
 		Client() {};
 		Client(int client_fd, std::string msgFromClient);
-		~Client();
+		//Same as in server.hpp
+		~Client() {};
 
-		void setNick(std::string nick);
+		//Tabulation for readability
+		/*void setNick(std::string nick);*/
+		void		setNick(std::string nick);
 		std::string getNick(void)const;
 
-		void setUser(int client_fd, std::string msgFromClient, std::map<int, Client> &clients);
+		//This is bullshit
+		//This function wasn't yet defined and we're all glad it never been, thanks god
+		/*void setUser(int client_fd, std::string msgFromClient, std::map<int, Client> &clients);*/
 };
 
 #endif

@@ -9,12 +9,16 @@
 #include <poll.h>
 #include "Channel.hpp"
 
+#define PORT 8080
+#define BACKLOG 5 // nombre de connexion simultanee a listen
+
 
 int parserPort(char *portInString);
 class server 
 {
 	typedef void (server::*CommandFunc)(int clientFd, std::string cmd);
 	typedef std::map<std::string, Channel>::iterator channelIterator;
+	typedef std::pair<std::string, Channel> channelEntry;
  
 	private :
 		std::string _port;
@@ -31,9 +35,13 @@ class server
 		
 	public :
 		server(std::string port, std::string password);
-		~server();
-		//todo
-		std::string getPort(void);
+
+		//You desctructor shouldn't be empty, but if it, you can initialise it here via syntax {}
+		~server() {}
+
+		//Useless
+		/*std::string getPort(void);*/
+
 		std::string getPass(void);
 		void listenClient();
 		void bindSocket();
@@ -43,11 +51,18 @@ class server
 		void sendWelcomeMessage(int client_fd, std::string nick);
  		void commandHandler(int clientFd, std::string cmd);
 
+		//--------------------- LOG / DEBUG --------------------//
+		void sendAndLog(int, std::string);
+		void log(std::string);
+		void fatal(std::string);
+
 		//-------------------- SERVER COMMANDS --------------- //
 		void nick(int, std::string);
 		void pass(int, std::string);
-		void join(int,std::string);
-
+		void join(int, std::string);
+		//Why omitting the space, don't you like order ????
+		//(right after the coma)
+		/*void join(int,std::string);*/
 };
 
 #endif

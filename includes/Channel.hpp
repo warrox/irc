@@ -26,6 +26,6 @@ class Channel
 		bool addUser(int fd);
 		bool delUser(int fd);
 		void setTopic(std::string topic);
-		~Channel();			
+		~Channel() {}
 	};
 #endif

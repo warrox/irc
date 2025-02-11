@@ -9,7 +9,6 @@
 /*   Updated: 2025/02/06 17:30:13 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "../includes/Client.hpp"
 #include "../includes/colors.hpp"
 
@@ -17,14 +16,21 @@
 #include <iostream>
 #include <string>
 
+
+//This function has nothing to do here. The client doesn't handle itself. 
+//The server should be responsible for handling client connexion.
+//plus, its never called
 Client::Client(int client_fd, std::string msgFromClient) {
 
 	(void)client_fd;
-	(void)msgFromClient;
 	
 	std::istringstream stream(msgFromClient);
 	std::string line;
 
+	//We've already implemented this logic in sever::commandHandler
+	//Dont repeat yourself
+	//You might aswell take a look at sever::log, and server::sendAndLog, functions I've suggested
+	//whilst we were refactoring warrens code last thusday
 	while(std::getline(stream, line)) {
 		if (line.empty())
 			continue;
@@ -64,4 +70,6 @@ std::string Client::getNick(void) const{
 	return this->_nick;
 }
 
-Client::~Client() {};
+//Same as server, if you don't need a destructor, initialize it in the header file.
+//I doubt its usefullness here
+/*Client::~Client() {};*/

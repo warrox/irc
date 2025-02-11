@@ -21,83 +21,62 @@
 #include "../includes/Channel.hpp"
 #include <sstream>
 #include "../includes/Channel.hpp"
-#define BACKLOG 5
+
 server::server(std::string port, std::string password)
 {
 	this->_port = port;
 	this->_pass = password;
+
 	struct sockaddr_in adress; 
 	this->_address = adress; 
+
 	socklen_t addrrlen = sizeof(adress);
 	this->_addrlen = addrrlen;
     
     this->_commands["NICK"] = &server::nick;
     this->_commands["PASS"] = &server::pass;
 	this->_commands["JOIN"] = &server::join;
+
+	//A function should be responsible for an action
+	//Orelse it should mention in its name, the actions it'll perform
+	//FIX:: 
 	bindSocket();
 	listenClient();
 	acceptClient();
 	readInSocket();
-
-	// sendMessage("Well done");
-
 }
-server::~server(){}
-void server::join(int fd, std::string cmd)
-{
-	std::istringstream lineStream(cmd);
-	std::string cmdName; 
-	std::string chanName;
-	lineStream >> cmdName;
-	lineStream >> chanName;
 
-	// channelIterator it = std::find(this->_channels.begin(), this->_channels.end(),chanName);	
-    std::map<std::string, Channel>::iterator it = this->_channels.find(chanName);
-	if(it == this->_channels.end())
-	{
-		this->_channels.insert(std::make_pair(chanName, Channel(chanName, fd)));	
-	}
-	else
-	{
-		std::cout << "Added client to  " << chanName <<std::endl;
-		it->second.addUser(fd);
-	}
-	
+//All exitfailure in this program should be replaced by a function that
+//Close clients sever, destroy the server and leave
+void server::fatal(std::string error) {
+	std::cerr << __FILE_NAME__ << ":" << __LINE__ << ": Fatal: " << error << std::endl;
+	exit(EXIT_FAILURE);
 }
-std::string server::getPort(void)
-{
-	return(this->_port);
-}
+
 void server::bindSocket()
 {
     // char buffer[1024] = {0};
     this->_server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (this->_server_fd == 0) 
-	{
-        perror("socket failed");
-        exit(EXIT_FAILURE);
-    }
+		this->fatal("Socker creation failed");
 
     this->_address.sin_family = AF_INET;
     this->_address.sin_addr.s_addr = INADDR_ANY;
-	std::string port = this->getPort();	
-	try
-	{
-		this->_address.sin_port = htons(std::atoi(port.c_str()));
-	}
-	catch(const std::exception &e)
-	{
-        std::cerr << "Invalid port number: " << e.what() << std::endl;
+	//Using getPort made no sense, pretty sure this variable is useless too
+	/*std::string port = this->_port;*/
+	try {
+		this->_address.sin_port = htons(std::atoi(this->_port.c_str()));
+	} catch(const std::exception &e) {
+		//The exception should suffice itself, no need to add an explicit message
+		//It's supposed to be explicit already
+        /*std::cerr << "Invalid port number: " << e.what() << std::endl;*/
+		std::cerr << e.what() << std::endl;
 		close(this->_server_fd);
 		exit(EXIT_FAILURE);
 	}
 
     if (::bind(this->_server_fd, (struct sockaddr*)&this->_address, sizeof(this->_address)) < 0) 
-	{
-        perror("bind failed");
-        exit(EXIT_FAILURE);
-    }
-
+		this->fatal("Port binding failed");
 }
 void server::listenClient()
 {
@@ -109,7 +88,6 @@ void server::listenClient()
     std::cout << BOLD_ON BLUE << "[serveur]: " << BOLD_OFF BLUE << "server listening on port " << this->_port << BOLD_OFF << std::endl;
 
 }
-
 
 void server::acceptClient()
 {
