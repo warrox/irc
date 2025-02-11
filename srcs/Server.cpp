@@ -9,28 +9,28 @@
 #include <cctype>
 #include <cstdio>
 #include <cstring>
-#include <iostream>		
-#include <poll.h>
+#include <iostream>
+#include <sys/poll.h>
 #include <vector>
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <fcntl.h>
 
-Server::Server(std::string port, std::string password)
-{
-	this->_port = port;
-	this->_pass = password;
+Server::Server(std::string port, std::string password) {
+        this->_port = port;
+        this->_pass = password;
 
-	struct sockaddr_in adress; 
-	this->_address = adress; 
+        struct sockaddr_in adress;
+        this->_address           = adress;
 
 	socklen_t addrrlen = sizeof(adress);
 	this->_addrlen = addrrlen;
     
     this->_commands["NICK"] = &Server::nick;
     this->_commands["PASS"] = &Server::pass;
-	this->_commands["JOIN"] = &Server::join;
+        this->_commands["JOIN"] = &Server::join;
 	this->_commands["TOPIC"] = &Server::topic;
 	this->_commands["PRIVMSG"] = &Server::privmsg;
 	//A function should be responsible for an action
@@ -40,105 +40,161 @@ Server::Server(std::string port, std::string password)
 	/*listenClient();*/
 	/*acceptClient();*/
 	/*readInSocket();*/
+
 }
 
-void Server::start()
-{
-    this->_server_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (this->_server_fd == 0) 
-		this->fatal("Socker creation failed");
+void Server::start() {
+        struct sockaddr_in server_address = {};
+        int32_t            server_socket  = -1;
+        const socklen_t    socklen        = sizeof(struct sockaddr_in);
+        int32_t            optname        = 1;
 
-    this->_address.sin_family = AF_INET;
-    this->_address.sin_addr.s_addr = INADDR_ANY;
-	//Using getPort made no sense, pretty sure this variable is useless too
-	/*std::string port = this->_port;*/
-	try {
-		this->_address.sin_port = htons(std::atoi(this->_port.c_str()));
-	} catch(const std::exception &e) {
-		//The exception should suffice itself, no need to add an explicit message
-		//It's supposed to be explicit already
-        /*std::cerr << "Invalid port number: " << e.what() << std::endl;*/
-		std::cerr << e.what() << std::endl;
-		close(this->_server_fd);
-		exit(EXIT_FAILURE);
-	}
+        try {
+                server_address.sin_family      = AF_INET;
+                server_address.sin_addr.s_addr = INADDR_ANY;
+                server_address.sin_port        = htons(std::atoi(this->_port.c_str()));
 
-    if (::bind(this->_server_fd, (struct sockaddr*)&this->_address, sizeof(this->_address)) < 0) 
-		this->fatal("Port binding failed");
+        } catch (const std::exception &e) {
+                this->fatal(e.what());
+                return;
+        }
 
-	if (listen(this->_server_fd, BACKLOG) < 0) 
-		this->fatal("Listen failed");
+        // here IPPROTO_TCP is what you will get anyway but it's explicit.
+        server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        if (server_socket == -1) {
+                this->fatal("Failed to create socket");
+                return;
+        }
 
-	std::string log = "Server started listening on port " + this->_port;
-	this->log(log);
+        // this is just a convenience to always have the same port and not have to wait for the kernel to release it.
+        if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &optname, socklen) == -1) {
+                close(server_socket);
+                this->fatal("Failed to configure socket to SO_REUSEADDR | SO_REUSEPORT");
+                return;
+        }
+
+        // you need to make sure client's are also configured in non-blocking mode.
+        if (fcntl(server_socket, F_SETFL, O_NONBLOCK) == -1) {
+                close(server_socket);
+                this->fatal("Failed to configure socket to O_NONBLOCK");
+                return;
+        }
+
+        if (bind(server_socket, (struct sockaddr *)&server_address, socklen) == -1) {
+                close(server_socket);
+                this->fatal("Failed to bind socket.");
+                return;
+        }
+
+        if (listen(server_socket, SOMAXCONN) == -1) {
+                close(server_socket);
+                this->fatal("Failed to listen with socket.");
+                return;
+        }
+
+        this->_address   = server_address;
+        this->_server_fd = server_socket;
 }
 
 void Server::acceptNewClient() {
-	int new_socket = accept(this->_server_fd, (struct sockaddr *)&this->_address, &this->_addrlen);
-	if (new_socket < 0)
-		this->fatal("Accept failed");
+        struct sockaddr client_address = {};
+        int32_t         client_socket  = -1;
+        socklen_t       socklen        = sizeof(struct sockaddr_in);
 
-	this->_clients[new_socket] = Client();
+        client_socket                  = accept(_server_fd, &client_address, &socklen);
 
-	std::stringstream log;
-	log << "New connection accepted on fd: " << new_socket;
-	this->log(log.str());
+        if (client_socket == -1) {
+                this->fatal("Failed to accept new client.");
+        }
 
-	pollfd client_pollfd;
-	client_pollfd.fd = new_socket;
-	client_pollfd.events = POLLIN;
-	this->_pfds.push_back(client_pollfd);
+        // you need to make sure client's are also configured in non-blocking mode.
+        if (fcntl(client_socket, F_SETFL, O_NONBLOCK) == -1) {
+                close(client_socket);
+                this->fatal("Failed to accept new client.");
+        }
 
-	this->sendWelcomeMessage(new_socket, "guest");
+        this->_clients[client_socket] = Client();
+        pollfd client_pollfd;
+        client_pollfd.fd     = client_socket;
+        client_pollfd.events = POLLIN;
+        this->_pfds.push_back(client_pollfd);
+        this->sendWelcomeMessage(client_socket, "guest");
 }
 
 void Server::scanClients() {
-	for (size_t i = 1; i < this->_pfds.size(); ++i) {
-		//Inverted the condition to avoid extra indentation level + its faster
-		if ((this->_pfds[i].revents & POLLIN) == 0)
-			continue;
-		/*if (this->_pfds[i].revents & POLLIN)*/
-		/*{*/
-		//1024 ????? #define
-		/*char message[1024] = {0};*/
-		char message[BUFFER_SIZE] = {0};
-		int valread = read(this->_pfds[i].fd, message, BUFFER_SIZE);
-		if (valread < 0)
-			this->fatal("Read failed");
+        char buffer[BUFFER_SIZE] = {0};
+        for (size_t i = 1; i < this->_pfds.size(); ++i) {
+                struct pollfd &client = _pfds[i];
 
-		if (!valread) {
-			std::stringstream log;
-			log << "Client disconnected: " << this->_pfds[i].fd;
-			this->log(log.str());
-			close(this->_pfds[i].fd);
-			this->_pfds.erase(this->_pfds.begin() + i);
-			--i; //Dangerous
-		} else {
-			message[valread] = '\0';
-			this->recvLog(this->_pfds[i].fd, message);
-			this->commandHandler(this->_pfds[i].fd, std::string(message));
-		}
-	}
+                if (client.revents == 0) { // no events so we can skip
+                        continue;
+                }
+
+                // those flags are set up automatically by poll to indicate that there was an error.
+                // or that the client disconnected.
+                if ((client.revents & POLLERR) == POLLERR or (client.revents & POLLHUP) == POLLHUP) {
+                        // insert logic to remove client.
+                        close(client.fd);
+                        _pfds.erase(_pfds.begin() + i);
+                }
+
+                // this is the flag that indicates that the client is ready to be read  by our server.
+                if (client.revents & POLLIN) {
+                        const int32_t buffsize = sizeof(buffer) / sizeof(buffer[0]);
+                        int32_t       rbytes   = recv(client.fd, buffer, buffsize, 0);
+
+                        if (rbytes == -1) {
+                                this->fatal("Failed to read client's request.");
+                                close(client.fd);
+                                _pfds.erase(_pfds.begin() + i);
+                                break;
+                        } else if (rbytes == 0) {
+                                close(client.fd);
+                                _pfds.erase(_pfds.begin() + i);
+                                break;
+                        } else {
+                                buffer[rbytes] = '\0';
+                                this->recvLog(client.fd, buffer);
+                                this->commandHandler(client.fd, std::string(buffer));
+                        }
+
+                        client.revents = POLLOUT; // always change POLLIN --> POLLOUT.
+                        continue;
+                }
+
+                // this is the flag that indicates that the client is ready to be written to by our server.
+                // if you don't do the switch poll will never wait and harrass you with notification.
+                if (client.revents & POLLOUT) {
+                        // handle sending data to client.
+
+                        int32_t wbytes = send(client.fd, "Hi", 2, 0);
+                        if (wbytes == -1) {
+                                this->fatal("Failed to read client's request.");
+                                close(client.fd);
+                                _pfds.erase(_pfds.begin() + i);
+                                break;
+                        }
+
+                        client.revents = POLLIN; // always change POLLOUT --> POLLIN.
+                        continue;
+                }
+        }
 }
 
-void Server::run()
-{
-    pollfd server_pollfd;
-    server_pollfd.fd = this->_server_fd;
-    server_pollfd.events = POLLIN;
-    this->_pfds.push_back(server_pollfd);
+void Server::run() {
+        pollfd server_pollfd;
+        server_pollfd.fd     = this->_server_fd;
+        server_pollfd.events = POLLIN;
+        this->_pfds.push_back(server_pollfd);
 
-    while (true)
-    {
-        int activity = poll(this->_pfds.data(), this->_pfds.size(), -1);
-        if (activity < 0)
-			this->fatal("Poll failed");
+        while (true) {
+                int activity = poll(this->_pfds.data(), this->_pfds.size(), -1);
+                if (activity < 0) this->fatal("Poll failed");
 
-        if (this->_pfds[0].revents & POLLIN)
-			this->acceptNewClient();
-
-		//Check for every clients if a packet has been sent
-		this->scanClients();
-
-    }
+                if (this->_pfds[0].revents & POLLIN) {
+                        this->acceptNewClient();
+                } else {
+                        this->scanClients();
+                }
+        }
 }
