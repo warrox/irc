@@ -43,12 +43,12 @@
       "-g3",
       "-c",
       "-o",
-      "srcs/server.o",
-      "srcs/server.cpp"
+      "srcs/Server.o",
+      "srcs/Server.cpp"
     ],
     "directory": "/home/bvan-pae/Desktop/perso/irc",
-    "file": "/home/bvan-pae/Desktop/perso/irc/srcs/server.cpp",
-    "output": "/home/bvan-pae/Desktop/perso/irc/srcs/server.o"
+    "file": "/home/bvan-pae/Desktop/perso/irc/srcs/Server.cpp",
+    "output": "/home/bvan-pae/Desktop/perso/irc/srcs/Server.o"
   },
   {
     "arguments": [
@@ -60,12 +60,12 @@
       "-g3",
       "-c",
       "-o",
-      "srcs/msghandler.o",
-      "srcs/msghandler.cpp"
+      "srcs/commandHandler.o",
+      "srcs/commandHandler.cpp"
     ],
     "directory": "/home/bvan-pae/Desktop/perso/irc",
-    "file": "/home/bvan-pae/Desktop/perso/irc/srcs/msghandler.cpp",
-    "output": "/home/bvan-pae/Desktop/perso/irc/srcs/msghandler.o"
+    "file": "/home/bvan-pae/Desktop/perso/irc/srcs/commandHandler.cpp",
+    "output": "/home/bvan-pae/Desktop/perso/irc/srcs/commandHandler.o"
   },
   {
     "arguments": [
@@ -100,5 +100,22 @@
     "directory": "/home/bvan-pae/Desktop/perso/irc",
     "file": "/home/bvan-pae/Desktop/perso/irc/srcs/Channel.cpp",
     "output": "/home/bvan-pae/Desktop/perso/irc/srcs/Channel.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-Wall",
+      "-Werror",
+      "-Wextra",
+      "-std=c++98",
+      "-g3",
+      "-c",
+      "-o",
+      "srcs/debug.o",
+      "srcs/debug.cpp"
+    ],
+    "directory": "/home/bvan-pae/Desktop/perso/irc",
+    "file": "/home/bvan-pae/Desktop/perso/irc/srcs/debug.cpp",
+    "output": "/home/bvan-pae/Desktop/perso/irc/srcs/debug.o"
   }
 ]

@@ -1,12 +1,19 @@
-#include "../includes/server.hpp"
+#include "../includes/Server.hpp"
 #include <iostream>
-#include <cstring>
-#include <sys/socket.h>
-#include <unistd.h>
-#include <arpa/inet.h>
 #include <cstdlib>
-#include <poll.h>
-#include <stdio.h>
+#include <string>
+#include <string>
+#include <cstdlib>
+
+void assertPortIsValid(const std::string &maybePort) {
+    char* end;
+    long port = std::strtol(maybePort.c_str(), &end, 10);
+    // Check if the entire string was consumed and the value is in range
+    if (*end != '\0' || port < 1 || port > 65535) {
+		std::cerr << "Invalid port number: " << port << ": Must be in range 1-65535" << std::endl;
+		exit(EXIT_FAILURE);
+	}
+}
 
 int main(int argc, char **argv)
 {
@@ -15,14 +22,18 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 
-	int port = parserPort(argv[1]);
 	//If the program exits here, why would you need a else statement
 	//Removing the esle prevent from creating a scope unnecessarily
-	if (port == -1)
-		exit(EXIT_FAILURE);
 	/*else*/
 	/*{*/
-		server server(argv[1],argv[2]);		
+
+	std::string port(argv[1]);
+	std::string password(argv[2]);
+
+	assertPortIsValid(port);
+	Server server(port, password);
+	server.start();
+	server.run();
 	/*}*/
 	return(0);
 }

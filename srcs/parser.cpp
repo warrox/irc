@@ -1,4 +1,12 @@
-#include "../includes/server.hpp" 
+
+
+
+//This file is unnecessary and causes confusion. 
+//It can be opaque if the parsing is tedious. Its not the case here.
+/*
+
+
+#include "../includes/Server.hpp" 
 #include <cstdio>
 #include <iostream>
 #include <string.h>
@@ -33,3 +41,4 @@ int parserPort(char *portInString)
 	return(-1);
 }
 
+*/

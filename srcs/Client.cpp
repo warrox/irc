@@ -29,7 +29,7 @@ Client::Client(int client_fd, std::string msgFromClient) {
 
 	//We've already implemented this logic in sever::commandHandler
 	//Dont repeat yourself
-	//You might aswell take a look at sever::log, and server::sendAndLog, functions I've suggested
+	//You might aswell take a look at sever::log, and Server::sendAndLog, functions I've suggested
 	//whilst we were refactoring warrens code last thusday
 	while(std::getline(stream, line)) {
 		if (line.empty())

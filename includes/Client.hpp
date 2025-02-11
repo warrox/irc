@@ -28,7 +28,7 @@ class Client {
 	public:
 		Client() {};
 		Client(int client_fd, std::string msgFromClient);
-		//Same as in server.hpp
+		//Same as in Server.hpp
 		~Client() {};
 
 		//Tabulation for readability

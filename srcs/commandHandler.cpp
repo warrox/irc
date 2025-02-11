@@ -1,21 +1,21 @@
-#include "../includes/server.hpp"
+#include "../includes/Server.hpp"
 #include <sstream>
 #include <iostream>
 #include <string>
 #include <unistd.h>
 #include "../includes/colors.hpp"
 
-void server::sendWelcomeMessage(int clientFd, std::string nick)
+void Server::sendWelcomeMessage(int clientFd, std::string nick)
 {
     std::string welcome = ":localhost 001 " + nick + " :Bienvenue sur mon serveur IRC !\r\n";
 	this->sendAndLog(clientFd, welcome);
 }
 
-void server::nick(int clientFd, std::string cmd) {
+void Server::nick(int clientFd, std::string cmd) {
 	(void)clientFd; (void)cmd;
 }
 
-void server::join(int clientFd, std::string cmd)
+void Server::join(int clientFd, std::string cmd)
 {
 	std::istringstream lineStream(cmd);
 
@@ -46,14 +46,16 @@ void server::join(int clientFd, std::string cmd)
 	}
 }
 
-//Removed getline, no need to split lines, we did it in server::commandHandler
-void server::pass(int clientFd, std::string cmd) {
+//Removed getline, no need to split lines, we did it in Server::commandHandler
+void Server::pass(int clientFd, std::string cmd) {
 	std::istringstream line(cmd);
 
 	std::string commandName;
 	std::string password;
 	line >> commandName;
 	line >> password;
+
+	std::cout << "COMMAND: " << cmd << std::endl;
 
 	//Handle error first
 	if (password != this->_pass) {
@@ -64,21 +66,13 @@ void server::pass(int clientFd, std::string cmd) {
 		return ;
 	}
 
-	//Log infos in the cout, see server::log, server::sendAndLog
+	//Log infos in the cout, see Server::log, Server::sendAndLog
 	std::string message("Password ok");
 	this->log(message);
 }
 
-void server::sendAndLog(int clientFd, std::string msg) {
-	std::cout << "[S -> " << clientFd << "]: " << msg << std::endl;
-	send(clientFd, msg.c_str(), msg.length(), 0);
-}
 
-void server::log(std::string info) {
-	std::cout << "[Log]: " << info << std::endl;
-}
-
-void server::commandHandler(int clientFd, std::string cmd) {
+void Server::commandHandler(int clientFd, std::string cmd) {
 	std::istringstream stream(cmd);
 	std::string line;
 
@@ -87,15 +81,15 @@ void server::commandHandler(int clientFd, std::string cmd) {
 		std::string commandName;
 		lineStream >> commandName;
 
-		std::cout << "RECEIVED COMMAND |" << commandName << "|" << std::endl;
-
 		std::map<std::string, CommandFunc>::iterator match = this->_commands.find(commandName);
 		if (match != this->_commands.end()) {
-			(this->*_commands[commandName])(clientFd, cmd);
+			(this->*_commands[commandName])(clientFd, line);
 		} else {
-			std::cout << "Unhandled command" << std::endl;
+			std::stringstream log;
+			log << commandName << ": Command not recognized";
+			this->log(log.str());
 		}
 	}
-
-	return ;
+	//Pretty useless return statement.
+	/*return ;*/
 }
