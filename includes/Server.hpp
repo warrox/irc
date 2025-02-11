@@ -2,22 +2,20 @@
 #define LIB_HPP
 
 #include "Client.hpp"
+#include "Channel.hpp"
+#include <map>
 #include <string>
 #include <vector>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <poll.h>
-#include "Channel.hpp"
-
-#define PORT 8080
-#define BACKLOG 5 // nombre de connexion simultanee a listen
-
 
 //Avoid magic numbers by defining whats static
 #define BUFFER_SIZE 1024
 
 
 int parserPort(char *portInString);
+
 class Server 
 {
 	typedef void (Server::*CommandFunc)(int clientFd, std::string cmd);
@@ -48,9 +46,6 @@ class Server
 		//You desctructor shouldn't be empty, but if it, you can initialise it here via syntax {}
 		~Server() {}
 
-		//Useless
-		/*std::string getPort(void);*/
-
 		std::string getPass(void);
 		void start();
 		void run();
@@ -63,17 +58,18 @@ class Server
 		void log(std::string);
 		void fatal(std::string);
 		void recvLog(int clientFd, std::string message);
+		void displayClientsInfo(void);
 
 		void sendWelcomeMessage(int client_fd, std::string nick);
 		//-------------------- SERVER COMMANDS --------------- //
 		void nick(int, std::string);
+		void setNewNick(int, std::string);
+		bool isNickTaken(std::string);
 		void pass(int, std::string);
+		void user(int, std::string);
 		void join(int, std::string);
 		void topic(int, std::string);
 		void privmsg(int, std::string);
-		//Why omitting the space, don't you like order ????
-		//(right after the coma)
-		/*void join(int,std::string);*/
 };
 
 #endif

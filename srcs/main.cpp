@@ -6,10 +6,10 @@
 #include <cstdlib>
 
 void assertPortIsValid(const std::string &maybePort) {
-    char* end;
-    long port = std::strtol(maybePort.c_str(), &end, 10);
-    // Check if the entire string was consumed and the value is in range
-    if (*end != '\0' || port < 1 || port > 65535) {
+	char* end;
+	long port = std::strtol(maybePort.c_str(), &end, 10);
+	// Check if the entire string was consumed and the value is in range
+	if (*end != '\0' || port < 1 || port > 65535) {
 		std::cerr << "Invalid port number: " << port << ": Must be in range 1-65535" << std::endl;
 		exit(EXIT_FAILURE);
 	}
@@ -21,11 +21,6 @@ int main(int argc, char **argv)
 		std::cout << "./ircserv <port> <password>" << std::endl;
 		exit(EXIT_FAILURE);
 	}
-
-	//If the program exits here, why would you need a else statement
-	//Removing the esle prevent from creating a scope unnecessarily
-	/*else*/
-	/*{*/
 
 	std::string port(argv[1]);
 	std::string password(argv[2]);

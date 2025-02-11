@@ -23,3 +23,14 @@ void Server::fatal(std::string error) {
 	std::cerr << __FILE_NAME__ << ":" << __LINE__ << ": Fatal: " << error << std::endl;
 	exit(EXIT_FAILURE);
 }
+
+void Server::displayClientsInfo(void){
+
+	for (std::map<int, Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it) {
+		std::cout << BLUE << "[_nick]--> " << BOLD_OFF << it->second.getNick() << std::endl;
+		std::cout << BLUE << "[_user]--> " << BOLD_OFF << it->second.getUser() << std::endl;
+		std::cout << BLUE << "[_host]--> " << BOLD_OFF << it->second.getHost() << std::endl;
+		std::cout << BLUE << "[_real_name]--> " << BOLD_OFF << it->second.getRealName() << std::endl;
+		std::cout << "-------------------" << std::endl;
+	}
+}

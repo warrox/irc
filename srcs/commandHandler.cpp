@@ -8,12 +8,72 @@
 
 void Server::sendWelcomeMessage(int clientFd, std::string nick)
 {
-    std::string welcome = ":localhost 001 " + nick + " :Bienvenue sur mon serveur IRC !\r\n";
+	std::string welcome = ":localhost 001 " + nick + " :Bienvenue sur mon serveur IRC !\r\n";
 	this->sendAndLog(clientFd, welcome);
 }
 
+void Server::user(int clientFd, std::string cmd) {
+
+	std::istringstream iss(cmd);
+	std::string command;
+	std::string nick;
+	std::string user;
+	std::string host;
+	std::string realname;
+
+	iss >> command >> nick >> user >> host;
+	std::getline(iss, realname);
+	// std::cout << "[DEBUG]: " << nick + "|" << user + "|" << host + "|" << realname << std::endl;
+	if (user.empty() || host.empty() || realname.empty() || realname[1] != ':') {
+		sendAndLog(clientFd, ":localhost 461 " + _clients[clientFd].getNick() + " USER :\r\n");
+		return;
+	}
+	_clients[clientFd].setUser(user);
+	_clients[clientFd].setHost(host);
+	_clients[clientFd].setRealName(realname.substr(2));
+	this->displayClientsInfo();
+}
+
+bool Server::isNickTaken(std::string nickname){
+
+	for (std::map<int, Client>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
+		if (it->second.getNick() == nickname)
+			return true;
+	}
+	return false;
+}
+
+void Server::setNewNick(int clienFd, std::string nickname) {
+	static int suf = 0;
+	std::stringstream new_nickname;
+
+	while (isNickTaken(new_nickname.str())) {
+		new_nickname << nickname << suf;
+		suf++;
+	}
+	_clients[clienFd].setNick(new_nickname.str());
+}
+
 void Server::nick(int clientFd, std::string cmd) {
-	(void)clientFd; (void)cmd;
+
+	std::istringstream iss(cmd);
+	std::string command;
+	std::string nickname;
+
+	iss >> command >> nickname;
+	// std::cout << nickname << std::endl;
+	if (nickname.empty()) {
+		sendAndLog(clientFd, ":localhost 461 " + _clients[clientFd].getNick() + " NICK :\r\n");
+		return;
+	}
+	for (std::map<int, Client>::iterator match = _clients.begin(); match != _clients.end(); ++match) {
+		if (match->second.getNick() == nickname) {
+			sendAndLog(clientFd, ":localhost 433 " + _clients[clientFd].getNick() + " NICK :" + nickname + "\r\n");
+			setNewNick(clientFd, nickname);
+			return;
+		}
+	}
+	_clients[clientFd].setNick(nickname);
 }
 void Server::privmsg(int clientFd, std::string cmd)
 {
@@ -43,16 +103,14 @@ void Server::privmsg(int clientFd, std::string cmd)
 			if(it->second.getNick() == dest) {
 				this->sendAndLog(it->first, message);
 			}
-			
 		}
-
 	}
-
 	(void)clientFd;
 	// clientIterator it = _clients.begin();
 
 
 }
+
 void Server::join(int clientFd, std::string cmd)
 {
 	std::istringstream lineStream(cmd);
@@ -128,6 +186,7 @@ void Server::topic(int clientFd, std::string cmd)
 		std::cout<< "Topic : " << this->_channels.find(actual_chan)->second.getTopic();
 	}
 }
+
 void Server::commandHandler(int clientFd, std::string cmd) {
 	std::istringstream stream(cmd);
 	std::string line;
@@ -146,6 +205,4 @@ void Server::commandHandler(int clientFd, std::string cmd) {
 			this->log(log.str());
 		}
 	}
-	//Pretty useless return statement.
-	/*return ;*/
 }
