@@ -6,7 +6,7 @@
 /*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:44:14 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/11 11:35:07 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/11 11:57:13 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Channel
 		bool delUser(int fd);
 		void setTopic(std::string topic);
 		std::string getTopic(void);
+		// stock le message du client dans un buffer > puis le renvoie a tous les clients non emeteur du message d'origine (e)
 		~Channel() {}
 	};
 #endif
