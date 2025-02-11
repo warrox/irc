@@ -7,9 +7,10 @@ CFLAGS = -Wall -Werror -Wextra -std=c++98 -g3
 SRC_DIR = srcs
 INCLUDE_DIR = includes
 
-SRC = $(SRC_DIR)/main.cpp $(SRC_DIR)/parser.cpp $(SRC_DIR)/server.cpp $(SRC_DIR)/msghandler.cpp $(SRC_DIR)/Client.cpp $(SRC_DIR)/Channel.cpp
+SRC = $(SRC_DIR)/main.cpp $(SRC_DIR)/parser.cpp $(SRC_DIR)/Server.cpp $(SRC_DIR)/commandHandler.cpp $(SRC_DIR)/Client.cpp $(SRC_DIR)/Channel.cpp \
+	  $(SRC_DIR)/debug.cpp
 
-#INCLUDES = $(INCLUDE_DIR)/server.hpp
+#INCLUDES = $(INCLUDE_DIR)/Server.hpp
 
 
 OBJ = $(SRC:.cpp=.o)

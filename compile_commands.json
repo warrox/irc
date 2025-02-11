@@ -1,0 +1,121 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-Wall",
+      "-Werror",
+      "-Wextra",
+      "-std=c++98",
+      "-g3",
+      "-c",
+      "-o",
+      "srcs/main.o",
+      "srcs/main.cpp"
+    ],
+    "directory": "/home/bvan-pae/Desktop/perso/irc",
+    "file": "/home/bvan-pae/Desktop/perso/irc/srcs/main.cpp",
+    "output": "/home/bvan-pae/Desktop/perso/irc/srcs/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-Wall",
+      "-Werror",
+      "-Wextra",
+      "-std=c++98",
+      "-g3",
+      "-c",
+      "-o",
+      "srcs/parser.o",
+      "srcs/parser.cpp"
+    ],
+    "directory": "/home/bvan-pae/Desktop/perso/irc",
+    "file": "/home/bvan-pae/Desktop/perso/irc/srcs/parser.cpp",
+    "output": "/home/bvan-pae/Desktop/perso/irc/srcs/parser.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-Wall",
+      "-Werror",
+      "-Wextra",
+      "-std=c++98",
+      "-g3",
+      "-c",
+      "-o",
+      "srcs/Server.o",
+      "srcs/Server.cpp"
+    ],
+    "directory": "/home/bvan-pae/Desktop/perso/irc",
+    "file": "/home/bvan-pae/Desktop/perso/irc/srcs/Server.cpp",
+    "output": "/home/bvan-pae/Desktop/perso/irc/srcs/Server.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-Wall",
+      "-Werror",
+      "-Wextra",
+      "-std=c++98",
+      "-g3",
+      "-c",
+      "-o",
+      "srcs/commandHandler.o",
+      "srcs/commandHandler.cpp"
+    ],
+    "directory": "/home/bvan-pae/Desktop/perso/irc",
+    "file": "/home/bvan-pae/Desktop/perso/irc/srcs/commandHandler.cpp",
+    "output": "/home/bvan-pae/Desktop/perso/irc/srcs/commandHandler.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-Wall",
+      "-Werror",
+      "-Wextra",
+      "-std=c++98",
+      "-g3",
+      "-c",
+      "-o",
+      "srcs/Client.o",
+      "srcs/Client.cpp"
+    ],
+    "directory": "/home/bvan-pae/Desktop/perso/irc",
+    "file": "/home/bvan-pae/Desktop/perso/irc/srcs/Client.cpp",
+    "output": "/home/bvan-pae/Desktop/perso/irc/srcs/Client.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-Wall",
+      "-Werror",
+      "-Wextra",
+      "-std=c++98",
+      "-g3",
+      "-c",
+      "-o",
+      "srcs/Channel.o",
+      "srcs/Channel.cpp"
+    ],
+    "directory": "/home/bvan-pae/Desktop/perso/irc",
+    "file": "/home/bvan-pae/Desktop/perso/irc/srcs/Channel.cpp",
+    "output": "/home/bvan-pae/Desktop/perso/irc/srcs/Channel.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-Wall",
+      "-Werror",
+      "-Wextra",
+      "-std=c++98",
+      "-g3",
+      "-c",
+      "-o",
+      "srcs/debug.o",
+      "srcs/debug.cpp"
+    ],
+    "directory": "/home/bvan-pae/Desktop/perso/irc",
+    "file": "/home/bvan-pae/Desktop/perso/irc/srcs/debug.cpp",
+    "output": "/home/bvan-pae/Desktop/perso/irc/srcs/debug.o"
+  }
+]

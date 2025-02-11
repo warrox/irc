@@ -13,12 +13,11 @@
 #include "../includes/Channel.hpp"
 #include <algorithm>
 
-
 Channel::Channel(std::string name, int fd) {
 	this->_chan_name = name;
 	this->_users.push_back(fd);
 }
-Channel::~Channel(){}
+
 bool Channel::addUser(int fd) {
 	if (std::find(this->_users.begin(), this->_users.end(), fd) == this->_users.end()) {
 		return false;
@@ -26,6 +25,7 @@ bool Channel::addUser(int fd) {
 	this->_users.push_back(fd);
 	return true;
 }
+
 bool Channel::delUser(int fd) {
 	std::vector<int>::iterator it;
 	if ((it = std::find(this->_users.begin(), this->_users.end(), fd)) != this->_users.end()) {
