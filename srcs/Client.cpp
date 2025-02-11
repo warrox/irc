@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:54:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/06 17:30:13 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:15:36 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../includes/Client.hpp"
@@ -26,7 +26,7 @@ Client::Client(int client_fd, std::string msgFromClient) {
 	
 	std::istringstream stream(msgFromClient);
 	std::string line;
-
+	this->_actual_chan = "NO";
 	//We've already implemented this logic in sever::commandHandler
 	//Dont repeat yourself
 	//You might aswell take a look at sever::log, and Server::sendAndLog, functions I've suggested
@@ -70,6 +70,14 @@ std::string Client::getNick(void) const{
 	return this->_nick;
 }
 
+std::string		Client::getChan(void)
+{
+	if(this->_actual_chan != "NO")
+	{
+		return(this->_actual_chan);
+	}
+	return("NO");
+}
 //Same as server, if you don't need a destructor, initialize it in the header file.
 //I doubt its usefullness here
 /*Client::~Client() {};*/
