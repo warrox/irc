@@ -6,11 +6,12 @@
 /*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/11 11:35:37 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/11 15:17:56 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Channel.hpp"
+#include "../includes/Server.hpp"
 #include <algorithm>
 
 Channel::Channel(std::string name, int fd) {
@@ -40,4 +41,13 @@ void Channel::setTopic(std::string topic) {
 }
 std::string Channel::getTopic(void){
 	return(this->_topic);
+}
+
+void Channel::broadcast(int clientToIgnore, Server &server, std::string msg) {
+	std::vector<int>::iterator it;
+	for (it = this->_users.begin(); it != this->_users.end(); ++it) {
+		if (*it == clientToIgnore) 
+			continue;
+		server.sendAndLog(*it, msg);
+	}
 }

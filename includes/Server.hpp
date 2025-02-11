@@ -22,6 +22,7 @@ class Server
 {
 	typedef void (Server::*CommandFunc)(int clientFd, std::string cmd);
 	typedef std::map<std::string, Channel>::iterator channelIterator;
+	typedef std::map<int , Client>::iterator clientIterator;
 	typedef std::pair<std::string, Channel> channelEntry;
  
 	private :
@@ -69,6 +70,7 @@ class Server
 		void pass(int, std::string);
 		void join(int, std::string);
 		void topic(int, std::string);
+		void privmsg(int, std::string);
 		//Why omitting the space, don't you like order ????
 		//(right after the coma)
 		/*void join(int,std::string);*/

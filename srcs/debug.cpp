@@ -2,6 +2,7 @@
 #include "../includes/colors.hpp"
 
 #include <cstdlib>
+#include <iostream>
 
 void Server::sendAndLog(int clientFd, std::string msg) {
 	std::cout << BOLD_ON RED << "[S -> " << clientFd << "]: " << BOLD_OFF << msg << std::endl;

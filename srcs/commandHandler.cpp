@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include "../includes/colors.hpp"
 
+
 void Server::sendWelcomeMessage(int clientFd, std::string nick)
 {
     std::string welcome = ":localhost 001 " + nick + " :Bienvenue sur mon serveur IRC !\r\n";
@@ -14,7 +15,44 @@ void Server::sendWelcomeMessage(int clientFd, std::string nick)
 void Server::nick(int clientFd, std::string cmd) {
 	(void)clientFd; (void)cmd;
 }
+void Server::privmsg(int clientFd, std::string cmd)
+{
+	std::istringstream lineStream(cmd);
+	std::string cmdName, dest, message;
+	lineStream >> cmdName;
+	lineStream >> dest;
+	lineStream >> cmdName;
+	std::getline(lineStream, message);
 
+
+
+	if (dest.at(0) == '#') {
+		channelIterator it = this->_channels.find(dest);
+		if (it == this->_channels.end())
+			return ;
+		this->log("Broadcasting on channel: " + dest);
+		it->second.broadcast(clientFd, *this, message);
+	}
+	else{
+		//je cherche le fd du client destinataire
+		//j'ai comme information, le 'nick' de ce client
+		//comment l'obtenir ?
+		clientIterator it = this->_clients.begin();
+		for(; it != this->_clients.end(); ++it)
+		{
+			if(it->second.getNick() == dest) {
+				this->sendAndLog(it->first, message);
+			}
+			
+		}
+
+	}
+
+	(void)clientFd;
+	// clientIterator it = _clients.begin();
+
+
+}
 void Server::join(int clientFd, std::string cmd)
 {
 	std::istringstream lineStream(cmd);
@@ -32,7 +70,12 @@ void Server::join(int clientFd, std::string cmd)
 		//We call every pair < key, value > in a map an Entry, see map definition on cpp reference
 		//Improved readability.
 		channelEntry newEntry(chanName, Channel(chanName, clientFd));
-		this->_channels.insert(newEntry);	
+		this->_channels.insert(newEntry);
+		this->log("Channel created: " + chanName);
+		it = this->_channels.find(chanName);
+		it->second.addUser(clientFd);
+		std::string log = "Added client to " + chanName;
+		this->log(log);
 		//Do you really think this is redeable ? maintainable ?
 		/*this->_channels.insert(std::make_pair<chanName, Channel(chanName, clientFd));*/
 	} else {
@@ -41,7 +84,7 @@ void Server::join(int clientFd, std::string cmd)
 		//Asserted it was ok by logging before actually updating the value
 		it->second.addUser(clientFd);
 		std::string log = "Added client to " + chanName;
-		this->log(chanName);
+		this->log(log);
 		/*it->second.addUser(clientFd);*/
 	}
 }
@@ -56,9 +99,9 @@ void Server::pass(int clientFd, std::string cmd) {
 	line >> password;
 
 	std::cout << "COMMAND: " << cmd << std::endl;
-
 	//Handle error first
-	if (password != this->_pass) {
+	if (password != this->_pass) 
+	{
 		std::cout << RED << "Wrong Password connection denied" << RESET << std::endl;
 		std::string errorMsg = ":localhost 464 * :Incorrect password\r\n";
 		this->sendAndLog(clientFd, errorMsg);
