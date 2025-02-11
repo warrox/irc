@@ -71,7 +71,20 @@ void Server::pass(int clientFd, std::string cmd) {
 	this->log(message);
 }
 
-
+void Server::topic(int clientFd, std::string cmd)
+{
+	std::istringstream line(cmd);
+	std::string commandName;
+	std::string topic_name;
+	line >> commandName;
+	line >> topic_name;
+	std::string actual_chan =this->_clients[clientFd].getChan();
+	if(actual_chan != "NO")
+	{
+		this->_channels.find(actual_chan)->second.setTopic(topic_name);	
+		std::cout<< "Topic : " << this->_channels.find(actual_chan)->second.getTopic();
+	}
+}
 void Server::commandHandler(int clientFd, std::string cmd) {
 	std::istringstream stream(cmd);
 	std::string line;

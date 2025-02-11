@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:54:19 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/11 11:13:16 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/11 11:24:42 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ class Client {
 		/*void setNick(std::string nick);*/
 		void		setNick(std::string nick);
 		std::string getNick(void)const;
-		void		getChan(void);
+		std::string	getChan(void);
 
 		//This is bullshit
 		//This function wasn't yet defined and we're all glad it never been, thanks god

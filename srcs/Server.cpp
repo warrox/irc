@@ -31,7 +31,7 @@ Server::Server(std::string port, std::string password)
     this->_commands["NICK"] = &Server::nick;
     this->_commands["PASS"] = &Server::pass;
 	this->_commands["JOIN"] = &Server::join;
-
+	this->_commands["TOPIC"] = &Server::topic;
 	//A function should be responsible for an action
 	//Orelse it should mention in its name, the actions it'll perform
 	//FIX:: 

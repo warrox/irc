@@ -68,6 +68,7 @@ class Server
 		void nick(int, std::string);
 		void pass(int, std::string);
 		void join(int, std::string);
+		void topic(int, std::string);
 		//Why omitting the space, don't you like order ????
 		//(right after the coma)
 		/*void join(int,std::string);*/

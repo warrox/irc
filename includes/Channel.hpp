@@ -6,7 +6,7 @@
 /*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:44:14 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/10 14:59:03 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/11 11:35:07 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ class Channel
 		bool addUser(int fd);
 		bool delUser(int fd);
 		void setTopic(std::string topic);
+		std::string getTopic(void);
 		~Channel() {}
 	};
 #endif
