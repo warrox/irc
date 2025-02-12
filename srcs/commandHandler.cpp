@@ -5,35 +5,55 @@
 #include <unistd.h>
 #include "../includes/colors.hpp"
 
-
 void Server::sendWelcomeMessage(int clientFd, std::string nick)
 {
 	std::string welcome = ":localhost 001 " + nick + " :Bienvenue sur mon serveur IRC !\r\n";
 	this->sendAndLog(clientFd, welcome);
 }
 
-void Server::user(int clientFd, std::string cmd) {
+void Server::disconnectClient(int clientFd, const std::string& reason) {
+    if (send(clientFd, "", 0, MSG_NOSIGNAL) != -1) {
+        std::string errorMsg = ":localhost ERROR :Closing Link: " + reason + "\r\n";
+        sendAndLog(clientFd, errorMsg);
+    }
 
-	std::istringstream iss(cmd);
-	std::string command;
-	std::string nick;
-	std::string user;
-	std::string host;
-	std::string realname;
-
-	iss >> command >> nick >> user >> host;
-	std::getline(iss, realname);
-	// std::cout << "[DEBUG]: " << nick + "|" << user + "|" << host + "|" << realname << std::endl;
-	if (user.empty() || host.empty() || realname.empty() || realname[1] != ':') {
-		sendAndLog(clientFd, ":localhost 461 " + _clients[clientFd].getNick() + " USER :\r\n");
-		return;
-	}
-	_clients[clientFd].setUser(user);
-	_clients[clientFd].setHost(host);
-	_clients[clientFd].setRealName(realname.substr(2));
-	this->displayClientsInfo();
+    close(clientFd);
+    _clients.erase(clientFd);
+    std::cout << RED << "Client " << clientFd << " disconnected: " << reason << RESET << std::endl;
 }
+void Server::user(int clientFd, std::string cmd) 
+{
+    std::string pass = this->_clients[clientFd].getPassword();	
+    if (pass.empty() || this->_pass != pass) {
+        std::cout << RED << "Wrong Password connection denied" << RESET << std::endl;
+        std::string errorMsg = ":localhost 464 * :Incorrect password\r\n";
+        this->sendAndLog(clientFd, errorMsg);
 
+        disconnectClient(clientFd, "Incorrect password");
+        return;
+    }
+
+    std::istringstream iss(cmd);
+    std::string command;
+    std::string nick;
+    std::string user;
+    std::string host;
+    std::string realname;
+
+    iss >> command >> nick >> user >> host;
+    std::getline(iss, realname);
+
+    if (user.empty() || host.empty() || realname.empty() || realname[1] != ':') {
+        sendAndLog(clientFd, ":localhost 461 " + _clients[clientFd].getNick() + " USER :\r\n");
+        disconnectClient(clientFd, "Invalid USER command");
+        return;
+    }
+
+    _clients[clientFd].setUser(user);
+    _clients[clientFd].setHost(host);
+    _clients[clientFd].setRealName(realname.substr(2));
+    this->displayClientsInfo();
+}
 bool Server::isNickTaken(std::string nickname){
 
 	for (std::map<int, Client>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
@@ -61,7 +81,6 @@ void Server::nick(int clientFd, std::string cmd) {
 	std::string nickname;
 
 	iss >> command >> nickname;
-	// std::cout << nickname << std::endl;
 	if (nickname.empty()) {
 		sendAndLog(clientFd, ":localhost 461 " + _clients[clientFd].getNick() + " NICK :\r\n");
 		return;
@@ -157,19 +176,7 @@ void Server::pass(int clientFd, std::string cmd) {
 	line >> password;
 
 	std::cout << "COMMAND: " << cmd << std::endl;
-	//Handle error first
-	if (password != this->_pass) 
-	{
-		std::cout << RED << "Wrong Password connection denied" << RESET << std::endl;
-		std::string errorMsg = ":localhost 464 * :Incorrect password\r\n";
-		this->sendAndLog(clientFd, errorMsg);
-		close(clientFd);
-		return ;
-	}
-
-	//Log infos in the cout, see Server::log, Server::sendAndLog
-	std::string message("Password ok");
-	this->log(message);
+	this->_clients[clientFd].setPassword(password);
 }
 
 void Server::topic(int clientFd, std::string cmd)
@@ -204,5 +211,9 @@ void Server::commandHandler(int clientFd, std::string cmd) {
 			log << commandName << ": Command not recognized";
 			this->log(log.str());
 		}
+	}
+	if(!this->_clients[clientFd].getIsConnected())
+	{
+
 	}
 }

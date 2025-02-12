@@ -130,6 +130,7 @@ void Server::scanClients() {
 			// insert logic to remove client.
 			close(client.fd);
 			_pfds.erase(_pfds.begin() + i);
+			// disconnectClient(client.fd, "Read error");
 		}
 
 		// this is the flag that indicates that the client is ready to be read  by our server.
@@ -144,7 +145,8 @@ void Server::scanClients() {
 				break;
 			} else if (rbytes == 0) {
 				close(client.fd);
-				_pfds.erase(_pfds.begin() + i);
+				_pfds.erase(_pfds.begin() + i);		
+				// disconnectClient(client.fd, "Read error");
 				break;
 			} else {
 				buffer[rbytes] = '\0';

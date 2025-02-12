@@ -10,8 +10,8 @@ INCLUDE_DIR = includes
 SRC = $(SRC_DIR)/main.cpp $(SRC_DIR)/Server.cpp $(SRC_DIR)/commandHandler.cpp $(SRC_DIR)/Client.cpp $(SRC_DIR)/Channel.cpp \
 	  $(SRC_DIR)/debug.cpp
 
-#INCLUDES = $(INCLUDE_DIR)/Server.hpp
 
+INCLUDES = $(INCLUDE_DIR)/Server.hpp $(INCLUDE_DIR)/Client.hpp $(INCLUDE_DIR)/Channel.hpp
 
 OBJ = $(SRC:.cpp=.o)
 
@@ -20,7 +20,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
 
-$(SRC_DIR)/%.o: $(SRC_DIR)/%.cpp # $(INCLUDES)
+$(SRC_DIR)/%.o: $(SRC_DIR)/%.cpp $(INCLUDES)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

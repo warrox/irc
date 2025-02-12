@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:54:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/11 16:43:11 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:57:04 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,11 @@ std::string	Client::getChan(void)
 	}
 	return("NO");
 }
+void Client::setIsConnected(bool isConnected){this->_is_connected = isConnected;}
+bool Client::getIsConnected(void)const {return this->_is_connected;}
+
+void Client::setPassword(std::string password){this->_password = password;}
+std::string Client::getPassword(void)const {return this->_password;}
 //Same as server, if you don't need a destructor, initialize it in the header file.
 //I doubt its usefullness here
 /*Client::~Client() {};*/

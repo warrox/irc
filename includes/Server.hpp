@@ -52,7 +52,7 @@ class Server
 		void acceptNewClient();
 		void scanClients();
  		void commandHandler(int clientFd, std::string cmd);
-
+		void disconnectClient(int clientFd, const std::string& reason);
 		//--------------------- LOG / DEBUG --------------------//
 		void sendAndLog(int, std::string);
 		void log(std::string);
