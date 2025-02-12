@@ -18,17 +18,19 @@
 Server::Server(std::string port, std::string password) {
 	this->_port = port;
 	this->_pass = password;
+	this->_servername = "ft_irc";
 
 	struct sockaddr_in adress;
 	this->_address	   = adress;
 
 	socklen_t addrrlen = sizeof(adress);
 	this->_addrlen = addrrlen;
-    
-    this->_commands["PASS"] = &Server::pass;
-    this->_commands["NICK"] = &Server::nick;
+
+	this->_commands["PASS"] = &Server::pass;
+	this->_commands["NICK"] = &Server::nick;
 	this->_commands["USER"] = &Server::user;
-    this->_commands["JOIN"] = &Server::join;
+	this->_commands["MODE"] = &Server::mode;
+	this->_commands["JOIN"] = &Server::join;
 	this->_commands["TOPIC"] = &Server::topic;
 	this->_commands["PRIVMSG"] = &Server::privmsg;
 
@@ -112,7 +114,7 @@ void Server::acceptNewClient() {
 	client_pollfd.events = POLLIN;
 	this->_pfds.push_back(client_pollfd);
 	//? test
-	this->sendWelcomeMessage(client_socket, this->_clients[client_socket].getNick());
+	this->sendWelcomeMessage(client_socket, "guest");
 }
 
 void Server::scanClients() {
