@@ -31,6 +31,11 @@ void Server::displayClientsInfo(void){
 		std::cout << BLUE << "[_user]--> " << BOLD_OFF << it->second.getUser() << std::endl;
 		std::cout << BLUE << "[_host]--> " << BOLD_OFF << it->second.getHost() << std::endl;
 		std::cout << BLUE << "[_real_name]--> " << BOLD_OFF << it->second.getRealName() << std::endl;
+
+		std::cout << BLUE << "[mode_i]--> " << BOLD_OFF << (it->second.getModeI() ? "enabled" : "disabled") << std::endl;
+		std::cout << BLUE << "[mode_t]--> " << BOLD_OFF << (it->second.getModeT() ? "enabled" : "disabled") << std::endl;
+		std::cout << BLUE << "[mode_k]--> " << BOLD_OFF << (it->second.getModeK() ? "enabled" : "disabled") << std::endl;
+		std::cout << BLUE << "[mode_o]--> " << BOLD_OFF << (it->second.getModeO() ? "enabled" : "disabled") << std::endl;
 		std::cout << "-------------------" << std::endl;
 	}
 }
