@@ -26,6 +26,7 @@ class Server
 	private :
 		std::string _port;
 		std::string _pass; //You might consider hashing the password, storing a plain text password is bullshit
+		std::string _servername;
 
 		// ----- Socket related ------ //
 		std::vector<pollfd> _pfds;
@@ -67,6 +68,7 @@ class Server
 		bool isNickTaken(std::string);
 		void pass(int, std::string);
 		void user(int, std::string);
+		void mode(int, std::string);
 		void join(int, std::string);
 		void topic(int, std::string);
 		void privmsg(int, std::string);
