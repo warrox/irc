@@ -28,7 +28,6 @@ void Server::user(int clientFd, std::string cmd)
         std::cout << RED << "Wrong Password connection denied" << RESET << std::endl;
         std::string errorMsg = ":localhost 464 * :Incorrect password\r\n";
         this->sendAndLog(clientFd, errorMsg);
-
         disconnectClient(clientFd, "Incorrect password");
         return;
     }
@@ -153,14 +152,20 @@ void Server::join(int clientFd, std::string cmd)
 		it->second.addUser(clientFd);
 		std::string log = "Added client to " + chanName;
 		this->log(log);
-		//Do you really think this is redeable ? maintainable ?
-		/*this->_channels.insert(std::make_pair<chanName, Channel(chanName, clientFd));*/
+		this->sendAndLog(clientFd, ":username!ident@hostname JOIN : #" + chanName);
+
 	} else {
 		//Add the client before logging the information, doesn't make sense othewise
 		//If you have an exception in addUser, you'll never get where it came from cuz you
 		//Asserted it was ok by logging before actually updating the value
 		it->second.addUser(clientFd);
-		std::string log = "Added client to " + chanName;
+		std::string log = "Added client to " + chanName;	
+		this->sendAndLog(clientFd, ":username!ident@hostname JOIN : #" + chanName);
+
+		if(it->second.getTopic() != "")
+		{
+			this->sendAndLog(clientFd, ":irc.example.com 332 username #channel : " + it->second.getTopic());
+		}
 		this->log(log);
 		/*it->second.addUser(clientFd);*/
 	}

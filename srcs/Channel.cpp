@@ -6,7 +6,7 @@
 /*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/11 15:17:56 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/12 16:56:04 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 Channel::Channel(std::string name, int fd) {
 	this->_chan_name = name;
 	this->_users.push_back(fd);
+	this->_topic = "";
 }
 
 bool Channel::addUser(int fd) {
@@ -50,4 +51,9 @@ void Channel::broadcast(int clientToIgnore, Server &server, std::string msg) {
 			continue;
 		server.sendAndLog(*it, msg);
 	}
+}
+
+std::string Channel::getChanName(void)
+{
+  return(this->_chan_name);
 }
