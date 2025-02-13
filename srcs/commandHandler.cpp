@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:50 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 15:30:10 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 19:29:28 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,12 @@ void Server::commandHandler(int clientFd, std::string cmd) {
 		if (match != this->_commands.end()) {
 			(this->*_commands[commandName])(clientFd, line);
 		} else {
-			std::stringstream log;
-			log << commandName << ": Command not recognized";
-			sendAndLog(clientFd, ":" + this->_servername + " 421 " + _clients[clientFd].getNick() + " " + commandName + " :Unknown command\r\n");
-			this->log(log.str());
+			std::cout << "Error" << std::endl;
+			//? need to
+			// std::stringstream log;
+			// log << commandName << ": Command not recognized";
+			// sendAndLog(clientFd, ":" + this->_servername + " 421 " + _clients[clientFd].getNick() + " " + commandName + " :Unknown command\r\n");
+			// this->log(log.str());
 		}
 	}
 }
