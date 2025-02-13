@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 11:16:18 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:37:08 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,30 +103,6 @@ void Server::start() {
 	this->log(log);
 }
 
-// void Server::acceptNewClient() {
-// 	struct sockaddr client_address = {};
-// 	int32_t client_socket  = -1;
-// 	socklen_t socklen	= sizeof(struct sockaddr_in);
-
-// 	client_socket  = accept(_server_fd, &client_address, &socklen);
-
-// 	if (client_socket == -1) {
-// 		this->fatal("Failed to accept new client.");
-// 	}
-
-// 	// you need to make sure client's are also configured in non-blocking mode.
-// 	if (fcntl(client_socket, F_SETFL, O_NONBLOCK) == -1) {
-// 		close(client_socket);
-// 		this->fatal("Failed to accept new client.");
-// 	}
-
-// 	this->_clients[client_socket] = Client();
-// 	pollfd client_pollfd;
-// 	client_pollfd.fd = client_socket;
-// 	client_pollfd.events = POLLIN;
-// 	this->_pfds.push_back(client_pollfd);
-// 	this->sendWelcomeMessage(client_socket, "guest");
-// }
 
 void Server::acceptNewClient() {
 	struct sockaddr client_address = {};

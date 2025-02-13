@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:50:03 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 10:50:06 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:36:49 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ class Server
 		void recvLog(int clientFd, std::string message);
 		void displayClientsInfo(void);
 
-		void sendWelcomeMessage(int client_fd, std::string nick);
 		//-------------------- SERVER COMMANDS --------------- //
 		void nick(int, std::string);
 		void setNewNick(int, std::string);

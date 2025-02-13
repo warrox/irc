@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:50 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 11:15:57 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:36:59 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,6 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
-
-void Server::sendWelcomeMessage(int clientFd, std::string nick) {
-
-	std::string welcome = ":localhost 001 " + nick + " :Bienvenue sur mon serveur IRC !\r\n";
-	this->sendAndLog(clientFd, welcome);
-}
 
 void Server::disconnectClient(int clientFd, const std::string& reason) {
 
@@ -95,12 +89,5 @@ void Server::commandHandler(int clientFd, std::string cmd) {
 			log << commandName << ": Command not recognized";
 			this->log(log.str());
 		}
-	}
-
-	// Vérifie si le client est maintenant authentifié et envoie le message de bienvenue
-	Client &client = this->_clients[clientFd];
-	if (!client.getIsConnected() && !client.getNick().empty() && !client.getUser().empty()) {
-		client.setIsConnected(true);
-		this->sendWelcomeMessage(clientFd, client.getNick());
 	}
 }
