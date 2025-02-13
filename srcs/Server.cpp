@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 11:37:08 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:30:03 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,6 @@ void Server::acceptNewClient() {
 		this->fatal("Failed to accept new client.");
 	}
 
-	// Configuration du socket en mode non-bloquant
-	if (fcntl(client_socket, F_SETFL, O_NONBLOCK) == -1) {
-		close(client_socket);
-		this->fatal("Failed to set non-blocking mode.");
-	}
-
-	// Ajout du client à la liste des clients
 	this->_clients[client_socket] = Client();
 
 	// Ajout du client à la liste des pollfd
