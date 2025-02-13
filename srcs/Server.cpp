@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 15:30:03 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:59:47 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ Server::Server(std::string port, std::string password) {
 	this->_commands["JOIN"] = &Server::join;
 	this->_commands["TOPIC"] = &Server::topic;
 	this->_commands["PRIVMSG"] = &Server::privmsg;
+	this->_commands["QUIT"] = &Server::quit;
+	this->_commands["PING"] = &Server::ping;
 
 }
 
