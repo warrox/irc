@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 18:59:47 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 20:25:27 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,23 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <ctime>
+
+std::string getTime() {
+	std::time_t now = std::time(0);
+	std::tm* now_tm = std::localtime(&now);
+
+	char buffer[20];
+	std::strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", now_tm);
+
+	return std::string(buffer);
+}
 
 Server::Server(std::string port, std::string password) {
 	this->_port = port;
 	this->_pass = password;
 	this->_servername = "ft_irc";
+	this->_time = getTime();
 
 	struct sockaddr_in adress;
 	this->_address	   = adress;

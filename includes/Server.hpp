@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:50:03 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 18:31:46 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 20:24:59 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class Server
 		std::string _port;
 		std::string _pass; //You might consider hashing the password, storing a plain text password is bullshit
 		std::string _servername;
+		std::string _time;
 
 		// ----- Socket related ------ //
 		std::vector<pollfd> _pfds;
