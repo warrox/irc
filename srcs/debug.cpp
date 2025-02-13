@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:41 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 10:48:43 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 20:13:58 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <iostream>
 
 void Server::sendAndLog(int clientFd, std::string msg) {
-	std::cout << BOLD_ON RED << "[S -> " << clientFd << "]: " << BOLD_OFF << msg << std::endl;
+	std::cout << BOLD_ON RED << "[S -> " << clientFd << "]: " << BOLD_OFF << msg;
 	send(clientFd, msg.c_str(), msg.length(), 0);
 }
 
