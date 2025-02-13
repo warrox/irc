@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:50:03 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 11:36:49 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:31:46 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ class Server
 		void join(int, std::string);
 		void topic(int, std::string);
 		void privmsg(int, std::string);
+		void quit(int, std::string);
+		void ping(int, std::string);
 };
 
 #endif
