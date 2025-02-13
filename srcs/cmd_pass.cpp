@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:43:20 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 10:44:41 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 13:23:27 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ void Server::pass(int clientFd, std::string cmd) {
 	line >> commandName;
 	line >> password;
 
-	std::cout << "COMMAND: " << cmd << std::endl;
+	// std::cout << "COMMAND: " << cmd << std::endl;
 	this->_clients[clientFd].setPassword(password);
 }
