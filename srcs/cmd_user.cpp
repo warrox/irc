@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:40:17 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 15:29:51 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 19:19:53 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ void Server::user(int clientFd, std::string cmd) {
 	// reponses IRC pour USER
 	
 	std::string welcome = ":localhost 001 " + _clients[clientFd].getNick() + " :Welcome to the IRC network, " + _clients[clientFd].getNick() + "!\r\n";
-	std::string your_host = ":localhost 002 " + _clients[clientFd].getHost() + " :Your host is " + this->_servername + ", running version 1.0\r\n";
+	std::string your_host = ":localhost 002 " + _clients[clientFd].getNick() + " :Your host is " + this->_servername + ", running version " + "1.0\r\n";
 	std::string created = ":localhost 003 " + _clients[clientFd].getNick() + " :This server was created on February\r\n";
-	std::string my_info = ":localhost 004 " + _clients[clientFd].getNick() + this->_servername + " 1.0 @cyferrei/@whamdi\r\n";
+	std::string my_info = ":localhost 004 " + _clients[clientFd].getNick() + " :" + this->_servername + " 1.0 @cyferrei/@whamdi\r\n";
 	std::string full_msg = welcome + your_host + created + my_info;
 
 	sendAndLog(clientFd, full_msg);
