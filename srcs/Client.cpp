@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:54:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/12 21:30:23 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:10:48 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,14 @@
 Client::Client() {
 	
 	this->_password = "";
+
 	this->mode_i = false;
 	this->mode_k = false;
 	this->mode_o = false;
 	this->mode_t = false;
 };
+
+
 
 void Client::setNick(std::string nick) {
 	this->_nick = nick;

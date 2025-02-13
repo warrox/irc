@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/12 16:56:04 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/13 10:49:54 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,17 @@ bool Channel::delUser(int fd) {
 	return false;
 }
 
-void Channel::setTopic(std::string topic) { 
+void Channel::setTopic(std::string topic) {
 	this->_topic = topic;
 }
+
 std::string Channel::getTopic(void){
+
 	return(this->_topic);
 }
 
 void Channel::broadcast(int clientToIgnore, Server &server, std::string msg) {
+
 	std::vector<int>::iterator it;
 	for (it = this->_users.begin(); it != this->_users.end(); ++it) {
 		if (*it == clientToIgnore) 
@@ -53,7 +56,7 @@ void Channel::broadcast(int clientToIgnore, Server &server, std::string msg) {
 	}
 }
 
-std::string Channel::getChanName(void)
-{
-  return(this->_chan_name);
+std::string Channel::getChanName(void) {
+	
+	return(this->_chan_name);
 }

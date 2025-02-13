@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 10:48:07 by cyferrei          #+#    #+#             */
+/*   Updated: 2025/02/13 11:00:22 by cyferrei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/Server.hpp"
+
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -29,6 +42,6 @@ int main(int argc, char **argv)
 	Server server(port, password);
 	server.start();
 	server.run();
-	/*}*/
+
 	return(0);
 }
