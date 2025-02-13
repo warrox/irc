@@ -12,7 +12,7 @@
 
 //Avoid magic numbers by defining whats static
 #define BUFFER_SIZE 1024
-
+#define SERVER_NAME = "irc.localhost"; 
 
 int parserPort(char *portInString);
 

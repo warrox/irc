@@ -161,9 +161,6 @@ void Server::privmsg(int clientFd, std::string cmd)
 		it->second.broadcast(clientFd, *this, message);
 	}
 	else{
-		//je cherche le fd du client destinataire
-		//j'ai comme information, le 'nick' de ce client
-		//comment l'obtenir ?
 		clientIterator it = this->_clients.begin();
 		for(; it != this->_clients.end(); ++it)
 		{
@@ -173,54 +170,38 @@ void Server::privmsg(int clientFd, std::string cmd)
 		}
 	}
 	(void)clientFd;
-	// clientIterator it = _clients.begin();
-
-
 }
 
 void Server::join(int clientFd, std::string cmd)
 {
 	std::istringstream lineStream(cmd);
-
-	//Declare two strings at once
 	std::string cmdName, chanName;
 	lineStream >> cmdName;
 	lineStream >> chanName;
 
-	//We made a typedef together for readability, use it
-    channelIterator it = this->_channels.find(chanName);
+	std::string server_name = "localhost.irc";
+	channelIterator it = this->_channels.find(chanName);
 
-	if(it == this->_channels.end()) {
-		//Added a new typdef, which is a pair of std::string, Channel::Channel
-		//We call every pair < key, value > in a map an Entry, see map definition on cpp reference
-		//Improved readability.
+	if (it == this->_channels.end()) {
 		channelEntry newEntry(chanName, Channel(chanName, clientFd));
 		this->_channels.insert(newEntry);
 		this->log("Channel created: " + chanName);
+
 		it = this->_channels.find(chanName);
 		it->second.addUser(clientFd);
-		std::string log = "Added client to " + chanName;
-		this->log(log);
-		this->sendAndLog(clientFd, ":username!ident@hostname JOIN : #" + chanName);
+		this->log("Added client to " + chanName);
+		this->sendAndLog(clientFd, ":" + server_name + " JOIN :" + chanName + "\r\n");
 
 	} else {
-		//Add the client before logging the information, doesn't make sense othewise
-		//If you have an exception in addUser, you'll never get where it came from cuz you
-		//Asserted it was ok by logging before actually updating the value
 		it->second.addUser(clientFd);
-		std::string log = "Added client to " + chanName;	
-		this->sendAndLog(clientFd, ":username!ident@hostname JOIN : #" + chanName);
+		this->log("Added client to " + chanName);
+		this->sendAndLog(clientFd, ":" + server_name + " JOIN :" + chanName + "\r\n");
 
-		if(it->second.getTopic() != "")
-		{
-			this->sendAndLog(clientFd, ":irc.example.com 332 username #channel : " + it->second.getTopic());
+		if (!it->second.getTopic().empty()) {
+			this->sendAndLog(clientFd, ":" + server_name + " 332 " + _clients[clientFd].getNick() + " " + chanName + " :" + it->second.getTopic() + "\r\n");
 		}
-		this->log(log);
-		/*it->second.addUser(clientFd);*/
 	}
 }
-
-//Removed getline, no need to split lines, we did it in Server::commandHandler
 void Server::pass(int clientFd, std::string cmd) {
 	std::istringstream line(cmd);
 
