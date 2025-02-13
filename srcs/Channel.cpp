@@ -6,20 +6,19 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/13 10:49:54 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 16:08:01 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Channel.hpp"
 #include "../includes/Server.hpp"
 #include <algorithm>
-
+#include <iostream>
 Channel::Channel(std::string name, int fd) {
 	this->_chan_name = name;
 	this->_users.push_back(fd);
 	this->_topic = "";
 }
-
 bool Channel::addUser(int fd) {
 	if (std::find(this->_users.begin(), this->_users.end(), fd) == this->_users.end()) {
 		return false;
