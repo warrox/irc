@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
+/*   Updated: 2025/02/13 10:52:23 by cyferrei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/Server.hpp"
 
 #include <cstdlib>
@@ -38,12 +50,12 @@ Server::Server(std::string port, std::string password) {
 
 void Server::start() {
 	struct sockaddr_in server_address = {};
-	int32_t	    server_socket  = -1;
-	const socklen_t    socklen	= sizeof(struct sockaddr_in);
-	int32_t	    optname	= 1;
+	int32_t server_socket = -1;
+	const socklen_t socklen	= sizeof(struct sockaddr_in);
+	int32_t optname	= 1;
 
 	try {
-		server_address.sin_family      = AF_INET;
+		server_address.sin_family = AF_INET;
 		server_address.sin_addr.s_addr = INADDR_ANY;
 		server_address.sin_port	= htons(std::atoi(this->_port.c_str()));
 
@@ -93,10 +105,10 @@ void Server::start() {
 
 void Server::acceptNewClient() {
 	struct sockaddr client_address = {};
-	int32_t	 client_socket  = -1;
-	socklen_t       socklen	= sizeof(struct sockaddr_in);
+	int32_t client_socket  = -1;
+	socklen_t socklen	= sizeof(struct sockaddr_in);
 
-	client_socket		  = accept(_server_fd, &client_address, &socklen);
+	client_socket  = accept(_server_fd, &client_address, &socklen);
 
 	if (client_socket == -1) {
 		this->fatal("Failed to accept new client.");
@@ -110,10 +122,9 @@ void Server::acceptNewClient() {
 
 	this->_clients[client_socket] = Client();
 	pollfd client_pollfd;
-	client_pollfd.fd     = client_socket;
+	client_pollfd.fd = client_socket;
 	client_pollfd.events = POLLIN;
 	this->_pfds.push_back(client_pollfd);
-	//? test
 	this->sendWelcomeMessage(client_socket, "guest");
 }
 
@@ -138,7 +149,7 @@ void Server::scanClients() {
 		// this is the flag that indicates that the client is ready to be read  by our server.
 		if (client.revents & POLLIN) {
 			const int32_t buffsize = sizeof(buffer) / sizeof(buffer[0]);
-			int32_t       rbytes   = recv(client.fd, buffer, buffsize, 0);
+			int32_t rbytes = recv(client.fd, buffer, buffsize, 0);
 
 			if (rbytes == -1) {
 				this->fatal("Failed to read client's request.");
@@ -181,7 +192,7 @@ void Server::scanClients() {
 
 void Server::run() {
 	pollfd server_pollfd;
-	server_pollfd.fd     = this->_server_fd;
+	server_pollfd.fd = this->_server_fd;
 	server_pollfd.events = POLLIN;
 	this->_pfds.push_back(server_pollfd);
 
