@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 10:39:56 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:02:59 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,5 @@ void Server::mode(int clientFd, std::string cmd) {
 				break;
 		}
 	}
-	this->displayClientsInfo();
+	// this->displayClientsInfo();
 }

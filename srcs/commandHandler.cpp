@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:50 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 10:49:21 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:15:57 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,12 @@ void Server::join(int clientFd, std::string cmd) {
 	}
 }
 
+
 void Server::commandHandler(int clientFd, std::string cmd) {
 	std::istringstream stream(cmd);
 	std::string line;
 
-	while(std::getline(stream, line)) {
+	while (std::getline(stream, line)) {
 		std::istringstream lineStream(line);
 		std::string commandName;
 		lineStream >> commandName;
@@ -95,8 +96,11 @@ void Server::commandHandler(int clientFd, std::string cmd) {
 			this->log(log.str());
 		}
 	}
-	if(!this->_clients[clientFd].getIsConnected())
-	{
 
+	// Vérifie si le client est maintenant authentifié et envoie le message de bienvenue
+	Client &client = this->_clients[clientFd];
+	if (!client.getIsConnected() && !client.getNick().empty() && !client.getUser().empty()) {
+		client.setIsConnected(true);
+		this->sendWelcomeMessage(clientFd, client.getNick());
 	}
 }
