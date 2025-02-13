@@ -1,0 +1,161 @@
+*1. Server::Server(std::string port, std::string password)
+
+	!-Initialise les parametres du serveur.
+	!-Prepare la gestion des commandes.
+	!-_address contient l'adresse du serveur.
+
+*2. Server::start()
+
+	!-Creer et configure le socket serveur pour ecouter les connexions.
+	!-Initialise server_address et server_socket - Définit socklen et optname pour les options du socket.
+	{
+		struct sockaddr_in server_address = {};
+		int32_t server_socket = -1;
+		const socklen_t socklen	= sizeof(struct sockaddr_in);
+		int32_t optname	= 1;
+	}
+	!-AF_INET → IPv4 - 
+	!INADDR_ANY → Accepte toutes les connexions entrantes - 
+	!htons() → Convertit le port en format réseau.
+	{
+		try {
+			server_address.sin_family = AF_INET;
+			server_address.sin_addr.s_addr = INADDR_ANY;
+			server_address.sin_port	= htons(std::atoi(this->_port.c_str()));
+		} catch (const std::exception &e) {
+			this->fatal(e.what());
+			return;
+		}
+	}
+	!-Creer le socket TCP - 
+	!AF_INET → IPv4 - 
+	!SOCK_STREAM: socket TCP (connexion fiable, orientee flux) -
+	!IPPROTO_TCP: on utilise un protocole TCP (peut etre set a 0 car deja defini sur SOCK_STREAM).
+	{
+		server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+		if (server_socket == -1) {
+			this->fatal("Failed to create socket");
+			return;
+		}
+	}
+	!Permet la réutilisation du port immédiatement après un redémarrage.
+	{
+		if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &optname, socklen) == -1) {
+			close(server_socket);
+			this->fatal("Failed to configure socket to SO_REUSEADDR | SO_REUSEPORT");
+			return;
+		}
+	}
+	!configure le socket en mode NON BLOQUANT - 
+	!fcntl(): modifie les proprietes d'un fd(socket) -
+	!F_SETFL: indique que l'on veut changer les flags du socket -
+	!O_NONBLOCK: active le mode non-bloquant: par defaut, les les appels a accept()
+	!recv() et send() attendent tant que l'operation n'est pas terminee.
+	{
+		if (fcntl(server_socket, F_SETFL, O_NONBLOCK) == -1) {
+			close(server_socket);
+			this->fatal("Failed to configure socket to O_NONBLOCK");
+			return;
+		}
+	}
+	!Lie (bind()) le socket à l'adresse et au port spécifié.
+	{
+		if (bind(server_socket, (struct sockaddr *)&server_address, socklen) == -1) {
+			close(server_socket);
+			this->fatal("Failed to bind socket.");
+			return;
+		}
+	}
+	!Démarre l'écoute (listen()) pour accepter les connexions.
+	!SOMAXCONN: constante indiquant le nb de connexion max en attente.
+	{
+		if (listen(server_socket, SOMAXCONN) == -1) {
+			close(server_socket);
+			this->fatal("Failed to listen with socket.");
+			return;
+		}
+	}
+	!Stocke les informations du serveur et affiche un log.
+	{
+		this->_address = server_address;
+		this->_server_fd = server_socket;
+		std::string log = "Server started listening on port " + this->_port;
+		this->log(log);
+	}
+*3 Server::acceptNewClient()
+
+	!Attends une connexion entrante - accepte avec accept()
+	{
+		struct sockaddr client_address = {};
+		int32_t client_socket = -1;
+		socklen_t socklen = sizeof(struct sockaddr_in);
+		client_socket = accept(_server_fd, &client_address, &socklen);
+	}
+	!Configure le client en mode non-bloquant
+	{
+		if (fcntl(client_socket, F_SETFL, O_NONBLOCK) == -1) {
+			close(client_socket);
+			this->fatal("Failed to set non-blocking mode.");
+		}
+	}
+	!Ajout d'un nouveau client
+	{
+		this->_clients[client_socket] = Client();
+	}
+	!Ajoute le client a la liste de surveillance pollfd pour detecter msg
+	{
+		pollfd client_pollfd;
+		client_pollfd.fd = client_socket;
+		client_pollfd.events = POLLIN;
+		this->_pfds.push_back(client_pollfd);
+	}
+
+*4 Server::scanClients()
+
+	!Parcourt tout les clients et ignore ceux qui n'ont pas d'events
+	{
+		for (size_t i = 1; i < this->_pfds.size(); ++i) {
+			struct pollfd &client = _pfds[i];
+			if (client.revents == 0) { continue; }
+		}
+	}
+	!Déconnecte un client s'il y a une erreur (POLLERR) ou une fermeture (POLLHUP)
+	{
+		if (client.revents & POLLIN) {
+			int32_t rbytes = recv(client.fd, buffer, buffsize, 0);
+			if (rbytes <= 0) {
+				close(client.fd);
+				_pfds.erase(_pfds.begin() + i);
+				break;
+			} else {
+				buffer[rbytes] = '\0';
+				this->commandHandler(client.fd, std::string(buffer));
+			}
+			client.revents = POLLOUT;
+		}
+	}
+	!Lit les messages (recv()), les traite avec commandHandler() et passe à l'état POLLOUT
+
+*5 Server::run()
+
+	!Ajoute le socket serveur à la liste pollfd.
+	!Attend des événements (poll()).
+	!Si un nouveau client arrive → acceptNewClient().
+	!Sinon, il traite les messages des clients (scanClients()).
+	{
+		pollfd server_pollfd;
+		server_pollfd.fd = this->_server_fd;
+		server_pollfd.events = POLLIN;
+		this->_pfds.push_back(server_pollfd);
+
+		while (true) {
+			int activity = poll(this->_pfds.data(), this->_pfds.size(), -1);
+			if (activity < 0) this->fatal("Poll failed");
+
+			if (this->_pfds[0].revents & POLLIN) {
+				this->acceptNewClient();
+			} else {
+				this->scanClients();
+			}
+		}
+	}
