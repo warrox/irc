@@ -6,12 +6,11 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:41:57 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/14 11:20:16 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/14 15:00:19 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
-#include "../includes/colors.hpp"
 
 #include <sstream>
 #include <iostream>
@@ -43,19 +42,30 @@ void Server::nick(int clientFd, std::string cmd) {
 	std::string nickname;
 
 	iss >> command >> nickname;
-	std::cout << YELLOW << "|" << command << "|" << std::endl;
-	std::cout << YELLOW << "|" << nickname << "|" << std::endl;
+	if (_clients[clientFd].getPassword().empty() || _clients[clientFd].getPassword() != this->_pass) {
+		// std::cout << RED << "Wrong Password connection denied" << RESET << std::endl;
+		std::string errorMsg = ":" + this->_servername + "464" + " " + _clients[clientFd].getNick() + " :Wrong password\r\n";
+		this->sendAndLog(clientFd, errorMsg);
+
+		disconnectClient(clientFd, "Incorrect password");
+		return;
+	}
 	if (nickname.empty()) {
-		sendAndLog(clientFd, ":localhost 461 " + _clients[clientFd].getNick() + " NICK :\r\n");
+		sendAndLog(clientFd, ":" + this->_servername + "431" + " " + _clients[clientFd].getNick() + " " + nickname + " :No nickname given\r\n");
 		return;
 	}
 	for (std::map<int, Client>::iterator match = _clients.begin(); match != _clients.end(); ++match) {
 		if (match->second.getNick() == nickname) {
-			setNewNick(clientFd, nickname);
-			sendAndLog(clientFd, this->get_prefix(clientFd) + " " + "NICK " + _clients[clientFd].getUser() + " " + _clients[clientFd].getNick()+ "\r\n");
+			// std::cout << BLUE << match->second.getNick() << std::endl;
+			sendAndLog(clientFd, ":" + this->_servername + "433" + " " + _clients[clientFd].getNick() + " " + nickname + " :Nickname in use\r\n");
+			if (_clients[clientFd].getNick().empty()) {
+				setNewNick(clientFd, "guest");
+				sendAndLog(clientFd, this->get_prefix(clientFd) + "NICK :" + _clients[clientFd].getUser() + " " + _clients[clientFd].getNick()+ "\r\n");
+			}
 			return;
 		}
 	}
+	// std::cout << nickname << std::endl;
 	_clients[clientFd].setNick(nickname);
-	sendAndLog(clientFd, this->get_prefix(clientFd) + " " + "NICK " + _clients[clientFd].getUser() + " " + _clients[clientFd].getNick() + "\r\n");
+	sendAndLog(clientFd, this->get_prefix(clientFd) + " NICK :" + _clients[clientFd].getUser() + " " + _clients[clientFd].getNick() + "\r\n");
 }
