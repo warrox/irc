@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:40:17 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 20:27:24 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/14 14:30:50 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void Server::user(int clientFd, std::string cmd) {
 
 	std::string pass = this->_clients[clientFd].getPassword();	
 	if (pass.empty() || this->_pass != pass) {
-		std::cout << RED << "Wrong Password connection denied" << RESET << std::endl;
-		std::string errorMsg = ":localhost 464 * :Incorrect password\r\n";
+		// std::cout << RED << "Wrong Password connection denied" << RESET << std::endl;
+		std::string errorMsg = ":" + this->_servername + "464" + " " + _clients[clientFd].getNick() + " :Wrong password\r\n";
 		this->sendAndLog(clientFd, errorMsg);
 
 		disconnectClient(clientFd, "Incorrect password");
@@ -44,7 +44,6 @@ void Server::user(int clientFd, std::string cmd) {
 		disconnectClient(clientFd, "Invalid USER command");
 		return;
 	}
-
 	_clients[clientFd].setUser(user);
 	_clients[clientFd].setHost(host);
 	_clients[clientFd].setRealName(realname.substr(2));
