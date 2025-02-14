@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:54:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/14 11:50:13 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/14 14:37:01 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ Client::Client() {
 	this->mode_i = false;
 	this->mode_k = false;
 	this->mode_o = false;
-	this->mode_t = false;
+	this->mod_t = false;
 };
 
 		std::string _nick;
@@ -31,7 +31,7 @@ Client::Client() {
 		std::string _password;
 		
 		bool mode_i;
-		bool mode_t;
+		bool mod_t;
 		bool mode_k;
 		bool mode_o;
 		bool _is_connected;
@@ -49,7 +49,7 @@ Client& Client::operator=(const Client &rhs)
 		this->_real_name = rhs._real_name;
 		this->_password = rhs._password;
 		this->mode_i = rhs.mode_i;
-		this->mode_t = rhs.mode_t;
+		this->mod_t = rhs.mod_t;
 		this->mode_k = rhs.mode_k;
 		this->mode_o = rhs.mode_o;
 		this->_is_connected = rhs._is_connected;
@@ -78,7 +78,7 @@ void	Client::setModeI(bool enable) {
 }
 
 void	Client::setModeT(bool enable) {
-	this->mode_t = enable;
+	this->mod_t = enable;
 }
 
 void	Client::setModeK(bool enable) {
@@ -110,7 +110,7 @@ bool Client::getModeI(void)const {
 }
 
 bool Client::getModeT(void)const {
-	return (this->mode_t);
+	return (this->mod_t);
 }
 
 bool Client::getModeK(void)const {

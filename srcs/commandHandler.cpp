@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:50 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 19:29:28 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/14 15:35:02 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,15 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
+
+//? <prefix>   ::= <servername> | <nick> [ '!' <user> ] [ '@' <host> ]
+
+//? <message>  ::= [':' <prefix> <SPACE> ] <command> <params> <crlf>
+//? ex --> his->get_prefix(clientFd) + " " + "MODE " + _clients[clientFd].getUser() + " " + mode + "\r\n");
+
+std::string Server::get_prefix(int clientFd) {
+	return (":" + _clients[clientFd].getNick() + "!" + _clients[clientFd].getUser() + "@" + _clients[clientFd].getHost());
+}
 
 void Server::disconnectClient(int clientFd, const std::string& reason) {
 
@@ -72,14 +81,10 @@ void Server::commandHandler(int clientFd, std::string cmd) {
 
 		std::map<std::string, CommandFunc>::iterator match = this->_commands.find(commandName);
 		if (match != this->_commands.end()) {
+			line.erase(line.end() - 1);
 			(this->*_commands[commandName])(clientFd, line);
 		} else {
 			std::cout << "Error" << std::endl;
-			//? need to
-			// std::stringstream log;
-			// log << commandName << ": Command not recognized";
-			// sendAndLog(clientFd, ":" + this->_servername + " 421 " + _clients[clientFd].getNick() + " " + commandName + " :Unknown command\r\n");
-			// this->log(log.str());
 		}
 	}
 }

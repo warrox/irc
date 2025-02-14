@@ -6,23 +6,18 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/14 12:06:00 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/14 15:11:59 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
 
-#include <cstdlib>
 #include <exception>
 #include <sys/poll.h>
 #include <sys/socket.h>
-#include <cctype>
 #include <cstdio>
-#include <cstring>
-#include <sys/poll.h>
 #include <vector>
 #include <arpa/inet.h>
-#include <sys/socket.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -38,13 +33,18 @@ std::string getTime() {
 
 	return std::string(buffer);
 }
-void Server::sendMessageto(int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name)
+void Server::sendMessageto(int clientFd, int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name)
 {
+	std::cout << "Message before sending to client : " << msg << std::endl;
 	// std::string formatedMsg = ":" + sender_name + " PRIVMSG " + receiver_name + " :" + msg + "\r\n";
-	(void)sender_name;
-	std::string formatedMsg = "PRIVMSG " + receiver_name + " :" + msg + "\r\n";
+	(void)sender_name;	
+	
+	std::string formatedMsg = this->get_prefix(clientFd) + " PRIVMSG " + receiver_name + " :" + msg + "\r\n";
+	std::cout << "Message size: " << formatedMsg.size() << std::endl;
+    std::cout << "Message to send: '" << formatedMsg << "'" << std::endl;
 	sendAndLog(receiver_fd, formatedMsg);
 }
+
 Server::Server(std::string port, std::string password) {
 	this->_port = port;
 	this->_pass = password;

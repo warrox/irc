@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:54:19 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/14 11:50:05 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/14 14:36:17 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class Client {
 		std::string _password;
 		
 		bool mode_i;
-		bool mode_t;
+		bool mod_t;
 		bool mode_k;
 		bool mode_o;
 		bool _is_connected;

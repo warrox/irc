@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/14 12:01:56 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/14 14:39:12 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void Channel::broadcast(int clientToIgnore, Server &server, std::string msg) {
 		if (*it == clientToIgnore) 
 			continue;
 		// server.sendAndLog(*it, msg += "\r\n");
-		server.sendMessageto(*it, msg, server.getClient(clientToIgnore).getNick(), server.getClient(*it).getNick());
+		server.sendMessageto(clientToIgnore,*it, msg, server.getClient(clientToIgnore).getNick(), this->getChanName()); 
 	}
 }
 

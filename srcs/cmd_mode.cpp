@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 20:30:15 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/14 11:17:45 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ void Server::mode(int clientFd, std::string cmd) {
 	std::istringstream iss(cmd);
 	std::string command, nickname, mode;
 	iss >> command >> nickname >> mode;
-
-	// std::cout << "CMD: " << cmd << "'" << std::endl;
 
 	if (mode.empty() || (mode[0] != '+' && mode[0] != '-')) {
 		std::cout << RED << "ERROR in MODE: Invalid format (must start with + or -)" << BOLD_OFF << std::endl;
@@ -52,7 +50,7 @@ void Server::mode(int clientFd, std::string cmd) {
 		}
 	}
 	if (nickname == _clients[clientFd].getNick())
-		sendAndLog(clientFd, ":" + _clients[clientFd].getNick() + "!" + _clients[clientFd].getUser() + "@" + _clients[clientFd].getHost() + " " + "MODE " + _clients[clientFd].getUser() + " " + mode + "\r\n");
+		sendAndLog(clientFd, this->get_prefix(clientFd) + " " + "MODE " + _clients[clientFd].getUser() + " " + mode + "\r\n");
 	else
 		std::cout << "ERROR: Nickname mismatch" << std::endl;
 }
