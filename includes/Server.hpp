@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:50:03 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 20:24:59 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/14 10:55:38 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,9 @@ class Server
 		void privmsg(int, std::string);
 		void quit(int, std::string);
 		void ping(int, std::string);
+		
+		//-------------------- GRAMMATICAL LANGUAGE--------------- //
+		std::string get_prefix(int);
 };
 
 #endif
