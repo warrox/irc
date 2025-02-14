@@ -6,13 +6,12 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:50 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/14 15:44:11 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:25:38 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
 #include "../includes/colors.hpp"
-
 #include <sstream>
 #include <iostream>
 #include <string>
@@ -21,7 +20,7 @@
 //? <prefix>   ::= <servername> | <nick> [ '!' <user> ] [ '@' <host> ]
 
 //? <message>  ::= [':' <prefix> <SPACE> ] <command> <params> <crlf>
-//? ex --> this->get_prefix(clientFd) + " " + "MODE " + _clients[clientFd].getUser() + " " + mode + "\r\n");
+//? ex --> his->get_prefix(clientFd) + " " + "MODE " + _clients[clientFd].getUser() + " " + mode + "\r\n");
 
 std::string Server::get_prefix(int clientFd) {
 
@@ -82,6 +81,9 @@ void Server::commandHandler(int clientFd, std::string cmd) {
 
 		std::map<std::string, CommandFunc>::iterator match = this->_commands.find(commandName);
 		if (match != this->_commands.end()) {
+			if (line.at(line.size() - 1) == '\r') {
+				line.erase(line.end() - 1);
+			}
 			(this->*_commands[commandName])(clientFd, line);
 		} else {
 			std::cout << "Unknown or unhandled cmd!" << std::endl;

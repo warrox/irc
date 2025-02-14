@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/13 10:50:03 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/14 14:19:32 by cyferrei         ###   ########.fr       */
+/*   Created: 2025/02/14 12:07:03 by whamdi            #+#    #+#             */
+/*   Updated: 2025/02/14 14:32:16 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,12 @@ class Server
 		void topic(int, std::string);
 		void privmsg(int, std::string);
 		void quit(int, std::string);
-		void ping(int, std::string);
+		void ping(int, std::string);	
+		void sendMessageto(int clientFd, int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name);
+
+		Client getClient(int client_fd) { return _clients[client_fd]; }
 		
+		int findClientByName(std::string name, std::map<int,Client> client);
 		//-------------------- GRAMMATICAL LANGUAGE--------------- //
 		std::string get_prefix(int);
 };
