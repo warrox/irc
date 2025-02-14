@@ -6,17 +6,12 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:50 by cyferrei          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/02/14 15:35:02 by whamdi           ###   ########.fr       */
-=======
-/*   Updated: 2025/02/14 14:26:55 by cyferrei         ###   ########.fr       */
->>>>>>> 7e47f184df48425df8f75919a19a8a7300379007
+/*   Updated: 2025/02/14 15:42:05 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
 #include "../includes/colors.hpp"
-
 #include <sstream>
 #include <iostream>
 #include <string>

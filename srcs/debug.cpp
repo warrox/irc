@@ -6,14 +6,14 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:41 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 20:13:58 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/14 16:07:33 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../includes/Server.hpp"
 #include "../includes/colors.hpp"
-
+#include "../includes/Client.hpp"
 #include <cstdlib>
 #include <iostream>
 
