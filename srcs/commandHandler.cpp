@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:50 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/14 11:21:10 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/14 14:26:55 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 //? ex --> his->get_prefix(clientFd) + " " + "MODE " + _clients[clientFd].getUser() + " " + mode + "\r\n");
 
 std::string Server::get_prefix(int clientFd) {
+
 	return (":" + _clients[clientFd].getNick() + "!" + _clients[clientFd].getUser() + "@" + _clients[clientFd].getHost());
 }
 
@@ -83,12 +84,7 @@ void Server::commandHandler(int clientFd, std::string cmd) {
 		if (match != this->_commands.end()) {
 			(this->*_commands[commandName])(clientFd, line);
 		} else {
-			std::cout << "Error" << std::endl;
-			//? need to
-			// std::stringstream log;
-			// log << commandName << ": Command not recognized";
-			// sendAndLog(clientFd, ":" + this->_servername + " 421 " + _clients[clientFd].getNick() + " " + commandName + " :Unknown command\r\n");
-			// this->log(log.str());
+			std::cout << "Unknown or unhandled cmd!" << std::endl;
 		}
 	}
 }
