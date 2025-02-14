@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 20:31:34 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/14 12:06:00 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <ctime>
+#include <iostream>
 
 std::string getTime() {
 	std::time_t now = std::time(0);
@@ -37,7 +38,13 @@ std::string getTime() {
 
 	return std::string(buffer);
 }
-
+void Server::sendMessageto(int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name)
+{
+	// std::string formatedMsg = ":" + sender_name + " PRIVMSG " + receiver_name + " :" + msg + "\r\n";
+	(void)sender_name;
+	std::string formatedMsg = "PRIVMSG " + receiver_name + " :" + msg + "\r\n";
+	sendAndLog(receiver_fd, formatedMsg);
+}
 Server::Server(std::string port, std::string password) {
 	this->_port = port;
 	this->_pass = password;

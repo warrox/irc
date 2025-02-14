@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:50:03 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 20:24:59 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/14 11:56:29 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,10 @@ class Server
 		void topic(int, std::string);
 		void privmsg(int, std::string);
 		void quit(int, std::string);
-		void ping(int, std::string);
+		void ping(int, std::string);	
+		void sendMessageto(int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name);
+
+		Client getClient(int client_fd) { return _clients[client_fd]; }
 };
 
 #endif

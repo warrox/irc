@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:54:19 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/12 21:28:58 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/14 11:50:05 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class Client {
 	public:
 		Client();
 		Client(int client_fd, std::string msgFromClient);
+		Client& operator=(const Client &);
 		~Client() {};
 
 
