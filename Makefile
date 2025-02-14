@@ -6,14 +6,14 @@
 #    By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/13 10:35:39 by cyferrei          #+#    #+#              #
-#    Updated: 2025/02/14 14:17:44 by whamdi           ###   ########.fr        #
+#    Updated: 2025/02/13 19:00:14 by cyferrei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 RM = rm -rf
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror  -g3
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g3
 
 SRC_DIR = srcs
 INCLUDE_DIR = includes

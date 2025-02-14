@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:45:59 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/14 15:19:48 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/13 15:33:44 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,6 @@
 
 #include <sstream>
 #include <iostream>
-int Server::findClientByName(std::string name, std::map<int,Client> client)
-{
-	for (std::map<int, Client>::const_iterator it = client.begin(); it != client.end(); ++it) {
-		if (it->second.getNick() == name)
-			return(it->first);
-	}
-	return(-1);
-}
 void Server::privmsg(int clientFd, std::string cmd)
 {
 	std::istringstream lineStream(cmd);
@@ -36,7 +28,6 @@ void Server::privmsg(int clientFd, std::string cmd)
 		if (it == this->_channels.end())
 			return ;
 		this->log("Broadcasting on channel: " + dest);
-		std::cout << message << std::endl;
 		it->second.broadcast(clientFd, *this, message); //ici 
 	}
 	else{
@@ -44,17 +35,10 @@ void Server::privmsg(int clientFd, std::string cmd)
 		//j'ai comme information, le 'nick' de ce client
 		//comment l'obtenir ?
 		clientIterator it = this->_clients.begin();
-		int fdOfReceiver = findClientByName(dest,this->_clients);
-		if(fdOfReceiver == -1)
-		{
-			std::cerr << "Client not found" << std::endl;
-			return;
-		}
 		for(; it != this->_clients.end(); ++it)
 		{
 			if(it->second.getNick() == dest) {
-				// this->sendAndLog(it->first, message);
-				this->sendMessageto(clientFd, fdOfReceiver, message, this->getClient(fdOfReceiver).getNick(), dest);
+				this->sendAndLog(it->first, message);
 			}
 		}
 	}
