@@ -6,26 +6,21 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:40:17 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/14 14:30:50 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/14 15:29:47 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
-#include "../includes/colors.hpp"
 
 #include <sstream>
-#include <iostream>
-
 
 void Server::user(int clientFd, std::string cmd) {
 
 	std::string pass = this->_clients[clientFd].getPassword();	
 	if (pass.empty() || this->_pass != pass) {
-		// std::cout << RED << "Wrong Password connection denied" << RESET << std::endl;
 		std::string errorMsg = ":" + this->_servername + "464" + " " + _clients[clientFd].getNick() + " :Wrong password\r\n";
 		this->sendAndLog(clientFd, errorMsg);
-
-		disconnectClient(clientFd, "Incorrect password");
+		disconnectClient(clientFd, errorMsg);
 		return;
 	}
 
@@ -40,15 +35,13 @@ void Server::user(int clientFd, std::string cmd) {
 	std::getline(iss, realname);
 
 	if (user.empty() || host.empty() || realname.empty() || realname[1] != ':') {
-		sendAndLog(clientFd, ":localhost 461 " + _clients[clientFd].getNick() + " USER :\r\n");
-		disconnectClient(clientFd, "Invalid USER command");
+		sendAndLog(clientFd, ":" + this->_servername + "461" + _clients[clientFd].getNick() + " " + " :Missing arguments\r\n");
+		// disconnectClient(clientFd, "Invalid USER command");
 		return;
 	}
 	_clients[clientFd].setUser(user);
 	_clients[clientFd].setHost(host);
 	_clients[clientFd].setRealName(realname.substr(2));
-	
-	// reponses IRC pour USER
 	
 	std::string welcome = ":" + this->_servername + " 001 " + _clients[clientFd].getNick() + " :Welcome to the IRC network, " + _clients[clientFd].getNick() + "!" + "\r\n";
 	std::string your_host = ":" + this->_servername + " 002 " + _clients[clientFd].getNick() + " :Your host is ft_irc running version 1.0" + "\r\n";
