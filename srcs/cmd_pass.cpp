@@ -6,13 +6,12 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:43:20 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 13:23:27 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/14 10:03:52 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
 
-#include <iostream>
 #include <sstream>
 
 void Server::pass(int clientFd, std::string cmd) {
