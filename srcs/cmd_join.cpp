@@ -6,7 +6,7 @@
 /*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/15 20:58:19 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/15 21:22:50 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,21 @@ void Server::join(int clientFd, std::string cmd) {
 		it->second.addUser(clientFd);
 		this->log("Added client to " + chanName);
 		this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
-
+    // std::string userList = ":" + _servername + " 353 " + client.getNick() + " = " + channelName + " :";
+    // const std::vector<Client>& users = channel->getUsers();
+    // for (std::vector<Client>::const_iterator it = users.begin(); it != users.end(); ++it) {
+    //     if (it->getModeO()) {
+    //         userList += "@" + it->getNick() + " ";
+    //     } else {
+    //         userList += it->getNick() + " ";
+    //     }
+    // }
+    // userList += "\r\n";
+    // sendAndLog(clientFd, userList);
+    //
+    // std::string endOfNames = ":" + _servername + " 366 " + client.getNick() + " " + channelName + " :End of /NAMES list.\r\n";
+    // sendAndLog(clientFd, endOfNames);
+    //
 	} else {
 		it->second.addUser(clientFd);
 		this->log("Added client to " + chanName);
@@ -41,5 +55,6 @@ void Server::join(int clientFd, std::string cmd) {
 			this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " 332 " + _clients[clientFd].getNick() + " " + chanName + " :" + it->second.getTopic() + "\r\n");
 		}
 	}
+
 }
 
