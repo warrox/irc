@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:50 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/14 17:25:38 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/15 12:29:09 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,37 +37,6 @@ void Server::disconnectClient(int clientFd, const std::string& reason) {
 	close(clientFd);
 	_clients.erase(clientFd);
 	std::cout << RED << "Client " << clientFd << " disconnected: " << reason << RESET << std::endl;
-}
-
-
-void Server::join(int clientFd, std::string cmd) {
-	std::istringstream lineStream(cmd);
-	std::string cmdName, chanName;
-	lineStream >> cmdName;
-	lineStream >> chanName;
-
-	std::string server_name = "localhost.irc";
-	channelIterator it = this->_channels.find(chanName);
-
-	if (it == this->_channels.end()) {
-		channelEntry newEntry(chanName, Channel(chanName, clientFd));
-		this->_channels.insert(newEntry);
-		this->log("Channel created: " + chanName);
-
-		it = this->_channels.find(chanName);
-		it->second.addUser(clientFd);
-		this->log("Added client to " + chanName);
-		this->sendAndLog(clientFd, ":" + server_name + " JOIN :" + chanName + "\r\n");
-
-	} else {
-		it->second.addUser(clientFd);
-		this->log("Added client to " + chanName);
-		this->sendAndLog(clientFd, ":" + server_name + " JOIN :" + chanName + "\r\n");
-
-		if (!it->second.getTopic().empty()) {
-			this->sendAndLog(clientFd, ":" + server_name + " 332 " + _clients[clientFd].getNick() + " " + chanName + " :" + it->second.getTopic() + "\r\n");
-		}
-	}
 }
 
 void Server::commandHandler(int clientFd, std::string cmd) {

@@ -6,7 +6,7 @@
 /*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 12:07:03 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/14 14:32:16 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/15 12:29:58 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,11 @@ class Server
 		void pass(int, std::string);
 		void user(int, std::string);
 		void mode(int, std::string);
-		void join(int, std::string);
 		void topic(int, std::string);
 		void privmsg(int, std::string);
 		void quit(int, std::string);
 		void ping(int, std::string);	
+		void join(int clientFd, std::string cmd);
 		void sendMessageto(int clientFd, int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name);
 
 		Client getClient(int client_fd) { return _clients[client_fd]; }
