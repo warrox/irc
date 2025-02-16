@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/14 14:39:12 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/16 13:58:38 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,23 @@
 #include "../includes/Server.hpp"
 #include <algorithm>
 #include <iostream>
+#include <iterator>
 #include <vector>
 
 
+  
+std::vector<Client> Channel::getUsers(void)
+{
+    std::vector<Client> clientsInChan;
+    std::map<int, Client> allClients = this->_server->getClients();
+
+    for (std::vector<int>::iterator itUser = this->_users.begin(); itUser != this->_users.end(); ++itUser) {
+        std::map<int, Client>::iterator itClient = allClients.find(*itUser);
+        if (itClient != allClients.end())
+            clientsInChan.push_back(itClient->second);
+    }
+    return clientsInChan;
+}
 void Channel::printClientInChan(std::vector<int> user)
 {
 	if(user.empty())
@@ -29,10 +43,10 @@ void Channel::printClientInChan(std::vector<int> user)
 		std::cout<< "user in Channel : " << user[i] << std::endl;
 	}
 }
-Channel::Channel(std::string name, int fd) {
+Channel::Channel(std::string name, int fd, Server &server) {
 	this->_chan_name = name;
 	(void)fd;
-	// this->_users.push_back(fd); not necessary
+	this->_server = &server;
 	this->_topic = "";
 }
 

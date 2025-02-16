@@ -6,7 +6,7 @@
 /*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 12:07:03 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/15 12:29:58 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/16 13:37:35 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ class Server
 
 		//You desctructor shouldn't be empty, but if it, you can initialise it here via syntax {}
 		~Server() {}
-
+		
 		std::string getPass(void);
 		void start();
 		void run();
@@ -66,6 +66,7 @@ class Server
 		void scanClients();
  		void commandHandler(int clientFd, std::string cmd);
 		void disconnectClient(int clientFd, const std::string& reason);
+		std::map<int,Client> getClients()const;
 		//--------------------- LOG / DEBUG --------------------//
 		void sendAndLog(int, std::string);
 		void log(std::string);

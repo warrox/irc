@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:44:14 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/14 11:58:04 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/16 14:21:31 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,23 @@ class Channel {
 
 	private:
 		std::string _chan_name;
-		std::string _chan_format; // reprend le nom du chan et le format pour chaque user	
-		// std::pair<int, Client> _users; 
-		
-		// std::vector<std::pair<int, Client> > _users;
+		std::string _chan_format; // reprend le nom du chan et le format pour chaque user		
 		std::vector<int> _users;
-		// std::pair<std::vector<int>, std::vector<Client> > _users;
+		Server *_server;
 		std::string _topic;
 	public :
-		Channel(std::string name, int fd);
 
+		Channel() : _chan_name(""), _server(NULL) {}
+		Channel(std::string name, int fd, Server &);
 		bool		addUser(int fd);
 		bool 		delUser(int fd);
 		void 		setTopic(std::string topic);
-	std::string		getChanName(void);
+		std::string		getChanName(void);
 		std::string getTopic(void);
 		void		broadcast(int, Server&, std::string);	
 		void printClientInChan(std::vector<int> user);
+		std::vector<Client> getUsers(void);  
+
 		// stock le message du client dans un buffer > puis le renvoie a tous les clients non emeteur du message d'origine (e)
 		~Channel() {}
 	};

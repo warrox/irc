@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/14 17:25:18 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/16 13:38:04 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,11 @@ std::string getTime() {
 	std::strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", now_tm);
 
 	return std::string(buffer);
+}
+
+std::map<int,Client> Server::getClients()const
+{
+	return(this->_clients);
 }
 void Server::sendMessageto(int clientFd, int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name)
 {

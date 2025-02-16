@@ -6,24 +6,24 @@
 /*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/15 21:22:50 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/16 14:27:46 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
 #include <sstream> 
-
+#include <iostream>
 void Server::join(int clientFd, std::string cmd) {
 	std::istringstream lineStream(cmd);
 	std::string cmdName, chanName;
 	lineStream >> cmdName;
 	lineStream >> chanName;
 
-	// std::string server_name = "localhost.irc";
 	channelIterator it = this->_channels.find(chanName);
 
 	if (it == this->_channels.end()) {
-		channelEntry newEntry(chanName, Channel(chanName, clientFd));
+		std::cout << "FIRST callL" << std::endl;
+		channelEntry newEntry(chanName, Channel(chanName, clientFd,*this));
 		this->_channels.insert(newEntry);
 		this->log("Channel created: " + chanName);
 
@@ -31,21 +31,20 @@ void Server::join(int clientFd, std::string cmd) {
 		it->second.addUser(clientFd);
 		this->log("Added client to " + chanName);
 		this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
-    // std::string userList = ":" + _servername + " 353 " + client.getNick() + " = " + channelName + " :";
-    // const std::vector<Client>& users = channel->getUsers();
-    // for (std::vector<Client>::const_iterator it = users.begin(); it != users.end(); ++it) {
-    //     if (it->getModeO()) {
-    //         userList += "@" + it->getNick() + " ";
-    //     } else {
-    //         userList += it->getNick() + " ";
-    //     }
-    // }
-    // userList += "\r\n";
-    // sendAndLog(clientFd, userList);
-    //
-    // std::string endOfNames = ":" + _servername + " 366 " + client.getNick() + " " + channelName + " :End of /NAMES list.\r\n";
-    // sendAndLog(clientFd, endOfNames);
-    //
+		std::string userList = ":" + _servername + " 353 " + this->_clients[clientFd].getNick() + " = " + chanName + " :";
+		const std::vector<Client>& users = this->_channels[chanName].getUsers();
+		for (std::vector<Client>::const_iterator it = users.begin(); it != users.end(); ++it) {
+			if (it->getModeO()) {
+				userList += "@" + it->getNick() + " ";
+			} else {
+				userList += it->getNick() + " ";
+			}
+			userList += "\r\n";
+			std::cout<<"Go in " << std::endl;
+			sendAndLog(clientFd, userList);
+    }
+
+
 	} else {
 		it->second.addUser(clientFd);
 		this->log("Added client to " + chanName);
