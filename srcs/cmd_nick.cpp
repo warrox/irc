@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:41:57 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/17 14:01:17 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:28:07 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,5 @@ void Server::nick(int clientFd, std::string cmd) {
 	// std::cout << nickname << std::endl;
 	_clients[clientFd].setNick(nickname);
 	sendAndLog(clientFd, this->get_prefix(clientFd) + " NICK :" + _clients[clientFd].getUser() + " " + _clients[clientFd].getNick() + "\r\n");
-	displayClientsInfo();
+	// displayClientsInfo();
 }
