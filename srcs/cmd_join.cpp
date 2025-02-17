@@ -6,7 +6,7 @@
 /*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/17 10:13:02 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/17 14:24:26 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,21 @@
 
 void Server::sendingUserListToClient(std::string chanName,int clientFd, bool is_first_client)
 {
+	(void) is_first_client;
+
 	std::string userList = ":" + _servername + " 353 " + this->_clients[clientFd].getNick() + " = " + chanName + " :";
+	std::string endOfUserList = ":" + _servername + " 366 " + this->_clients[clientFd].getNick() + " " + chanName + " :End of member list\r\n";
 	const std::vector<Client>& users = this->_channels[chanName].getUsers();
 	for (std::vector<Client>::const_iterator it = users.begin(); it != users.end(); ++it) {
-		if (is_first_client) {
-			userList += "@" + it->getNick() + " ";
+		if (this->_clients[clientFd].getModeO()) {
+			userList += "@" + it->getNick();
 		} else {
-			userList += it->getNick() + " ";
+			userList += " " + it->getNick();
 		}
 		userList += "\r\n";
-		std::cout<<"Go in " << std::endl;
 		this->log("Sending the userList to client : " + userList);
-		this->sendAndLog(clientFd, userList);
+		this->sendAndLog(clientFd,userList);
+		this->sendAndLog(clientFd, endOfUserList);
 	}
 }
 
@@ -48,6 +51,7 @@ void Server::join(int clientFd, std::string cmd)
 		this->log("Channel created: " + chanName);
 
 		it = this->_channels.find(chanName);
+		this->_clients[clientFd].setModeO(true);
 		it->second.addUser(clientFd);
 		this->log("Added client to " + chanName);
 		this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
