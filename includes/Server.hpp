@@ -6,7 +6,7 @@
 /*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 12:07:03 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/16 13:37:35 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/17 10:12:30 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ class Server
 		void fatal(std::string);
 		void recvLog(int clientFd, std::string message);
 		void displayClientsInfo(void);
-
+		void sendMessageto(int clientFd, int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name);	
+		void sendingUserListToClient(std::string chanName,int clientFd, bool);
 		//-------------------- SERVER COMMANDS --------------- //
 		void nick(int, std::string);
 		void setNewNick(int, std::string);
@@ -86,7 +87,6 @@ class Server
 		void quit(int, std::string);
 		void ping(int, std::string);	
 		void join(int clientFd, std::string cmd);
-		void sendMessageto(int clientFd, int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name);
 
 		Client getClient(int client_fd) { return _clients[client_fd]; }
 		
