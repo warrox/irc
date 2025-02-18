@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/18 14:56:11 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:28:46 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,75 @@
 #include "../includes/colors.hpp"
 
 #include <cstddef>
+#include <map>
 #include <sstream>
 #include <iostream>
+#include <string>
 #include <sys/socket.h>
 
-void Server::case_mode_channel(void) {
+bool Server::is_channel(std::string target) {
 	
-	std::cout << BOLD_ON << "mode CHANNEL" << BOLD_OFF << std::endl;
+	std::map<std::string, Channel>::iterator match = _channels.begin();
+	
+	for (; match != _channels.end(); ++match) {
+		if (match->second.getChanName() == target)
+			return true;
+	}
+	return false;
+}
+
+void Server::case_mode_channel(std::string target, std::string mode, int clientFd) {
+	
+	if (mode.empty()) {
+		sendAndLog(clientFd, this->get_prefix(clientFd) + " 324 " + _clients[clientFd].getNick() + " " + target + "\r\n");
+		return;		
+	}
+	
+	std::map<std::string, Channel>::iterator match = _channels.begin();
+	bool addMode = (mode[0] == '+');
+	(void)addMode;
+	
+	for(; match != _channels.end(); ++match) {
+		
+		// std::cout << "INSIDE" << std::endl;
+		std::cout << "DEBUG :" << match->second.getChanName() << std::endl;
+		std::cout << "DEBUG :" << (target) << std::endl;
+		if (match->second.getChanName() == (target)) {
+			for (size_t i = 1; i < mode.size(); ++i) {
+				switch (mode[i]) {
+					case 'i':
+						std::cout << BOLD_ON << "MODE I" << BOLD_OFF << std::endl;
+						break;
+					case 't':
+						std::cout << BOLD_ON << "MODE T" << BOLD_OFF << std::endl;
+						break;
+					case 'k':
+						std::cout << BOLD_ON << "MODE K" << BOLD_OFF << std::endl;
+						break;
+					case 'o':
+						std::cout << BOLD_ON << "MODE O" << BOLD_OFF << std::endl;
+						break;
+					case 'l':
+						std::cout << BOLD_ON << "MODE L" << BOLD_OFF << std::endl;
+						break;
+					default:
+						sendAndLog(clientFd, this->get_prefix(clientFd) + " 472 " + _clients[clientFd].getNick() + " " + mode + " :Unknown mode\r\n");
+						return;
+				}
+			}
+		}
+	}
+	//!error no such channel!
+}
+
+void Server::case_mode_channel_response(std::string target, int clientFd) {
+	
+	sendAndLog(clientFd, this->get_prefix(clientFd) + " 324 " + _clients[clientFd].getNick() + " " + target + "\r\n");
 }
 
 void Server::case_mode_user(std::string target, std::string mode, int clientFd) {
 	
-	std::cout << BOLD_ON << "mode USER" << BOLD_OFF << std::endl;
+	// std::cout << BOLD_ON << "mode USER" << BOLD_OFF << std::endl;
 	if ((mode[0] != '+' && mode[0] != '-') || mode.empty())
 		//!error
 		std::cout << YELLOW << "[WRGANSWER]: trouble +/-!" << BOLD_OFF << std::endl;
@@ -44,7 +101,7 @@ void Server::case_mode_user(std::string target, std::string mode, int clientFd) 
 						break;
 					default:
 						sendAndLog(clientFd, this->get_prefix(clientFd) + " 472 " + _clients[clientFd].getNick() + " " + target + " :Unknown mode\r\n");
-						return; // std::cout << YELLOW << "[WRGANSWER]: Unknowned mode!" << BOLD_OFF << std::endl;
+						return;
 						break;
 				}
 			}
@@ -74,7 +131,7 @@ void Server::mode(int clientFd, std::string cmd) {
 	std::cout << command << "|" << target << "|" << mode << "|" << target_user << std::endl;
 	
 	if (target[0] == '#')
-		case_mode_channel();
+		case_mode_channel(target, mode, clientFd);
 	else if (is_user(target))
 	 	case_mode_user(target, mode, clientFd);
 	else
