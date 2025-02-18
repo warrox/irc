@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:45:59 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/14 16:46:25 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/18 16:49:21 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void Server::privmsg(int clientFd, std::string cmd)
 		channelIterator it = this->_channels.find(dest);
 		if (it == this->_channels.end())
 			return ;
-		this->log("Broadcasting on channel: " + dest);
+		// this->log("Broadcasting on channel: " + dest);
 		std::cout << message << std::endl;
 		it->second.broadcast(clientFd, *this, message); //ici 
 	}
