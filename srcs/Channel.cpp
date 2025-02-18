@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/16 13:58:38 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/18 14:19:18 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ std::string Channel::getTopic(void){
 	return(this->_topic);
 }
 
-void Channel::broadcast(int clientToIgnore, Server &server, std::string msg) {
+void Channel::broadcast(int clientToIgnore, Server &server, std::string msg, bool is_for_topic) {
 
 	std::vector<int>::iterator it;
 	printClientInChan(this->_users);
@@ -86,7 +86,11 @@ void Channel::broadcast(int clientToIgnore, Server &server, std::string msg) {
 		if (*it == clientToIgnore) 
 			continue;
 		// server.sendAndLog(*it, msg += "\r\n");
-		server.sendMessageto(clientToIgnore,*it, msg, server.getClient(clientToIgnore).getNick(), this->getChanName()); 
+		if(is_for_topic){
+			server.sendAndLog(*it, msg);
+		}else{
+			server.sendMessageto(clientToIgnore,*it, msg, server.getClient(clientToIgnore).getNick(), this->getChanName()); 
+		}
 	}
 }
 

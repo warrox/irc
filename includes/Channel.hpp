@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:44:14 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/16 14:21:31 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/18 14:20:08 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ class Channel {
 		void 		setTopic(std::string topic);
 		std::string		getChanName(void);
 		std::string getTopic(void);
-		void		broadcast(int, Server&, std::string);	
+		void		broadcast(int, Server&, std::string, bool);	
 		void printClientInChan(std::vector<int> user);
 		std::vector<Client> getUsers(void);  
 
