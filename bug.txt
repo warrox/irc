@@ -1,1 +1,0 @@
-FIX blue window when changing topic
