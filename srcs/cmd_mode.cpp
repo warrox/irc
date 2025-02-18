@@ -6,29 +6,80 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/17 17:56:43 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/18 14:56:11 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
 #include "../includes/colors.hpp"
 
+#include <cstddef>
 #include <sstream>
 #include <iostream>
 #include <sys/socket.h>
 
+void Server::case_mode_channel(void) {
+	
+	std::cout << BOLD_ON << "mode CHANNEL" << BOLD_OFF << std::endl;
+}
+
+void Server::case_mode_user(std::string target, std::string mode, int clientFd) {
+	
+	std::cout << BOLD_ON << "mode USER" << BOLD_OFF << std::endl;
+	if ((mode[0] != '+' && mode[0] != '-') || mode.empty())
+		//!error
+		std::cout << YELLOW << "[WRGANSWER]: trouble +/-!" << BOLD_OFF << std::endl;
+	
+	bool add_mode = (mode[0] == '+');
+	std::map<int, Client>::iterator match = _clients.begin();
+	
+	for (; match != _clients.end(); ++match) {
+
+		if (match->second.getNick() == target) {
+			
+			for (size_t i = 1; i < mode.size(); ++i) {
+				switch (mode[i]) {
+					case 'i':
+						match->second.setModeI(add_mode);
+						break;
+					default:
+						sendAndLog(clientFd, this->get_prefix(clientFd) + " 472 " + _clients[clientFd].getNick() + " " + target + " :Unknown mode\r\n");
+						return; // std::cout << YELLOW << "[WRGANSWER]: Unknowned mode!" << BOLD_OFF << std::endl;
+						break;
+				}
+			}
+		}
+		sendAndLog(clientFd, this->get_prefix(clientFd) + " MODE " + target + " " + mode + "\r\n");
+		return;
+	}
+	sendAndLog(clientFd, this->get_prefix(clientFd) + " 401 " + _clients[clientFd].getNick() + " " + target + " :No such nick\r\n");
+}
+
+bool Server::is_user(std::string target) {
+
+	std::map<int, Client>::iterator match = _clients.begin();
+	for (; match != _clients.end(); ++match) {
+		if (match->second.getNick() == target)
+			return true;
+	}
+	return false;
+}
+
 void Server::mode(int clientFd, std::string cmd) {
 
 	std::istringstream iss(cmd);
-	std::string command, target_channel, mode, target_user;
-	iss >> command >> target_channel >> mode >> target_user;
+	std::string command, target, mode, target_user;
+	iss >> command >> target >> mode >> target_user;
 
-	std::cout << command << "|" << target_channel << "|" << mode << "|" << target_user << std::endl;
+	std::cout << command << "|" << target << "|" << mode << "|" << target_user << std::endl;
 	
-	//? if (target_channel.empty())
-	//? 	sendAndLog(clientFd, this->get_prefix(clientFd) + " 461 " + _clients[clientFd].getNick() + " MODE :Not enough parameters\r\n");
-	
-	(void)clientFd;
+	if (target[0] == '#')
+		case_mode_channel();
+	else if (is_user(target))
+	 	case_mode_user(target, mode, clientFd);
+	else
+		//!error
+		(void)clientFd;
 }
 // void Server::mode(int clientFd, std::string cmd) {
 	
