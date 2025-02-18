@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/18 16:49:46 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:32:00 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void Server::sendingUserListToClient(std::string chanName,int clientFd, bool is_
 			userList += " " + it->getNick();
 		}
 		userList += "\r\n";
-		this->log("Sending the userList to client : " + userList);
+		// this->log("Sending the userList to client : " + userList);
 		this->sendAndLog(clientFd,userList);
 		this->sendAndLog(clientFd, endOfUserList);
 	}
