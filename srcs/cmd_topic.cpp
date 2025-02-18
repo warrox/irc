@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:44:28 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/17 15:12:44 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/18 11:35:48 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,11 @@ void Server::topic(int clientFd, std::string cmd)
 
         std::string response = ":" + this->_servername + " TOPIC " + chan + " :" + topic_name + "\r\n";
 
-
-        send(clientFd, response.c_str(), response.size(), 0);
+		this->sendAndLog(clientFd, response);	
+		std::cout << "XXXXXXXXXXXXXXXXXX : " << response << std::endl;
+		this->_channels[chan].broadcast(clientFd, *this, response);
+		// [server] --> :whamdi!whamdi@localhost TOPIC #pd :haah
+        // send(clientFd, response.c_str(), response.size(), 0);
     }
     else
     {
