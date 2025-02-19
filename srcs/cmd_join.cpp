@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/18 17:32:00 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/19 14:23:35 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void Server::join(int clientFd, std::string cmd)
 		it = this->_channels.find(chanName);
 		this->_clients[clientFd].setModeO(true);
 		it->second.addUser(clientFd);
+		//TEST
+		it->second.addUserInChannel(_clients[clientFd]);
 		// this->log("Added client to " + chanName);
 		this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
 		sendingUserListToClient(chanName, clientFd, true);
@@ -62,6 +64,8 @@ void Server::join(int clientFd, std::string cmd)
 	else 
 	{
 		it->second.addUser(clientFd);
+		//TEST
+		it->second.addUserInChannel(_clients[clientFd]);
 		// this->log("Added client to " + chanName);
 		this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
 
