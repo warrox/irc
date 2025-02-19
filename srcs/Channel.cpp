@@ -6,13 +6,14 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/19 17:12:05 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 00:43:50 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Channel.hpp"
 #include "../includes/Server.hpp"
 
+#include <cstddef>
 #include <string>
 #include <algorithm>
 #include <iostream>
@@ -30,7 +31,6 @@ void	Channel::setModeI(bool enable) {
 bool	Channel::getModeI(void)const {
 	return (this->_modeI);
 }
-
 
 std::vector<Client> Channel::getUsers(void)
 {
@@ -117,22 +117,22 @@ std::string Channel::getChanName(void) {
 
 void Channel::setModeOInChannel(std::string target_name, bool enable) {
 	
-	std::vector<Client>::iterator match = this->_usersInChannel.begin();
+	std::vector<Client*>::iterator match = this->_usersInChannel.begin();
 	
 	for(; match != this->_usersInChannel.end(); ++match) {
-		if (match->getNick() == target_name) {
+		if ((*match)->getNick() == target_name) {
 			std::cout << "HEY" << std::endl;
-			std::cout << match->getNick() << std::endl;
-			match->setModeO(enable);
+			std::cout << (*match)->getNick() << std::endl;
+			(*match)->setModeO(enable);
 		}
 	}
 }
 
 bool Channel::isUserInChannel(std::string target_name) {
 	
-	std::vector<Client>::iterator match = this->_usersInChannel.begin();
+	std::vector<Client*>::iterator match = this->_usersInChannel.begin();
 	for (; match != this->_usersInChannel.end(); ++match) {
-		if (match->getNick() == target_name)
+		if ((*match)->getNick() == target_name)
 			return true;
 	}
 	return false;
@@ -140,16 +140,25 @@ bool Channel::isUserInChannel(std::string target_name) {
 
 void Channel::removeUserInChannel(Client client) {
 	
-	std::vector<Client>::iterator match = this->_usersInChannel.begin();
+	std::vector<Client*>::iterator match = this->_usersInChannel.begin();
 	for (; match != this->_usersInChannel.end(); ++match) {
-		if (match->getNick() == client.getNick()) {
+		if ((*match)->getNick() == client.getNick()) {
 			this->_usersInChannel.erase(match);
 			return;
 		}
 	}
 }
 
+Client *Channel::getTarget(std::string target) {
+	
+	for (std::vector<Client*>::iterator match = _usersInChannel.begin(); match != _usersInChannel.end(); ++match) {
+		if ((*match)->getNick() == target)
+			return (*match);
+	}
+	return NULL;
+}
+
 void Channel::addUserInChannel(Client &client) {
 
-	this->_usersInChannel.push_back(client);
+	this->_usersInChannel.push_back(&client);
 }
