@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/19 17:39:03 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:49:17 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,18 @@
 // bool Server::isUserInChannel(std::string channel_name, std::string target_name) {
 // 	this->_channels[channel_name].
 // }
+
+void Server::mode_i(int clientFd, bool addMode, std::string target, std::string mode, std::map<std::string, Channel>::iterator match) {
+	if (_clients[clientFd].getModeO()) {
+		match->second.setModeI(addMode);
+		sendAndLog(clientFd, this->get_prefix(clientFd) + " MODE " + target + " " + mode + "\r\n");
+		return;
+	}
+	else {
+		sendAndLog(clientFd, this->get_prefix(clientFd) + " 482 " + _clients[clientFd].getNick() + " " + target + " :Not enought privileges" + "\r\n");
+		return;
+	}
+}
 
 bool Server::is_channel(std::string target) {
 	
@@ -55,17 +67,9 @@ void Server::case_mode_channel(std::string target, std::string mode, std::string
 			for (size_t i = 1; i < mode.size(); ++i) {
 				switch (mode[i]) {
 					case 'i':
-						// std::cout << BOLD_ON << "MODE I" << BOLD_OFF << std::endl;
-						if (_clients[clientFd].getModeO()) {
-							match->second.setModeI(addMode);
-							sendAndLog(clientFd, this->get_prefix(clientFd) + " MODE " + target + " " + mode + "\r\n");
-							return;
-						}
-						else {
-							sendAndLog(clientFd, this->get_prefix(clientFd) + " 482 " + _clients[clientFd].getNick() + " " + target + " :Not enought privileges" + "\r\n");
-							return;
-						}
-						break;
+						mode_i(clientFd, addMode, target, mode, match);
+						return;
+						// break;
 					case 't':
 						std::cout << BOLD_ON << "MODE T" << BOLD_OFF << std::endl;
 						break;
