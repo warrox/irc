@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:54:19 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/17 13:57:54 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:07:51 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ class Client {
 		std::string _password;
 		
 		bool mode_i;
-		bool mod_t;
-		bool mode_k;
 		bool mode_o;
-		bool mode_l;
 		bool _is_connected;
 		
 		std::string _actual_chan;
@@ -45,10 +42,10 @@ class Client {
 		void	setPassword(std::string);
 		void	setIsConnected(bool);
 		void	setModeI(bool);
-		void	setModeT(bool);
-		void	setModeK(bool);
+		// void	setModeT(bool);
+		// void	setModeK(bool);
 		void	setModeO(bool);
-		void	setModeL(bool);
+		// void	setModeL(bool);
 
 
 		
@@ -60,10 +57,10 @@ class Client {
 		bool getIsConnected(void)const;
 		std::string	getChan(void); // ? const ?
 		bool getModeI(void)const;
-		bool getModeT(void)const;
-		bool getModeK(void)const;
+		// bool getModeT(void)const;
+		// bool getModeK(void)const;
 		bool getModeO(void)const;
-		bool getModeL(void)const;
+		// bool getModeL(void)const;
 
 };
 

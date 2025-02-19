@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:40:17 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/17 14:01:05 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/19 00:15:01 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ void Server::user(int clientFd, std::string cmd) {
 	std::string your_host = ":" + this->_servername + " 002 " + _clients[clientFd].getNick() + " :Your host is ft_irc running version 1.0" + "\r\n";
 	std::string created = ":" + this->_servername + " 003 " + _clients[clientFd].getNick() + " :This server was created on " + this->_time + "\r\n";
 	std::string my_info = ":" + this->_servername + " 004 " + _clients[clientFd].getNick()  + this->_servername + "1.0 @cyferrei/@whamdi" + "\r\n";
-	std::string full_msg = welcome + your_host + created + my_info;
 
-	sendAndLog(clientFd, full_msg);
+	sendAndLog(clientFd, welcome);
+	sendAndLog(clientFd, your_host);
+	sendAndLog(clientFd, created);
+	sendAndLog(clientFd, my_info);
+
 }

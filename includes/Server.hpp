@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 12:07:03 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/17 10:12:30 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/19 15:48:29 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,13 @@ class Server
 		int findClientByName(std::string name, std::map<int,Client> client);
 		//-------------------- GRAMMATICAL LANGUAGE--------------- //
 		std::string get_prefix(int);
+		//-------------------- MODE--------------- //
+		void case_mode_channel_response(std::string, int);
+		void case_mode_channel(std::string, std::string, std::string, int);
+		void case_mode_user(std::string, std::string, int);
+		bool is_user(std::string);
+		bool is_channel(std::string);
+
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:41 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/13 20:13:58 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/18 13:45:15 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ void Server::displayClientsInfo(void){
 		std::cout << BLUE << "[_real_name]--> " << BOLD_OFF << it->second.getRealName() << std::endl;
 
 		std::cout << BLUE << "[mode_i]--> " << BOLD_OFF << (it->second.getModeI() ? "enabled" : "disabled") << std::endl;
-		std::cout << BLUE << "[mode_t]--> " << BOLD_OFF << (it->second.getModeT() ? "enabled" : "disabled") << std::endl;
-		std::cout << BLUE << "[mode_k]--> " << BOLD_OFF << (it->second.getModeK() ? "enabled" : "disabled") << std::endl;
+		// std::cout << BLUE << "[mode_t]--> " << BOLD_OFF << (it->second.getModeT() ? "enabled" : "disabled") << std::endl;
+		// std::cout << BLUE << "[mode_k]--> " << BOLD_OFF << (it->second.getModeK() ? "enabled" : "disabled") << std::endl;
 		std::cout << BLUE << "[mode_o]--> " << BOLD_OFF << (it->second.getModeO() ? "enabled" : "disabled") << std::endl;
 		std::cout << "-------------------" << std::endl;
 	}
