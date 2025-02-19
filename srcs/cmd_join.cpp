@@ -6,11 +6,13 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/19 17:12:41 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 00:28:38 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
+#include "../includes/Channel.hpp"
+
 #include <sstream> 
 #include <iostream>
 
