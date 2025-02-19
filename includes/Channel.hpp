@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:44:14 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/19 17:11:15 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 00:39:02 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ class Channel {
 		std::string _topic;
 
 		bool _modeI;
-		std::vector<Client> _usersInChannel;
+		std::vector<Client*> _usersInChannel;
 		
 	public :
 
@@ -53,7 +53,8 @@ class Channel {
 		void removeUserInChannel(Client);
 		bool isUserInChannel(std::string);
 		void setModeOInChannel(std::string, bool);
-		
+		Client *getTarget(std::string);
+				
 		~Channel() {}
 	};
 	
