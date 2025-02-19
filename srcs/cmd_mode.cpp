@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/19 16:38:31 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:39:03 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,12 @@ void Server::case_mode_channel(std::string target, std::string mode, std::string
 						}
 						if (_clients[clientFd].getModeO()) {
 							if (match->second.isUserInChannel(target_user)) {
+								// Client target = match->second.getTarget(target_user);
 								match->second.setModeOInChannel(target_user, addMode);
-								sendAndLog(clientFd, ":" + _servername + " MODE " + target + " " + mode + " " + target_user + "\r\n");
+								
+								std::string tmp = ":" + _servername + " MODE " + target + " " + mode + " " + target_user + "\r\n";
+								sendAndLog(clientFd, tmp);
+								match->second.broadcast(clientFd, *this, tmp, true);
 								//? need to broadcast
 								return;
 							}

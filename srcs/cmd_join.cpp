@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/19 14:23:35 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:12:41 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void Server::sendingUserListToClient(std::string chanName,int clientFd, bool is_
 	std::string endOfUserList = ":" + _servername + " 366 " + this->_clients[clientFd].getNick() + " " + chanName + " :End of member list\r\n";
 	const std::vector<Client>& users = this->_channels[chanName].getUsers();
 	for (std::vector<Client>::const_iterator it = users.begin(); it != users.end(); ++it) {
-		if (this->_clients[clientFd].getModeO()) {
+		if (it->getModeO()) 
+		{
 			userList += "@" + it->getNick();
 		} else {
 			userList += " " + it->getNick();

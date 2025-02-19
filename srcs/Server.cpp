@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/19 15:48:24 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:13:24 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ Server::Server(std::string port, std::string password) {
 	this->_commands["PRIVMSG"] = &Server::privmsg;
 	this->_commands["QUIT"] = &Server::quit;
 	this->_commands["PING"] = &Server::ping;
+	this->_commands["KICK"] = &Server::kick;
 
 }
 

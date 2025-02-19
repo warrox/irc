@@ -6,7 +6,7 @@
 #    By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/13 10:35:39 by cyferrei          #+#    #+#              #
-#    Updated: 2025/02/15 12:29:31 by whamdi           ###   ########.fr        #
+#    Updated: 2025/02/19 13:34:36 by whamdi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ SRC = $(SRC_DIR)/main.cpp $(SRC_DIR)/Server.cpp $(SRC_DIR)/commandHandler.cpp \
       $(SRC_DIR)/Client.cpp $(SRC_DIR)/Channel.cpp $(SRC_DIR)/debug.cpp $(SRC_DIR)/cmd_mode.cpp \
 	  $(SRC_DIR)/cmd_nick.cpp $(SRC_DIR)/cmd_pass.cpp $(SRC_DIR)/cmd_privmsg.cpp \
 	  $(SRC_DIR)/cmd_topic.cpp $(SRC_DIR)/cmd_user.cpp $(SRC_DIR)/cmd_quit.cpp \
-	  $(SRC_DIR)/cmd_ping.cpp $(SRC_DIR)/cmd_join.cpp
+	  $(SRC_DIR)/cmd_ping.cpp $(SRC_DIR)/cmd_join.cpp $(SRC_DIR)/cmd_kick.cpp
 
 INCLUDES = $(INCLUDE_DIR)/Server.hpp $(INCLUDE_DIR)/Client.hpp $(INCLUDE_DIR)/Channel.hpp
 
