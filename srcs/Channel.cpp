@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/19 01:00:41 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:18:27 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,4 +107,45 @@ void Channel::broadcast(int clientToIgnore, Server &server, std::string msg) {
 
 std::string Channel::getChanName(void) {
 	return(this->_chan_name);
+}
+
+/********************************************************************************************************************************* */
+
+void Channel::setModeOInChannel(std::string target_name, bool enable) {
+	
+	std::vector<Client>::iterator match = this->_usersInChannel.begin();
+	
+	for(; match != this->_usersInChannel.end(); ++match) {
+		if (match->getNick() == target_name) {
+			std::cout << "HEY" << std::endl;
+			std::cout << match->getNick() << std::endl;
+			match->setModeO(enable);
+		}
+	}
+}
+
+bool Channel::isUserInChannel(std::string target_name) {
+	
+	std::vector<Client>::iterator match = this->_usersInChannel.begin();
+	for (; match != this->_usersInChannel.end(); ++match) {
+		if (match->getNick() == target_name)
+			return true;
+	}
+	return false;
+}
+
+void Channel::removeUserInChannel(Client client) {
+	
+	std::vector<Client>::iterator match = this->_usersInChannel.begin();
+	for (; match != this->_usersInChannel.end(); ++match) {
+		if (match->getNick() == client.getNick()) {
+			this->_usersInChannel.erase(match);
+			return;
+		}
+	}
+}
+
+void Channel::addUserInChannel(Client &client) {
+
+	this->_usersInChannel.push_back(client);
 }
