@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:44:14 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/18 11:37:06 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/19 00:58:45 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,12 @@ class Channel {
 		std::vector<int> _users;
 		Server *_server;
 		std::string _topic;
+
+		bool _modeI;
 		
 	public :
 
-		Channel() : _chan_name(""), _server(NULL) {}
+		Channel() : _chan_name(""), _server(NULL), _modeI(false) {}
 		Channel(std::string name, int fd, Server &);
 		bool		addUser(int fd);
 		bool 		delUser(int fd);
@@ -43,8 +45,10 @@ class Channel {
 		void printClientInChan(std::vector<int> user);
 		std::vector<Client> getUsers(void);
 
-		// std::string getCreationTime()const;
-		// stock le message du client dans un buffer > puis le renvoie a tous les clients non emeteur du message d'origine (e)
+		void setModeI(bool);
+
+		bool getModeI(void)const;
+		
 		~Channel() {}
 	};
 	

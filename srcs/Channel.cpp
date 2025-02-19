@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/18 11:37:01 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/19 01:00:41 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,19 @@
 #include <iostream>
 #include <vector>
 
-#include <sstream>
+// #include <sstream>
 
 #include "../includes/Channel.hpp"
 #include "../includes/Server.hpp"
 
-// std::string Channel::getCreationTime() const {
+void	Channel::setModeI(bool enable) {
+	this->_modeI = enable;
+}
 
-// 	std::ostringstream oss;
-// 	oss << _creationTime;
-// 	return oss.str();
-// }
+bool	Channel::getModeI(void)const {
+	return (this->_modeI);
+}
+
 
 std::vector<Client> Channel::getUsers(void)
 {
