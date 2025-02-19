@@ -6,7 +6,7 @@
 /*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 12:07:03 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/17 10:12:30 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/19 10:46:44 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ class Server
 		void quit(int, std::string);
 		void ping(int, std::string);	
 		void join(int clientFd, std::string cmd);
-
+		void kick(int clientFd, std::string cmd);
 		Client getClient(int client_fd) { return _clients[client_fd]; }
 		
 		int findClientByName(std::string name, std::map<int,Client> client);
