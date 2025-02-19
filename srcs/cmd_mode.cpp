@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/18 17:28:46 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/19 01:06:08 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,16 @@ void Server::case_mode_channel(std::string target, std::string mode, int clientF
 			for (size_t i = 1; i < mode.size(); ++i) {
 				switch (mode[i]) {
 					case 'i':
-						std::cout << BOLD_ON << "MODE I" << BOLD_OFF << std::endl;
+						// std::cout << BOLD_ON << "MODE I" << BOLD_OFF << std::endl;
+						if (_clients[clientFd].getModeO()) {
+							match->second.setModeI(addMode);
+							sendAndLog(clientFd, this->get_prefix(clientFd) + " MODE " + target + " " + mode + "\r\n");
+							return;
+						}
+						else {
+							sendAndLog(clientFd, this->get_prefix(clientFd) + " 482 " + _clients[clientFd].getNick() + " " + target + " :Not enought privileges" + "\r\n");
+							return;
+						}
 						break;
 					case 't':
 						std::cout << BOLD_ON << "MODE T" << BOLD_OFF << std::endl;
@@ -66,13 +75,13 @@ void Server::case_mode_channel(std::string target, std::string mode, int clientF
 						std::cout << BOLD_ON << "MODE L" << BOLD_OFF << std::endl;
 						break;
 					default:
-						sendAndLog(clientFd, this->get_prefix(clientFd) + " 472 " + _clients[clientFd].getNick() + " " + mode + " :Unknown mode\r\n");
+						sendAndLog(clientFd, this->get_prefix(clientFd) + " 472 " + _clients[clientFd].getNick() + " " + target + " :Unknown mode\r\n");
 						return;
 				}
 			}
 		}
 	}
-	//!error no such channel!
+	sendAndLog(clientFd, this->get_prefix(clientFd) + " 403 " + _clients[clientFd].getNick() + " " + mode + " :No such channel\r\n");
 }
 
 void Server::case_mode_channel_response(std::string target, int clientFd) {
