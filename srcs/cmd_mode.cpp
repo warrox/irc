@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/19 01:06:08 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:38:31 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@
 #include <string>
 #include <sys/socket.h>
 
+// bool Server::isUserInChannel(std::string channel_name, std::string target_name) {
+// 	this->_channels[channel_name].
+// }
+
 bool Server::is_channel(std::string target) {
 	
 	std::map<std::string, Channel>::iterator match = _channels.begin();
@@ -31,7 +35,7 @@ bool Server::is_channel(std::string target) {
 	return false;
 }
 
-void Server::case_mode_channel(std::string target, std::string mode, int clientFd) {
+void Server::case_mode_channel(std::string target, std::string mode, std::string target_user, int clientFd) {
 	
 	if (mode.empty()) {
 		sendAndLog(clientFd, this->get_prefix(clientFd) + " 324 " + _clients[clientFd].getNick() + " " + target + "\r\n");
@@ -45,8 +49,8 @@ void Server::case_mode_channel(std::string target, std::string mode, int clientF
 	for(; match != _channels.end(); ++match) {
 		
 		// std::cout << "INSIDE" << std::endl;
-		std::cout << "DEBUG :" << match->second.getChanName() << std::endl;
-		std::cout << "DEBUG :" << (target) << std::endl;
+		// std::cout << "DEBUG :" << match->second.getChanName() << std::endl;
+		// std::cout << "DEBUG :" << (target) << std::endl;
 		if (match->second.getChanName() == (target)) {
 			for (size_t i = 1; i < mode.size(); ++i) {
 				switch (mode[i]) {
@@ -69,7 +73,28 @@ void Server::case_mode_channel(std::string target, std::string mode, int clientF
 						std::cout << BOLD_ON << "MODE K" << BOLD_OFF << std::endl;
 						break;
 					case 'o':
-						std::cout << BOLD_ON << "MODE O" << BOLD_OFF << std::endl;
+						if (_clients[clientFd].getModeO())
+							std::cout << BOLD_ON GREEN << "MODE O" << BOLD_OFF << std::endl;
+						if (target_user.empty()) {
+							sendAndLog(clientFd, get_prefix(clientFd) + " 461 " + _clients[clientFd].getNick() + " " + target + " " + mode + " :Need more argument" + "\r\n");
+							return;
+						}
+						if (_clients[clientFd].getModeO()) {
+							if (match->second.isUserInChannel(target_user)) {
+								match->second.setModeOInChannel(target_user, addMode);
+								sendAndLog(clientFd, ":" + _servername + " MODE " + target + " " + mode + " " + target_user + "\r\n");
+								//? need to broadcast
+								return;
+							}
+							else {
+								sendAndLog(clientFd, get_prefix(clientFd) + " 401 " + _clients[clientFd].getNick() + " " + target_user + " :No such nick in channel" + "\r\n");
+								return;
+							}
+						}
+						else {
+							sendAndLog(clientFd, this->get_prefix(clientFd) + " 482 " + _clients[clientFd].getNick() + " " + target + " :Not enought privileges" + "\r\n");
+							return;
+						}
 						break;
 					case 'l':
 						std::cout << BOLD_ON << "MODE L" << BOLD_OFF << std::endl;
@@ -140,7 +165,7 @@ void Server::mode(int clientFd, std::string cmd) {
 	std::cout << command << "|" << target << "|" << mode << "|" << target_user << std::endl;
 	
 	if (target[0] == '#')
-		case_mode_channel(target, mode, clientFd);
+		case_mode_channel(target, mode, target_user, clientFd);
 	else if (is_user(target))
 	 	case_mode_user(target, mode, clientFd);
 	else
