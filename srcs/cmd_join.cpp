@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 15:36:58 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 15:45:06 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,26 @@
 #include <sstream> 
 #include <iostream>
 
-void Server::sendingUserListToClient(std::string chanName,int clientFd, bool is_first_client)
+void Server::sendingUserListToClient(std::string chanName, int clientFd, bool is_first_client)
 {
-	(void) is_first_client;
+    (void) is_first_client;
 
-	std::string userList = ":" + _servername + " 353 " + this->_clients[clientFd].getNick() + " = " + chanName + " :";
-	std::string endOfUserList = ":" + _servername + " 366 " + this->_clients[clientFd].getNick() + " " + chanName + " :End of member list\r\n";
-	const std::vector<Client>& users = this->_channels[chanName].getUsers();
-	for (std::vector<Client>::const_iterator it = users.begin(); it != users.end(); ++it) {
-		if (it->getModeO()) 
-		{
-			userList += "@" + it->getNick();
-		} else {
-			userList += " " + it->getNick();
-		}
-		userList += "\r\n";
-		// this->log("Sending the userList to client : " + userList);
-		this->sendAndLog(clientFd,userList);
-		this->sendAndLog(clientFd, endOfUserList);
-	}
+    std::string userList = ":" + _servername + " 353 " + this->_clients[clientFd].getNick() + " = " + chanName + " :";
+    std::string endOfUserList = ":" + _servername + " 366 " + this->_clients[clientFd].getNick() + " " + chanName + " :End of member list\r\n";
+
+    const std::vector<Client>& users = this->_channels[chanName].getUsers();
+    for (std::vector<Client>::const_iterator it = users.begin(); it != users.end(); ++it) {
+        if (it->getModeO()) 
+        {
+            userList += "@" + it->getNick();
+        } else {
+            userList += " " + it->getNick();
+        }
+    }
+
+    userList += "\r\n";
+    this->sendAndLog(clientFd, userList);
+    this->sendAndLog(clientFd, endOfUserList);
 }
 
 void Server::join(int clientFd, std::string cmd) 
@@ -44,9 +45,8 @@ void Server::join(int clientFd, std::string cmd)
 	lineStream >> cmdName;
 	lineStream >> chanName;
 	lineStream >> args;
-
+	
 	channelIterator it = this->_channels.find(chanName);
-
 	if (it == this->_channels.end()) 
 	{
 		std::cout << "FIRST call" << std::endl;

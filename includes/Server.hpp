@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 12:07:03 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 13:56:36 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 15:44:01 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ class Server
 		void ping(int, std::string);	
 		void join(int clientFd, std::string cmd);
 		void kick(int clientFd, std::string cmd);
+		void invite(int clientFd, std::string cmd);
 		Client getClient(int client_fd) { return _clients[client_fd]; }
 		
 		int findClientByName(std::string name, std::map<int,Client> client);
