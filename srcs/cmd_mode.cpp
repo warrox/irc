@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/20 00:44:27 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 01:03:01 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,18 @@
 #include <iostream>
 #include <string>
 #include <sys/socket.h>
+
+void Server::mode_t(int clientFd, bool addMode, std::string target, std::string mode, std::map<std::string, Channel>::iterator match) {
+	
+	if (!_clients[clientFd].getModeO()) {
+		sendAndLog(clientFd, this->get_prefix(clientFd) + " 482 " + _clients[clientFd].getNick() + " " + target + " :Not enought privileges" + "\r\n");
+		return;
+	}
+	match->second.setModeT(addMode);
+	std::string msg = ":" + _servername + " MODE " + target + " " + mode + "\r\n";
+	sendAndLog(clientFd, msg);
+	match->second.broadcast(clientFd, *this, msg, true);
+}
 
 void Server::mode_o(int clientFd, std::string target, std::string target_user, bool addMode, std::string mode, std::map<std::string, Channel>::iterator match) {
 	
@@ -50,6 +62,7 @@ void Server::mode_o(int clientFd, std::string target, std::string target_user, b
 }
 
 void Server::mode_i(int clientFd, bool addMode, std::string target, std::string mode, std::map<std::string, Channel>::iterator match) {
+
 	if (_clients[clientFd].getModeO()) {
 		
 		match->second.setModeI(addMode);
@@ -94,8 +107,8 @@ void Server::case_mode_channel(std::string target, std::string mode, std::string
 						mode_i(clientFd, addMode, target, mode, match);
 						return;
 					case 't':
-						std::cout << BOLD_ON << "MODE T" << BOLD_OFF << std::endl;
-						break;
+						mode_t(clientFd, addMode, target, mode, match);
+						return;
 					case 'k':
 						std::cout << BOLD_ON << "MODE K" << BOLD_OFF << std::endl;
 						break;
@@ -113,11 +126,6 @@ void Server::case_mode_channel(std::string target, std::string mode, std::string
 		}
 	}
 	sendAndLog(clientFd, this->get_prefix(clientFd) + " 403 " + _clients[clientFd].getNick() + " " + mode + " :No such channel\r\n");
-}
-
-void Server::case_mode_channel_response(std::string target, int clientFd) {
-	
-	sendAndLog(clientFd, this->get_prefix(clientFd) + " 324 " + _clients[clientFd].getNick() + " " + target + "\r\n");
 }
 
 void Server::case_mode_user(std::string target, std::string mode, int clientFd) {

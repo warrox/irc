@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 12:07:03 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 00:46:52 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 01:02:14 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ class Server
 		//-------------------- GRAMMATICAL LANGUAGE--------------- //
 		std::string get_prefix(int);
 		//-------------------- MODE--------------- //
-		void case_mode_channel_response(std::string, int);
 		void case_mode_channel(std::string, std::string, std::string, int);
 		void case_mode_user(std::string, std::string, int);
 		bool is_user(std::string);
@@ -102,7 +101,7 @@ class Server
 
 		void mode_i(int clientFd, bool addMode, std::string target, std::string mode, std::map<std::string, Channel>::iterator match);
 		void mode_o(int clientFd, std::string target, std::string target_user, bool addMode, std::string mode, std::map<std::string, Channel>::iterator match);
-
+		void mode_t(int clientFd, bool addMode, std::string target, std::string mode, std::map<std::string, Channel>::iterator match);
 };
 
 #endif

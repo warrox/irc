@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 00:43:50 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 01:00:18 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,6 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
-
-// #include <sstream>
-
-#include "../includes/Channel.hpp"
-#include "../includes/Server.hpp"
-
-void	Channel::setModeI(bool enable) {
-	this->_modeI = enable;
-}
-
-bool	Channel::getModeI(void)const {
-	return (this->_modeI);
-}
 
 std::vector<Client> Channel::getUsers(void)
 {
@@ -161,4 +148,20 @@ Client *Channel::getTarget(std::string target) {
 void Channel::addUserInChannel(Client &client) {
 
 	this->_usersInChannel.push_back(&client);
+}
+
+void	Channel::setModeI(bool enable) {
+	this->_modeI = enable;
+}
+
+void	Channel::setModeT(bool enable) {
+	this->_modeT = enable;
+}
+
+bool	Channel::getModeI(void)const {
+	return (this->_modeI);
+}
+
+bool	Channel::getModeT(void)const {
+	return (this->_modeT);
 }
