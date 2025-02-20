@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 10:43:16 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/19 17:13:02 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 09:10:56 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,17 @@ void Server::kick(int clientFd, std::string cmd){
 	// std::cout << "Size of :" << reason.size() << std::endl; // CHECK SIZE 
 	// lineStream >> reason;
 	// std::cout << "Bozo to kick : " << client_to_kick << std::endl;
-	if(this->_clients[clientFd].getModeO())
+	if(this->_clients[clientFd].getModeO() && client_to_kick == this->_clients[clientFd].getNick())
+	{
+		std::string no_perm;
+		no_perm = ":ft_irc 485 " + this->_clients[clientFd].getNick() + " :can't kick channel operator\r\n";
+		// send(clientFd, no_perm, no_perm.size(), 0);
+		this->sendAndLog(clientFd, no_perm);
+		//build str 
+		// :ft_irc 401	
+		//	std::string response = SERVER_NAME + numeric_string +  " " + userInfo_[clientSocket].nickname;
+	}
+	else if(this->_clients[clientFd].getModeO())
 	{
 		// send and kick from channel		
 		std::string kick_answer;
@@ -38,6 +48,7 @@ void Server::kick(int clientFd, std::string cmd){
 			kick_answer += reason;
 		kick_answer += "\r\n";
 		this->sendAndLog(clientFd, kick_answer);
+		this->_channels[chan_name].broadcast(clientFd, *this, kick_answer,true);
 		// std::cout << "DOuble bozlard : " << kick_answer << std::endl;
 	}else{
 		// t'as pas les droit et tu refuses
