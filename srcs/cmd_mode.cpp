@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/20 13:13:08 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:20:05 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void Server::mode_l(int clientFd, bool addMode, std::string target, std::string 
 		match->second.setModeL(addMode);
 		match->second.setLimitValue(limit);
 		
-		std::string tmp = ":" + _servername + " MODE " + target + " " + mode + "\r\n";
+		std::string tmp = ":" + _servername + " MODE " + target + " " + mode + " " + target_user + "\r\n";
 		sendAndLog(clientFd, tmp);
 		match->second.broadcast(clientFd, *this, tmp, true);
 		return;
