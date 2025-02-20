@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:44:14 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 00:58:41 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 10:58:44 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ class Channel {
 		
 	public :
 
+		std::vector<std::string> client_invite_lst;
 		Channel() : _chan_name(""), _server(NULL), _modeI(false) {}
 		Channel(std::string name, int fd, Server &);
 		bool		addUser(int fd);

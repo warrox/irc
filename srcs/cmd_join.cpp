@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 00:28:38 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 10:32:47 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void Server::sendingUserListToClient(std::string chanName,int clientFd, bool is_
 			userList += " " + it->getNick();
 		}
 		userList += "\r\n";
-		// this->log("Sending the userList to client : " + userList);
+		// this->log("Sending the userList to client : " + userList)https://github.com/marineks/Ft_irc.git;
 		this->sendAndLog(clientFd,userList);
 		this->sendAndLog(clientFd, endOfUserList);
 	}
@@ -43,7 +43,7 @@ void Server::join(int clientFd, std::string cmd)
 	std::string cmdName, chanName;
 	lineStream >> cmdName;
 	lineStream >> chanName;
-
+	static int i = 0;
 	channelIterator it = this->_channels.find(chanName);
 
 	if (it == this->_channels.end()) 
@@ -62,8 +62,6 @@ void Server::join(int clientFd, std::string cmd)
 		this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
 		sendingUserListToClient(chanName, clientFd, true);
     }
-
-
 	else 
 	{
 		it->second.addUser(clientFd);
@@ -75,6 +73,7 @@ void Server::join(int clientFd, std::string cmd)
 		if (!it->second.getTopic().empty()) 
 			this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " 332 " + _clients[clientFd].getNick() + " " + chanName + " :" + it->second.getTopic() + "\r\n");
 		sendingUserListToClient(chanName, clientFd, false);
+		std::cout << "i : " << i++ << std::endl;
 	}
 }
 
