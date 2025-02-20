@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 12:37:02 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 15:36:58 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,10 @@ void Server::sendingUserListToClient(std::string chanName,int clientFd, bool is_
 void Server::join(int clientFd, std::string cmd) 
 {
 	std::istringstream lineStream(cmd);
-	std::string cmdName, chanName;
+	std::string cmdName, chanName, args;
 	lineStream >> cmdName;
 	lineStream >> chanName;
+	lineStream >> args;
 
 	channelIterator it = this->_channels.find(chanName);
 
@@ -62,19 +63,60 @@ void Server::join(int clientFd, std::string cmd)
 		this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
 		sendingUserListToClient(chanName, clientFd, true);
     }
-
-
 	else 
 	{
-		it->second.addUser(clientFd);
-		//TEST
-		it->second.addUserInChannel(_clients[clientFd]);
-		// this->log("Added client to " + chanName);
-		this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
-
+		//**************************************************MODE K*************************************************** */
+		if (_channels[chanName].getModeK() && args == _channels[chanName].getKeyChannel()) {
+			if (_channels[chanName].getModeL()) {
+				if ((int)_channels[chanName].getNbUsersInChannel() < _channels[chanName].getLimitValue()) {
+					it->second.addUser(clientFd);
+					it->second.addUserInChannel(_clients[clientFd]);
+					this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
+					return;
+				}
+				else {
+					sendAndLog(clientFd, ":" + _servername + " 471 " + _clients[clientFd].getNick() + " " + chanName + " :Channel is now full" + "\r\n");
+					return;
+				}
+			}
+			else {
+				it->second.addUser(clientFd);
+				it->second.addUserInChannel(_clients[clientFd]);
+				this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
+				return;
+			}
+		}
+		else if (_channels[chanName].getModeK() && args != _channels[chanName].getKeyChannel()) {
+			sendAndLog(clientFd, get_prefix(clientFd) + " 475 " + _clients[clientFd].getNick() + " " + chanName + " :Wrong channel key" + "\r\n");
+			return;
+		}
+		//**************************************************MODE L*************************************************** */
+		if (_channels[chanName].getModeL() && ((int)_channels[chanName].getNbUsersInChannel() < _channels[chanName].getLimitValue())) {
+			if (_channels[chanName].getModeK()) {
+				if (_channels[chanName].getKeyChannel() == args) {
+					it->second.addUser(clientFd);
+					it->second.addUserInChannel(_clients[clientFd]);
+					this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
+					return;
+				}
+				else {
+					sendAndLog(clientFd, get_prefix(clientFd) + " 475 " + _clients[clientFd].getNick() + " " + chanName + " :Wrong channel key" + "\r\n");
+					return;
+				}
+			}
+			else {
+				it->second.addUser(clientFd);
+				it->second.addUserInChannel(_clients[clientFd]);
+				this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
+				return;
+			}
+		}
+		else if (_channels[chanName].getModeL() && ((int)_channels[chanName].getNbUsersInChannel() == _channels[chanName].getLimitValue())) {
+			sendAndLog(clientFd, ":" + _servername + " 471 " + _clients[clientFd].getNick() + " " + chanName + " :Channel is now full" + "\r\n");
+			return;
+		}
 		if (!it->second.getTopic().empty()) 
 			this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " 332 " + _clients[clientFd].getNick() + " " + chanName + " :" + it->second.getTopic() + "\r\n");
 		sendingUserListToClient(chanName, clientFd, false);
 	}
 }
-

@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 13:55:29 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:33:10 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,11 @@ Channel::Channel() {
 	this->_limitValue = 0;
 	this->_keyChannel = "";
 }
+
+size_t Channel::getNbUsersInChannel() {
+	return this->_usersInChannel.size();
+}
+
 
 void Channel::setModeOInChannel(std::string target_name, bool enable) {
 	

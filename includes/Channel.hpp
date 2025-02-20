@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:44:14 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 14:15:21 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:33:18 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ class Channel {
 		Client *getTarget(std::string);
 
 		void displayChannelInfos();
+		size_t getNbUsersInChannel();
 				
 		~Channel() {}
 	};
