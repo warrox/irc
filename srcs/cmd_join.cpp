@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 00:28:38 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 12:37:02 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void Server::join(int clientFd, std::string cmd)
 	if (it == this->_channels.end()) 
 	{
 		std::cout << "FIRST call" << std::endl;
-		channelEntry newEntry(chanName, Channel(chanName, clientFd,*this));
+		channelEntry newEntry(chanName, Channel(chanName,*this));
 		this->_channels.insert(newEntry);
 		// this->log("Channel created: " + chanName);
 
