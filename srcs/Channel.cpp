@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 14:33:10 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:10:45 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,17 @@ bool Channel::isUserInChannel(std::string target_name) {
 	}
 	return false;
 }
+
+bool Channel::isUserInvitedInChannel(std::string invited) {
+	
+	std::vector<std::string>::iterator match = this->client_invite_lst.begin();
+	for (; match != this->client_invite_lst.end(); ++match) {
+		if (*match == invited)
+			return true;
+	}
+	return false;
+}
+
 
 void Channel::removeUserInChannel(Client client) {
 	
