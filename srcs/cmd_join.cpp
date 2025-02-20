@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 16:21:43 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:23:22 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <sstream> 
 #include <iostream>
+#include <vector>
 
 void Server::sendingUserListToClient(std::string chanName, int clientFd, bool is_first_client)
 {
@@ -27,7 +28,7 @@ void Server::sendingUserListToClient(std::string chanName, int clientFd, bool is
     for (std::vector<Client>::const_iterator it = users.begin(); it != users.end(); ++it) {
         if (it->getModeO()) 
         {
-            userList += "@" + it->getNick();
+            userList += " @" + it->getNick();
         } else {
             userList += " " + it->getNick();
         }
@@ -71,6 +72,10 @@ void Server::join(int clientFd, std::string cmd)
 		}
 		if (_channels[chanName].getModeL() && ((int)_channels[chanName].getNbUsersInChannel() >= _channels[chanName].getLimitValue())) {
 			sendAndLog(clientFd, ":" + _servername + " 471 " + _clients[clientFd].getNick() + " " + chanName + " :Channel is now full\r\n");
+			return;
+		}
+		if (_channels[chanName].getModeI() && !(_channels[chanName].isUserInvitedInChannel(_clients[clientFd].getNick()))) {
+			sendAndLog(clientFd, ":" + _servername + " 473 " + _clients[clientFd].getNick() + " " + chanName + " :You must be invited to join this channel\r\n");
 			return;
 		}
 		it->second.addUser(clientFd);
