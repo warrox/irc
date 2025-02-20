@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/20 13:09:53 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:13:08 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,31 +140,26 @@ void Server::case_mode_channel(std::string target, std::string mode, std::string
 	bool addMode = (mode[0] == '+');
 	
 	for(; match != _channels.end(); ++match) {
-		
 		if (match->second.getChanName() == (target)) {
-			for (size_t i = 1; i < mode.size(); ++i) {
-				switch (mode[i]) {
-					case 'i':
-						mode_i(clientFd, addMode, target, mode, match);
-						displayClientsInfo();
-						return;
-					case 't':
-						mode_t(clientFd, addMode, target, mode, match);
-						return;
-					case 'k':
-						std::cout << BOLD_ON << "MODE K" << BOLD_OFF << std::endl;
-						break;
-					case 'o':
-						mode_o(clientFd, target, target_user, addMode, mode, match);
-						displayClientsInfo();
-						return;
-					case 'l':
-						std::cout << BOLD_ON << "MODE L" << BOLD_OFF << std::endl;
-						return;
-					default:
-						sendAndLog(clientFd, this->get_prefix(clientFd) + " 472 " + _clients[clientFd].getNick() + " " + target + " :Unknown mode\r\n");
-						return;
-				}
+			switch (mode[1]) {
+				case 'i':
+					mode_i(clientFd, addMode, target, mode, match);
+					return;
+				case 't':
+					mode_t(clientFd, addMode, target, mode, match);
+					return;
+				case 'k':
+					std::cout << BOLD_ON << "MODE K" << BOLD_OFF << std::endl;
+					break;
+				case 'o':
+					mode_o(clientFd, target, target_user, addMode, mode, match);
+					return;
+				case 'l':
+					mode_l(clientFd, addMode, target, target_user, mode, match);
+					return;
+				default:
+					sendAndLog(clientFd, this->get_prefix(clientFd) + " 472 " + _clients[clientFd].getNick() + " " + target + " :Unknown mode\r\n");
+					return;
 			}
 		}
 	}
