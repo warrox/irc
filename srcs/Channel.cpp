@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 11:18:58 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:55:29 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ Channel::Channel(std::string name, Server &server) {
 	this->_modeI = false;
 	this->_modeL = false;
 	this->_modeT = false;
+	this->_modeK = false;
 	this->_limitValue = 0;
+	this->_keyChannel = "";
 }
 
 
@@ -110,10 +112,13 @@ Channel::Channel() {
 	
 	this->_chan_name = "";
 	this->_server = NULL;
+	
 	this->_modeI = false;
 	this->_modeL = false;
 	this->_modeT = false;
+	this->_modeK = false;
 	this->_limitValue = 0;
+	this->_keyChannel = "";
 }
 
 void Channel::setModeOInChannel(std::string target_name, bool enable) {
@@ -180,6 +185,14 @@ void	Channel::setModeL(bool enable) {
 	this->_modeL = enable;
 }
 
+void	Channel::setModeK(bool enable) {
+	this->_modeK = enable;
+}
+
+void	Channel::setKeyChannel(std::string key) {
+	this->_keyChannel = key;
+}
+
 bool	Channel::getModeI(void)const {
 	return (this->_modeI);
 }
@@ -194,4 +207,12 @@ bool	Channel::getModeL(void)const {
 
 int	Channel::getLimitValue(void)const {
 	return (this->_limitValue);
+}
+
+bool	Channel::getModeK(void)const {
+	return (this->_modeK);
+}
+
+std::string	Channel::getKeyChannel(void)const {
+	return (this->_keyChannel);
 }

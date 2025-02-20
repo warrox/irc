@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/20 13:20:05 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:19:44 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,43 @@
 #include <iostream>
 #include <string>
 #include <sys/socket.h>
+
+void Server::mode_k(int clientFd, bool addMode, std::string target, std::string target_user, std::string mode, std::map<std::string, Channel>::iterator match) {
+	
+	if (!_clients[clientFd].getModeO()) {
+		sendAndLog(clientFd, this->get_prefix(clientFd) + " 482 " + _clients[clientFd].getNick() + " " + target + " :Not enought privileges" + "\r\n");
+		return;
+	}
+	
+	if (addMode && target_user.empty()) {
+		sendAndLog(clientFd, get_prefix(clientFd) + " 461 " + _clients[clientFd].getNick() + " " + target + " " + mode + " :Need more argument" + "\r\n");
+		return;
+	}
+	
+	if (!addMode) {
+		match->second.setModeK(addMode);
+		match->second.setKeyChannel("");
+		
+		std::string tmp = ":" + _servername + " MODE " + target + " " + mode + "\r\n";
+		sendAndLog(clientFd, tmp);
+		match->second.broadcast(clientFd, *this, tmp, true);
+		return;
+	}
+	if (addMode && target_user != "") {
+		match->second.setModeK(addMode);
+		match->second.setKeyChannel(target_user);
+
+		std::string tmp = ":" + _servername + " MODE " + target + " " + mode + " " + target_user + "\r\n";
+		sendAndLog(clientFd, tmp);
+		match->second.broadcast(clientFd, *this, tmp, true);
+		return;
+	}
+	else {
+		sendAndLog(clientFd, get_prefix(clientFd) + " 461 " + _clients[clientFd].getNick() + " " + target + " " + mode + " :Invalid key" + "\r\n");
+		return;
+	}
+}
+
 
 void Server::mode_l(int clientFd, bool addMode, std::string target, std::string target_user, std::string mode, std::map<std::string, Channel>::iterator match) {
 	
@@ -144,18 +181,28 @@ void Server::case_mode_channel(std::string target, std::string mode, std::string
 			switch (mode[1]) {
 				case 'i':
 					mode_i(clientFd, addMode, target, mode, match);
+					// match->second.displayChannelInfos();
+					// displayClientsInfo();
 					return;
 				case 't':
 					mode_t(clientFd, addMode, target, mode, match);
+					// match->second.displayChannelInfos();
+					// displayClientsInfo();
 					return;
 				case 'k':
-					std::cout << BOLD_ON << "MODE K" << BOLD_OFF << std::endl;
-					break;
+					mode_k(clientFd, addMode, target, target_user, mode, match);
+					// match->second.displayChannelInfos();
+					// displayClientsInfo();
+					return;
 				case 'o':
 					mode_o(clientFd, target, target_user, addMode, mode, match);
+					// match->second.displayChannelInfos();
+					// displayClientsInfo();
 					return;
 				case 'l':
 					mode_l(clientFd, addMode, target, target_user, mode, match);
+					// match->second.displayChannelInfos();
+					// displayClientsInfo();
 					return;
 				default:
 					sendAndLog(clientFd, this->get_prefix(clientFd) + " 472 " + _clients[clientFd].getNick() + " " + target + " :Unknown mode\r\n");
