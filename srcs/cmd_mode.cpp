@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/20 16:02:46 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:30:59 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ void Server::mode_i(int clientFd, bool addMode, std::string target, std::string 
 		return;
 	}
 	else {
-		sendAndLog(clientFd, this->get_prefix(clientFd) + " 482 " + _clients[clientFd].getNick() + " " + target + " :Not enought privilegesICI" + "\r\n");
+		sendAndLog(clientFd, this->get_prefix(clientFd) + " 482 " + _clients[clientFd].getNick() + " " + target + " :Not enought privileges" + "\r\n");
 		return;
 	}
 }
@@ -181,28 +181,18 @@ void Server::case_mode_channel(std::string target, std::string mode, std::string
 			switch (mode[1]) {
 				case 'i':
 					mode_i(clientFd, addMode, target, mode, match);
-					// match->second.displayChannelInfos();
-					// displayClientsInfo();
 					return;
 				case 't':
 					mode_t(clientFd, addMode, target, mode, match);
-					// match->second.displayChannelInfos();
-					// displayClientsInfo();
 					return;
 				case 'k':
 					mode_k(clientFd, addMode, target, target_user, mode, match);
-					// match->second.displayChannelInfos();
-					// displayClientsInfo();
 					return;
 				case 'o':
 					mode_o(clientFd, target, target_user, addMode, mode, match);
-					// match->second.displayChannelInfos();
-					// displayClientsInfo();
 					return;
 				case 'l':
 					mode_l(clientFd, addMode, target, target_user, mode, match);
-					// match->second.displayChannelInfos();
-					// displayClientsInfo();
 					return;
 				default:
 					sendAndLog(clientFd, this->get_prefix(clientFd) + " 472 " + _clients[clientFd].getNick() + " " + target + " :Unknown mode\r\n");
