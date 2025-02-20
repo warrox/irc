@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:44:14 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 00:58:41 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 11:18:54 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,15 @@ class Channel {
 
 		bool _modeI;
 		bool _modeT;
+		bool _modeL;
+		int _limitValue;
+		
 		std::vector<Client*> _usersInChannel;
 		
 	public :
 
-		Channel() : _chan_name(""), _server(NULL), _modeI(false) {}
-		Channel(std::string name, int fd, Server &);
+		Channel();
+		Channel(std::string name, Server &);
 		bool		addUser(int fd);
 		bool 		delUser(int fd);
 		void 		setTopic(std::string topic);
@@ -50,9 +53,13 @@ class Channel {
 		
 		void setModeI(bool);
 		void setModeT(bool);
+		void setModeL(bool);
+		void setLimitValue(int);
 		
 		bool getModeI(void)const;
 		bool getModeT(void)const;
+		bool getModeL(void)const;
+		int getLimitValue(void)const;
 		
 		void addUserInChannel(Client &client);
 		void removeUserInChannel(Client);

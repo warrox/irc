@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 01:00:18 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 11:18:58 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,16 @@ void Channel::printClientInChan(std::vector<int> user)
 		std::cout<< "user in Channel : " << user[i] << std::endl;
 	}
 }
-Channel::Channel(std::string name, int fd, Server &server) {
+Channel::Channel(std::string name, Server &server) {
 
 	this->_chan_name = name;
-	(void)fd;
 	this->_server = &server;
 	this->_topic = "";
+	
+	this->_modeI = false;
+	this->_modeL = false;
+	this->_modeT = false;
+	this->_limitValue = 0;
 }
 
 
@@ -101,6 +105,16 @@ std::string Channel::getChanName(void) {
 }
 
 /********************************************************************************************************************************* */
+
+Channel::Channel() {
+	
+	this->_chan_name = "";
+	this->_server = NULL;
+	this->_modeI = false;
+	this->_modeL = false;
+	this->_modeT = false;
+	this->_limitValue = 0;
+}
 
 void Channel::setModeOInChannel(std::string target_name, bool enable) {
 	
@@ -158,10 +172,26 @@ void	Channel::setModeT(bool enable) {
 	this->_modeT = enable;
 }
 
+void	Channel::setLimitValue(int value) {
+	this->_limitValue = value;
+}
+
+void	Channel::setModeL(bool enable) {
+	this->_modeL = enable;
+}
+
 bool	Channel::getModeI(void)const {
 	return (this->_modeI);
 }
 
 bool	Channel::getModeT(void)const {
 	return (this->_modeT);
+}
+
+bool	Channel::getModeL(void)const {
+	return (this->_modeL);
+}
+
+int	Channel::getLimitValue(void)const {
+	return (this->_limitValue);
 }
