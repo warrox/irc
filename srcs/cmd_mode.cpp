@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/20 13:01:12 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:09:53 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,13 +160,7 @@ void Server::case_mode_channel(std::string target, std::string mode, std::string
 						return;
 					case 'l':
 						std::cout << BOLD_ON << "MODE L" << BOLD_OFF << std::endl;
-						mode_l(clientFd, addMode, target, target_user, mode, match);
-						if (match->second.getModeL())
-							std::cout << "MODE_L ENABLE" << std::endl;
-						else
-							std::cout << "MODE_L DISABLE" << std::endl;
 						return;
-						// break;
 					default:
 						sendAndLog(clientFd, this->get_prefix(clientFd) + " 472 " + _clients[clientFd].getNick() + " " + target + " :Unknown mode\r\n");
 						return;
