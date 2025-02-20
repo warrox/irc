@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 15:45:06 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 16:21:43 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,58 +65,20 @@ void Server::join(int clientFd, std::string cmd)
     }
 	else 
 	{
-		//**************************************************MODE K*************************************************** */
-		if (_channels[chanName].getModeK() && args == _channels[chanName].getKeyChannel()) {
-			if (_channels[chanName].getModeL()) {
-				if ((int)_channels[chanName].getNbUsersInChannel() < _channels[chanName].getLimitValue()) {
-					it->second.addUser(clientFd);
-					it->second.addUserInChannel(_clients[clientFd]);
-					this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
-					return;
-				}
-				else {
-					sendAndLog(clientFd, ":" + _servername + " 471 " + _clients[clientFd].getNick() + " " + chanName + " :Channel is now full" + "\r\n");
-					return;
-				}
-			}
-			else {
-				it->second.addUser(clientFd);
-				it->second.addUserInChannel(_clients[clientFd]);
-				this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
-				return;
-			}
-		}
-		else if (_channels[chanName].getModeK() && args != _channels[chanName].getKeyChannel()) {
-			sendAndLog(clientFd, get_prefix(clientFd) + " 475 " + _clients[clientFd].getNick() + " " + chanName + " :Wrong channel key" + "\r\n");
+		if (_channels[chanName].getModeK() && args != _channels[chanName].getKeyChannel()) {
+			sendAndLog(clientFd, get_prefix(clientFd) + " 475 " + _clients[clientFd].getNick() + " " + chanName + " :Wrong channel key\r\n");
 			return;
 		}
-		//**************************************************MODE L*************************************************** */
-		if (_channels[chanName].getModeL() && ((int)_channels[chanName].getNbUsersInChannel() < _channels[chanName].getLimitValue())) {
-			if (_channels[chanName].getModeK()) {
-				if (_channels[chanName].getKeyChannel() == args) {
-					it->second.addUser(clientFd);
-					it->second.addUserInChannel(_clients[clientFd]);
-					this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
-					return;
-				}
-				else {
-					sendAndLog(clientFd, get_prefix(clientFd) + " 475 " + _clients[clientFd].getNick() + " " + chanName + " :Wrong channel key" + "\r\n");
-					return;
-				}
-			}
-			else {
-				it->second.addUser(clientFd);
-				it->second.addUserInChannel(_clients[clientFd]);
-				this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
-				return;
-			}
-		}
-		else if (_channels[chanName].getModeL() && ((int)_channels[chanName].getNbUsersInChannel() == _channels[chanName].getLimitValue())) {
-			sendAndLog(clientFd, ":" + _servername + " 471 " + _clients[clientFd].getNick() + " " + chanName + " :Channel is now full" + "\r\n");
+		if (_channels[chanName].getModeL() && ((int)_channels[chanName].getNbUsersInChannel() >= _channels[chanName].getLimitValue())) {
+			sendAndLog(clientFd, ":" + _servername + " 471 " + _clients[clientFd].getNick() + " " + chanName + " :Channel is now full\r\n");
 			return;
 		}
+		it->second.addUser(clientFd);
+		it->second.addUserInChannel(_clients[clientFd]);
+		this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
 		if (!it->second.getTopic().empty()) 
 			this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " 332 " + _clients[clientFd].getNick() + " " + chanName + " :" + it->second.getTopic() + "\r\n");
+
 		sendingUserListToClient(chanName, clientFd, false);
 	}
 }
