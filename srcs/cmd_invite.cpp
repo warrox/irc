@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 10:39:32 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 17:04:23 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:29:00 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,7 @@ void Server::invite(int clientFd, std::string cmd)
 		invite_answer += ":ft_irc 341 " + this->_clients[clientFd].getNick() + " "+ name_invit + " " + chan_name + "\r\n";
 		this->sendAndLog(fdOfreceiver, invite_answer);
 		this->_channels[chan_name].client_invite_lst.push_back(name_invit);
-	}		
+	}
+	else
+		sendAndLog(clientFd, this->get_prefix(clientFd) + " 482 " + _clients[clientFd].getNick() + " " + chan_name + " :Not enought privileges" + "\r\n");
 }
