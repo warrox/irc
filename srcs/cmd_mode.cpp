@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/21 01:42:39 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:52:51 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,7 @@ void Server::mode(int clientFd, std::string cmd) {
 	std::string command, target, mode, target_user;
 	iss >> command >> target >> mode >> target_user;
 
-	std::cout << command << "|" << target << "|" << mode << "|" << target_user << std::endl;
+	// std::cout << command << "|" << target << "|" << mode << "|" << target_user << std::endl;
 	
 	if (target[0] == '#')
 		case_mode_channel(target, mode, target_user, clientFd);

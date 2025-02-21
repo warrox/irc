@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:44:14 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 17:07:52 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:33:54 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ class Channel {
 		std::string _keyChannel;
 		
 		std::vector<Client*> _usersInChannel;
+		std::vector<std::string> _userNameList;
 		
 	public :
 
@@ -70,7 +71,9 @@ class Channel {
 		std::string getKeyChannel(void)const;
 		
 		void addUserInChannel(Client &client);
-		void removeUserInChannel(Client);
+		void addNameInListChannel(std::string);
+		void removeUserInChannel(Client &client);
+		void removeNameUserInChannel(std::string);
 		bool isUserInChannel(std::string);
 		bool isUserInvitedInChannel(std::string);
 		void setModeOInChannel(std::string, bool);

@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/20 10:42:56 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/21 14:37:11 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ Server::Server(std::string port, std::string password) {
 	this->_commands["PING"] = &Server::ping;
 	this->_commands["KICK"] = &Server::kick;
 	this->_commands["INVITE"] = &Server::invite;
+	this->_commands["PART"] = &Server::part;
 
 }
 
@@ -232,4 +233,11 @@ void Server::run() {
 			this->scanClients();
 		}
 	}
+}
+
+void Server::removeChannel(std::string channel_name) {
+
+	std::map<std::string, Channel>::iterator match = _channels.find(channel_name);
+	if (match != _channels.end()) 
+		_channels.erase(match);
 }

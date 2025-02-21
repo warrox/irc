@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:54:19 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/19 16:07:51 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:51:39 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,7 @@ class Client {
 		void	setPassword(std::string);
 		void	setIsConnected(bool);
 		void	setModeI(bool);
-		// void	setModeT(bool);
-		// void	setModeK(bool);
 		void	setModeO(bool);
-		// void	setModeL(bool);
 
 
 		
@@ -55,12 +52,9 @@ class Client {
 		std::string getRealName(void)const;
 		std::string getPassword(void)const;
 		bool getIsConnected(void)const;
-		std::string	getChan(void); // ? const ?
+		std::string	getChan(void);
 		bool getModeI(void)const;
-		// bool getModeT(void)const;
-		// bool getModeK(void)const;
 		bool getModeO(void)const;
-		// bool getModeL(void)const;
 
 };
 

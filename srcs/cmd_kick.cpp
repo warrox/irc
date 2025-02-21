@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 10:43:16 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 09:10:56 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/21 14:52:44 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <sys/socket.h>
 
 void Server::kick(int clientFd, std::string cmd){
-	std::cout << "Command kick : " << cmd << std::endl;
+	// std::cout << "Command kick : " << cmd << std::endl;
 	std::istringstream lineStream(cmd);	
 	std::string cmdName, chan_name,client_to_kick, reason;
 	lineStream >> cmdName;

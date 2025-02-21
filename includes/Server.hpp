@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 12:07:03 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 15:44:01 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:34:05 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,9 @@ class Server
 		void join(int clientFd, std::string cmd);
 		void kick(int clientFd, std::string cmd);
 		void invite(int clientFd, std::string cmd);
+		void part(int ClientFd, std::string cmd);
+		//--------------------?? --------------- //
 		Client getClient(int client_fd) { return _clients[client_fd]; }
-		
 		int findClientByName(std::string name, std::map<int,Client> client);
 		//-------------------- GRAMMATICAL LANGUAGE--------------- //
 		std::string get_prefix(int);
@@ -99,6 +100,7 @@ class Server
 		void case_mode_user(std::string, std::string, int);
 		bool is_user(std::string);
 		bool is_channel(std::string);
+		void removeChannel(std::string);
 
 		void mode_i(int clientFd, bool addMode, std::string target, std::string mode, std::map<std::string, Channel>::iterator match);
 		void mode_o(int clientFd, std::string target, std::string target_user, bool addMode, std::string mode, std::map<std::string, Channel>::iterator match);

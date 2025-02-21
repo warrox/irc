@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:44:28 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/18 14:09:08 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/21 14:53:57 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void Server::topic(int clientFd, std::string cmd)
         topic_name.erase(0, 2);
 
     std::string actual_chan = this->_clients[clientFd].getChan();
-    std::cout << "cmd brut : " << cmd << std::endl;
+    // std::cout << "cmd brut : " << cmd << std::endl;
 
     if (actual_chan != "NO" && this->_clients[clientFd].getModeO())
     {

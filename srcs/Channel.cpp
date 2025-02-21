@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 17:10:45 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:52:16 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ std::string Channel::getTopic(void){
 void Channel::broadcast(int clientToIgnore, Server &server, std::string msg, bool is_for_topic) {
 
 	std::vector<int>::iterator it;
-	printClientInChan(this->_users);
+	// printClientInChan(this->_users);
 	for (it = this->_users.begin(); it != this->_users.end(); ++it) {
 		if (*it == clientToIgnore) 
 			continue;
@@ -121,10 +121,25 @@ Channel::Channel() {
 	this->_keyChannel = "";
 }
 
+void Channel::addNameInListChannel(std::string name) {
+	this->_userNameList.push_back(name);
+}
+
+void Channel::removeNameUserInChannel(std::string name) {
+	
+	std::vector<std::string>::iterator it = _userNameList.begin();
+	while (it != _userNameList.end()) {
+		if (*it == name)
+			it = _userNameList.erase(it);
+		else
+			++it;
+	}
+	
+}
+
 size_t Channel::getNbUsersInChannel() {
 	return this->_usersInChannel.size();
 }
-
 
 void Channel::setModeOInChannel(std::string target_name, bool enable) {
 	
@@ -132,8 +147,8 @@ void Channel::setModeOInChannel(std::string target_name, bool enable) {
 	
 	for(; match != this->_usersInChannel.end(); ++match) {
 		if ((*match)->getNick() == target_name) {
-			std::cout << "HEY" << std::endl;
-			std::cout << (*match)->getNick() << std::endl;
+			// std::cout << "HEY" << std::endl;
+			// std::cout << (*match)->getNick() << std::endl;
 			(*match)->setModeO(enable);
 		}
 	}
@@ -160,7 +175,7 @@ bool Channel::isUserInvitedInChannel(std::string invited) {
 }
 
 
-void Channel::removeUserInChannel(Client client) {
+void Channel::removeUserInChannel(Client &client) {
 	
 	std::vector<Client*>::iterator match = this->_usersInChannel.begin();
 	for (; match != this->_usersInChannel.end(); ++match) {

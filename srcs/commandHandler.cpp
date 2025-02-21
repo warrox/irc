@@ -6,12 +6,13 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:50 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/15 12:29:09 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/21 14:54:21 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
 #include "../includes/colors.hpp"
+
 #include <sstream>
 #include <iostream>
 #include <string>
@@ -55,7 +56,7 @@ void Server::commandHandler(int clientFd, std::string cmd) {
 			}
 			(this->*_commands[commandName])(clientFd, line);
 		} else {
-			std::cout << "Unknown or unhandled cmd!" << std::endl;
+			std::cout << YELLOW << "Unknown or unhandled cmd!" << std::endl;
 		}
 	}
 }
