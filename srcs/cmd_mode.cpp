@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/20 17:30:59 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/21 01:42:39 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ void Server::mode_o(int clientFd, std::string target, std::string target_user, b
 	if (_clients[clientFd].getModeO()) {
 		if (match->second.isUserInChannel(target_user)) {
 			
+			// std::cout << BOLD_ON << "WHAT?" << BOLD_OFF << std::endl;
 			Client *target_in_channel = match->second.getTarget(target_user);
 			target_in_channel->setModeO(addMode);
 			
