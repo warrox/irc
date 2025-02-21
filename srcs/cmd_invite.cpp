@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_invite.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: whamdi <whamdi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 10:39:32 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 14:25:37 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/20 17:04:23 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
+
 #include <sstream>
-#include <iostream>
 #include <sys/socket.h>
+
 void Server::invite(int clientFd, std::string cmd)
 {
 	std::istringstream lineStream(cmd);	

@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 15:31:22 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/20 17:23:22 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <sstream> 
 #include <iostream>
+#include <vector>
 
 void Server::sendingUserListToClient(std::string chanName, int clientFd, bool is_first_client)
 {
@@ -27,7 +28,7 @@ void Server::sendingUserListToClient(std::string chanName, int clientFd, bool is
     for (std::vector<Client>::const_iterator it = users.begin(); it != users.end(); ++it) {
         if (it->getModeO()) 
         {
-            userList += "@" + it->getNick();
+            userList += " @" + it->getNick();
         } else {
             userList += " " + it->getNick();
         }
@@ -41,15 +42,16 @@ void Server::sendingUserListToClient(std::string chanName, int clientFd, bool is
 void Server::join(int clientFd, std::string cmd) 
 {
 	std::istringstream lineStream(cmd);
-	std::string cmdName, chanName;
+	std::string cmdName, chanName, args;
 	lineStream >> cmdName;
 	lineStream >> chanName;
-	static int i = 0;
+	lineStream >> args;
+	
 	channelIterator it = this->_channels.find(chanName);
 	if (it == this->_channels.end()) 
 	{
 		std::cout << "FIRST call" << std::endl;
-		channelEntry newEntry(chanName, Channel(chanName, clientFd,*this));
+		channelEntry newEntry(chanName, Channel(chanName,*this));
 		this->_channels.insert(newEntry);
 		// this->log("Channel created: " + chanName);
 
@@ -64,16 +66,24 @@ void Server::join(int clientFd, std::string cmd)
     }
 	else 
 	{
+		if (_channels[chanName].getModeK() && args != _channels[chanName].getKeyChannel()) {
+			sendAndLog(clientFd, get_prefix(clientFd) + " 475 " + _clients[clientFd].getNick() + " " + chanName + " :Wrong channel key\r\n");
+			return;
+		}
+		if (_channels[chanName].getModeL() && ((int)_channels[chanName].getNbUsersInChannel() >= _channels[chanName].getLimitValue())) {
+			sendAndLog(clientFd, ":" + _servername + " 471 " + _clients[clientFd].getNick() + " " + chanName + " :Channel is now full\r\n");
+			return;
+		}
+		if (_channels[chanName].getModeI() && !(_channels[chanName].isUserInvitedInChannel(_clients[clientFd].getNick()))) {
+			sendAndLog(clientFd, ":" + _servername + " 473 " + _clients[clientFd].getNick() + " " + chanName + " :You must be invited to join this channel\r\n");
+			return;
+		}
 		it->second.addUser(clientFd);
-		//TEST
 		it->second.addUserInChannel(_clients[clientFd]);
-		// this->log("Added client to " + chanName);
 		this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
-
 		if (!it->second.getTopic().empty()) 
 			this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " 332 " + _clients[clientFd].getNick() + " " + chanName + " :" + it->second.getTopic() + "\r\n");
+
 		sendingUserListToClient(chanName, clientFd, false);
-		std::cout << "i : " << i++ << std::endl;
 	}
 }
-

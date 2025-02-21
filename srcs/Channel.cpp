@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 01:00:18 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:10:45 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,18 @@ void Channel::printClientInChan(std::vector<int> user)
 		std::cout<< "user in Channel : " << user[i] << std::endl;
 	}
 }
-Channel::Channel(std::string name, int fd, Server &server) {
+Channel::Channel(std::string name, Server &server) {
 
 	this->_chan_name = name;
-	(void)fd;
 	this->_server = &server;
 	this->_topic = "";
+	
+	this->_modeI = false;
+	this->_modeL = false;
+	this->_modeT = false;
+	this->_modeK = false;
+	this->_limitValue = 0;
+	this->_keyChannel = "";
 }
 
 
@@ -102,6 +108,24 @@ std::string Channel::getChanName(void) {
 
 /********************************************************************************************************************************* */
 
+Channel::Channel() {
+	
+	this->_chan_name = "";
+	this->_server = NULL;
+	
+	this->_modeI = false;
+	this->_modeL = false;
+	this->_modeT = false;
+	this->_modeK = false;
+	this->_limitValue = 0;
+	this->_keyChannel = "";
+}
+
+size_t Channel::getNbUsersInChannel() {
+	return this->_usersInChannel.size();
+}
+
+
 void Channel::setModeOInChannel(std::string target_name, bool enable) {
 	
 	std::vector<Client*>::iterator match = this->_usersInChannel.begin();
@@ -124,6 +148,17 @@ bool Channel::isUserInChannel(std::string target_name) {
 	}
 	return false;
 }
+
+bool Channel::isUserInvitedInChannel(std::string invited) {
+	
+	std::vector<std::string>::iterator match = this->client_invite_lst.begin();
+	for (; match != this->client_invite_lst.end(); ++match) {
+		if (*match == invited)
+			return true;
+	}
+	return false;
+}
+
 
 void Channel::removeUserInChannel(Client client) {
 	
@@ -158,10 +193,42 @@ void	Channel::setModeT(bool enable) {
 	this->_modeT = enable;
 }
 
+void	Channel::setLimitValue(int value) {
+	this->_limitValue = value;
+}
+
+void	Channel::setModeL(bool enable) {
+	this->_modeL = enable;
+}
+
+void	Channel::setModeK(bool enable) {
+	this->_modeK = enable;
+}
+
+void	Channel::setKeyChannel(std::string key) {
+	this->_keyChannel = key;
+}
+
 bool	Channel::getModeI(void)const {
 	return (this->_modeI);
 }
 
 bool	Channel::getModeT(void)const {
 	return (this->_modeT);
+}
+
+bool	Channel::getModeL(void)const {
+	return (this->_modeL);
+}
+
+int	Channel::getLimitValue(void)const {
+	return (this->_limitValue);
+}
+
+bool	Channel::getModeK(void)const {
+	return (this->_modeK);
+}
+
+std::string	Channel::getKeyChannel(void)const {
+	return (this->_keyChannel);
 }

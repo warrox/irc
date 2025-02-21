@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:54:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/19 17:09:18 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:08:05 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,8 @@
 Client::Client() {
 	
 	this->_password = "";
-
-	this->mode_i = false;
-	// this->mode_k = false;
+	this->mode_i = true;
 	this->mode_o = false;
-	// this->mod_t = false;
-	// this->mode_l = false;
 };
 
 void Client::setNick(std::string nick) {
@@ -45,21 +41,9 @@ void	Client::setModeI(bool enable) {
 	this->mode_i = enable;
 }
 
-// void	Client::setModeT(bool enable) {
-// 	this->mod_t = enable;
-// }
-
-// void	Client::setModeK(bool enable) {
-// 	this->mode_k = enable;
-// }
-
 void	Client::setModeO(bool enable) {
 	this->mode_o = enable;
 }
-
-// void	Client::setModeL(bool enable) {
-// 	this->mode_l = enable;
-// }
 
 std::string Client::getNick(void) const{
 	return this->_nick;
@@ -81,21 +65,9 @@ bool Client::getModeI(void)const {
 	return (this->mode_i);
 }
 
-// bool Client::getModeT(void)const {
-// 	return (this->mod_t);
-// }
-
-// bool Client::getModeK(void)const {
-// 	return (this->mode_k);
-// }
-
 bool Client::getModeO(void)const {
 	return (this->mode_o);
 }
-
-// bool Client::getModeL(void)const {
-// 	return(this->mode_l);
-// }
 
 std::string	Client::getChan(void)
 {

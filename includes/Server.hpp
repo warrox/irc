@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 12:07:03 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 10:43:36 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/20 15:44:01 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,9 @@ class Server
 		void mode_i(int clientFd, bool addMode, std::string target, std::string mode, std::map<std::string, Channel>::iterator match);
 		void mode_o(int clientFd, std::string target, std::string target_user, bool addMode, std::string mode, std::map<std::string, Channel>::iterator match);
 		void mode_t(int clientFd, bool addMode, std::string target, std::string mode, std::map<std::string, Channel>::iterator match);
+		void mode_l(int clientFd, bool addMode, std::string target, std::string target_user, std::string mode, std::map<std::string, Channel>::iterator match);
+		void mode_k(int clientFd, bool addMode, std::string target, std::string target_user, std::string mode, std::map<std::string, Channel>::iterator match);
+
 };
 
 #endif
