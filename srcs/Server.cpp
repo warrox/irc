@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/21 14:37:11 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/23 22:40:18 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,17 @@
 #include <ctime>
 #include <iostream>
 #include <cstdlib>
+
+std::string Server::isClientInAChannel(std::string name) {
+	
+	std::map<std::string, Channel>::iterator match = _channels.begin();
+	for (; match != _channels.end(); ++match) {
+		if (match->second.isUserInChannel(name))
+			return (match->first);
+	}
+	return "";
+}
+
 
 std::string getTime() {
 	std::time_t now = std::time(0);
