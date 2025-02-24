@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 12:50:01 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/24 15:39:22 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:15:24 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void Server::part(int clientFd, std::string cmd) {
 		// _channels[channel_name].displayChannelInfos();
 		// std::cout << "Client in this channel" << std::endl;
 		sendAndLog(clientFd, get_prefix(clientFd) + _clients[clientFd].getNick() + " " + "PART " + channel_name + "\r\n");
-		_channels[channel_name].broadcast(clientFd, *this, (get_prefix(clientFd) + _clients[clientFd].getNick() + " " + "PART " + channel_name + "\r\n"), true, false);
+		_channels[channel_name].broadcast(clientFd, *this, (get_prefix(clientFd) + _clients[clientFd].getNick() + " " + "PART " + channel_name + "\r\n"), true);
 		_channels[channel_name].removeNameUserInChannel(_clients[clientFd].getNick());
 		_channels[channel_name].removeUserInChannel(_clients[clientFd]);
 		_channels[channel_name].delUser(clientFd);

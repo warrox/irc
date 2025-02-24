@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/24 15:39:08 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:14:47 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void Server::mode_k(int clientFd, bool addMode, std::string target, std::string 
 		
 		std::string tmp = ":" + _servername + " MODE " + target + " " + mode + "\r\n";
 		sendAndLog(clientFd, tmp);
-		match->second.broadcast(clientFd, *this, tmp, true, false);
+		match->second.broadcast(clientFd, *this, tmp, true);
 		return;
 	}
 	if (addMode && target_user != "") {
@@ -47,7 +47,7 @@ void Server::mode_k(int clientFd, bool addMode, std::string target, std::string 
 
 		std::string tmp = ":" + _servername + " MODE " + target + " " + mode + " " + target_user + "\r\n";
 		sendAndLog(clientFd, tmp);
-		match->second.broadcast(clientFd, *this, tmp, true, false);
+		match->second.broadcast(clientFd, *this, tmp, true);
 		return;
 	}
 	else {
@@ -80,7 +80,7 @@ void Server::mode_l(int clientFd, bool addMode, std::string target, std::string 
 		
 		std::string tmp = ":" + _servername + " MODE " + target + " " + mode + "\r\n";
 		sendAndLog(clientFd, tmp);
-		match->second.broadcast(clientFd, *this, tmp, true, false);
+		match->second.broadcast(clientFd, *this, tmp, true);
 		return;
 	}
 	if (addMode && (limit > 0)) {
@@ -89,7 +89,7 @@ void Server::mode_l(int clientFd, bool addMode, std::string target, std::string 
 		
 		std::string tmp = ":" + _servername + " MODE " + target + " " + mode + " " + target_user + "\r\n";
 		sendAndLog(clientFd, tmp);
-		match->second.broadcast(clientFd, *this, tmp, true, false);
+		match->second.broadcast(clientFd, *this, tmp, true);
 		return;
 	}
 	else {
@@ -107,7 +107,7 @@ void Server::mode_t(int clientFd, bool addMode, std::string target, std::string 
 	match->second.setModeT(addMode);
 	std::string msg = ":" + _servername + " MODE " + target + " " + mode + "\r\n";
 	sendAndLog(clientFd, msg);
-	match->second.broadcast(clientFd, *this, msg, true, false);
+	match->second.broadcast(clientFd, *this, msg, true);
 }
 
 void Server::mode_o(int clientFd, std::string target, std::string target_user, bool addMode, std::string mode, std::map<std::string, Channel>::iterator match) {
@@ -126,7 +126,7 @@ void Server::mode_o(int clientFd, std::string target, std::string target_user, b
 			
 			std::string tmp = ":" + _servername + " MODE " + target + " " + mode + " " + target_user + "\r\n";
 			sendAndLog(clientFd, tmp);
-			match->second.broadcast(clientFd, *this, tmp, true, false);
+			match->second.broadcast(clientFd, *this, tmp, true);
 			return;
 		}
 		else {
@@ -147,7 +147,7 @@ void Server::mode_i(int clientFd, bool addMode, std::string target, std::string 
 		match->second.setModeI(addMode);
 		std::string tmp = ":" + _servername + " MODE " + target + " " + mode + "\r\n";
 		sendAndLog(clientFd, this->get_prefix(clientFd) + " MODE " + target + " " + mode + "\r\n");
-		match->second.broadcast(clientFd, *this, tmp, true, false);
+		match->second.broadcast(clientFd, *this, tmp, true);
 		return;
 	}
 	else {

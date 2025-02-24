@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/24 15:35:39 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:22:32 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,11 @@ std::map<int,Client> Server::getClients()const
 }
 
 
-void Server::sendMessageto(int clientFd, int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name, bool is_nick_up)
+void Server::sendMessageto(int clientFd, int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name)
 {
-	if (is_nick_up) {
-		sendAndLog(receiver_fd, msg);
-		return;
-	}
-	std::cout << "Message before sending to client : " << msg << std::endl;
-	// std::string formatedMsg = ":" + sender_name + " PRIVMSG " + receiver_name + " :" + msg + "\r\n";
 	(void)sender_name;
-
-	std::cout << this->get_prefix(clientFd) << std::endl;
 	
 	std::string formatedMsg = this->get_prefix(clientFd) + " PRIVMSG " + receiver_name + " :" + msg + "\r\n";
-	std::cout << "Message size: " << formatedMsg.size() << std::endl;
-    std::cout << "Message to send: '" << formatedMsg << "'" << std::endl;
 	sendAndLog(receiver_fd, formatedMsg);
 }
 

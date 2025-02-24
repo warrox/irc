@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/21 14:52:34 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:22:06 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,28 +43,23 @@ void Server::join(int clientFd, std::string cmd)
 {
 	std::istringstream lineStream(cmd);
 	std::string cmdName, chanName, args;
-	lineStream >> cmdName;
-	lineStream >> chanName;
-	lineStream >> args;
-	
+	lineStream >> cmdName >> chanName >> args;
+
 	channelIterator it = this->_channels.find(chanName);
 	if (it == this->_channels.end()) 
 	{
-		// std::cout << "FIRST call" << std::endl;
-		channelEntry newEntry(chanName, Channel(chanName,*this));
-		this->_channels.insert(newEntry);
-		// this->log("Channel created: " + chanName);
-
+		this->_channels.insert(channelEntry(chanName, Channel(chanName, *this)));
 		it = this->_channels.find(chanName);
+
 		this->_clients[clientFd].setModeO(true);
 		it->second.addUser(clientFd);
-		//TEST
 		it->second.addUserInChannel(_clients[clientFd]);
 		it->second.addNameInListChannel(_clients[clientFd].getNick());
-		// this->log("Added client to " + chanName);
-		this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
+
+		std::string joinMsg = ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n";
+		this->sendAndLog(clientFd, joinMsg);
 		sendingUserListToClient(chanName, clientFd, true);
-    }
+	}
 	else 
 	{
 		if (_channels[chanName].getModeK() && args != _channels[chanName].getKeyChannel()) {
@@ -79,13 +74,19 @@ void Server::join(int clientFd, std::string cmd)
 			sendAndLog(clientFd, ":" + _servername + " 473 " + _clients[clientFd].getNick() + " " + chanName + " :You must be invited to join this channel\r\n");
 			return;
 		}
+
 		it->second.addUser(clientFd);
 		it->second.addUserInChannel(_clients[clientFd]);
 		it->second.addNameInListChannel(_clients[clientFd].getNick());
-		this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
-		if (!it->second.getTopic().empty()) 
-			this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " 332 " + _clients[clientFd].getNick() + " " + chanName + " :" + it->second.getTopic() + "\r\n");
 
+		std::string joinMsg = ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n";
+		this->sendAndLog(clientFd, joinMsg);
+
+		if (!it->second.getTopic().empty()) {
+			this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " 332 " + _clients[clientFd].getNick() + " " + chanName + " :" + it->second.getTopic() + "\r\n");
+		}
+		
+		it->second.broadcast(clientFd, *this, joinMsg, true);
 		sendingUserListToClient(chanName, clientFd, false);
 	}
 }

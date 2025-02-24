@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:41:57 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/24 15:36:15 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:21:21 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ void Server::nick(int clientFd, std::string cmd) {
 	if (is_in_channel.empty())
 		return;
 	else {
-		std::cout << "ICI" << std::endl;
-		// this->sendNickChange(clientFd, old_nick, nickname);
-		_channels[is_in_channel].broadcast(clientFd, *this, response, false, true);
+		_channels[is_in_channel].broadcast(clientFd, *this, response, true);
 	}
 }
