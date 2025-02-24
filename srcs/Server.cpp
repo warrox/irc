@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/20 10:42:56 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/24 14:03:57 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,12 @@ std::string getTime() {
 	return std::string(buffer);
 }
 
+void setNonBlocking(int socket) {
+    if (fcntl(socket, F_SETFL, O_NONBLOCK) == -1) {
+        perror("fcntl F_SETFL");
+        exit(EXIT_FAILURE);
+    }
+}
 std::map<int,Client> Server::getClients()const
 {
 	return(this->_clients);
@@ -142,7 +148,7 @@ void Server::acceptNewClient() {
 	if (client_socket == -1) {
 		this->fatal("Failed to accept new client.");
 	}
-
+	setNonBlocking(client_socket);
 	this->_clients[client_socket] = Client();
 
 	// Ajout du client à la liste des pollfd
