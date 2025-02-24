@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/24 18:22:32 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 19:03:11 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <ctime>
-#include <iostream>
 #include <cstdlib>
 
 std::string Server::isClientInAChannel(std::string name) {
@@ -34,16 +33,6 @@ std::string Server::isClientInAChannel(std::string name) {
 	}
 	return "";
 }
-
-// std::string getTime() {
-// 	std::time_t now = std::time(0);
-// 	std::tm* now_tm = std::localtime(&now);
-
-// 	char buffer[20];
-// 	std::strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", now_tm);
-
-// 	return std::string(buffer);
-// }
 
 std::map<int,Client> Server::getClients()const
 {

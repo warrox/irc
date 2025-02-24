@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/24 18:14:47 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:55:24 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <iostream>
 #include <string>
 #include <sys/socket.h>
+#include <climits>
 
 void Server::mode_k(int clientFd, bool addMode, std::string target, std::string target_user, std::string mode, std::map<std::string, Channel>::iterator match) {
 	
@@ -56,6 +57,17 @@ void Server::mode_k(int clientFd, bool addMode, std::string target, std::string 
 	}
 }
 
+bool isValidInt(const std::string &str, int &value) {
+	
+	std::istringstream iss(str);
+	iss >> value;
+
+	if (iss.fail() || !iss.eof())
+		return false;
+	if (value < 0 || value > INT_MAX)
+		return false;
+	return true;
+}
 
 void Server::mode_l(int clientFd, bool addMode, std::string target, std::string target_user, std::string mode, std::map<std::string, Channel>::iterator match) {
 	
@@ -68,12 +80,12 @@ void Server::mode_l(int clientFd, bool addMode, std::string target, std::string 
 		sendAndLog(clientFd, get_prefix(clientFd) + " 461 " + _clients[clientFd].getNick() + " " + target + " " + mode + " :Need more argument" + "\r\n");
 		return;
 	}
-
+	
 	std::istringstream iss(target_user);
 	int limit;
 	iss >> limit;
 	
-	//? Check overflow ?
+	
 	if (!addMode) {
 		match->second.setModeL(addMode);
 		match->second.setLimitValue(0);
@@ -83,6 +95,12 @@ void Server::mode_l(int clientFd, bool addMode, std::string target, std::string 
 		match->second.broadcast(clientFd, *this, tmp, true);
 		return;
 	}
+	
+	if (!isValidInt(target_user, limit)) {
+		sendAndLog(clientFd, get_prefix(clientFd) + " 461 " + _clients[clientFd].getNick() + " " + target + " " + mode + " :Invalid limit" + "\r\n");
+		return;
+	}
+	
 	if (addMode && (limit > 0)) {
 		match->second.setModeL(addMode);
 		match->second.setLimitValue(limit);
@@ -119,8 +137,7 @@ void Server::mode_o(int clientFd, std::string target, std::string target_user, b
 	
 	if (_clients[clientFd].getModeO()) {
 		if (match->second.isUserInChannel(target_user)) {
-			
-			// std::cout << BOLD_ON << "WHAT?" << BOLD_OFF << std::endl;
+
 			Client *target_in_channel = match->second.getTarget(target_user);
 			target_in_channel->setModeO(addMode);
 			
@@ -206,7 +223,6 @@ void Server::case_mode_channel(std::string target, std::string mode, std::string
 
 void Server::case_mode_user(std::string target, std::string mode, int clientFd) {
 	
-	// std::cout << BOLD_ON << "mode USER" << BOLD_OFF << std::endl;
 	if ((mode[0] != '+' && mode[0] != '-') || mode.empty())
 		//!error
 		std::cout << YELLOW << "[WRGANSWER]: trouble +/-!" << BOLD_OFF << std::endl;
@@ -251,8 +267,6 @@ void Server::mode(int clientFd, std::string cmd) {
 	std::istringstream iss(cmd);
 	std::string command, target, mode, target_user;
 	iss >> command >> target >> mode >> target_user;
-
-	// std::cout << command << "|" << target << "|" << mode << "|" << target_user << std::endl;
 	
 	if (target[0] == '#')
 		case_mode_channel(target, mode, target_user, clientFd);

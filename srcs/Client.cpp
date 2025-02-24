@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:54:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/20 13:08:05 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:42:23 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ std::string	Client::getChan(void)
 	}
 	return("NO");
 }
+
 void Client::setIsConnected(bool isConnected){this->_is_connected = isConnected;}
 bool Client::getIsConnected(void)const {return this->_is_connected;}
 

@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:54:19 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/21 14:51:39 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:40:58 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ class Client {
 	public:
 		Client();
 		Client(int client_fd, std::string msgFromClient);
-		// Client& operator=(const Client &);
 		~Client() {};
-
 
 		void	setNick(std::string nick);
 		void	setUser(std::string user);
@@ -44,8 +42,6 @@ class Client {
 		void	setModeI(bool);
 		void	setModeO(bool);
 
-
-		
 		std::string getNick(void)const;
 		std::string getUser(void)const;
 		std::string getHost(void)const;

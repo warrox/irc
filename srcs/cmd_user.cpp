@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:40:17 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/19 00:15:01 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 19:02:38 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void Server::user(int clientFd, std::string cmd) {
 
 	if (user.empty() || host.empty() || realname.empty() || realname[1] != ':') {
 		sendAndLog(clientFd, ":" + this->_servername + "461" + _clients[clientFd].getNick() + " " + " :Missing arguments\r\n");
-		// disconnectClient(clientFd, "Invalid USER command");
 		return;
 	}
 	_clients[clientFd].setUser(user);

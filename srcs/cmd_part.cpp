@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 12:50:01 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/24 18:15:24 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 19:02:13 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,10 @@
 
 void Server::part(int clientFd, std::string cmd) {
 	
-	// std::cout << BOLD_ON YELLOW << "PART detected" << BOLD_OFF << std::endl;
 	std::istringstream iss(cmd);
 	std::string commamd, channel_name;
 	
 	iss >> commamd >> channel_name;
-	// std::cout << commamd << "|" << channel_name << std::endl;
 
 	std::map<std::string, Channel>::iterator match = _channels.begin();
 	for (; match != _channels.end(); ++match) {
@@ -38,8 +36,7 @@ void Server::part(int clientFd, std::string cmd) {
 	}
 	
 	if (_channels[channel_name].isUserInChannel(_clients[clientFd].getNick())) {
-		// _channels[channel_name].displayChannelInfos();
-		// std::cout << "Client in this channel" << std::endl;
+
 		sendAndLog(clientFd, get_prefix(clientFd) + _clients[clientFd].getNick() + " " + "PART " + channel_name + "\r\n");
 		_channels[channel_name].broadcast(clientFd, *this, (get_prefix(clientFd) + _clients[clientFd].getNick() + " " + "PART " + channel_name + "\r\n"), true);
 		_channels[channel_name].removeNameUserInChannel(_clients[clientFd].getNick());
@@ -48,7 +45,6 @@ void Server::part(int clientFd, std::string cmd) {
 		
 		if (_channels[channel_name].getNbUsersInChannel() == 0)
 			this->removeChannel(channel_name);
-		// _channels[channel_name].displayChannelInfos();
 	}
 	else 
 		this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " 441 " + _clients[clientFd].getNick() + " " + channel_name + " :Not in channel\r\n");
