@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 12:07:03 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 15:44:01 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:41:57 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ class Server
 		Server(std::string port, std::string password);
 
 		//You desctructor shouldn't be empty, but if it, you can initialise it here via syntax {}
-		~Server() {}
+		~Server();
 		
 		std::string getPass(void);
 		void start();

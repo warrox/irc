@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/24 14:03:57 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/24 16:36:51 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,15 @@ void Server::sendMessageto(int clientFd, int receiver_fd, std::string msg, std::
     std::cout << "Message to send: '" << formatedMsg << "'" << std::endl;
 	sendAndLog(receiver_fd, formatedMsg);
 }
-
+Server::~Server()
+{	
+	this->_commands.clear();
+}
 Server::Server(std::string port, std::string password) {
 	this->_port = port;
 	this->_pass = password;
 	this->_servername = "ft_irc";
-	this->_time = getTime();
+	// this->_time = getTime();
 
 	struct sockaddr_in adress;
 	this->_address	   = adress;
@@ -80,7 +83,6 @@ Server::Server(std::string port, std::string password) {
 	this->_commands["PING"] = &Server::ping;
 	this->_commands["KICK"] = &Server::kick;
 	this->_commands["INVITE"] = &Server::invite;
-
 }
 
 void Server::start() {
