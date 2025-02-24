@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:40:17 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/19 00:15:01 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 11:00:47 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void Server::user(int clientFd, std::string cmd) {
 
 	std::string pass = this->_clients[clientFd].getPassword();	
 	if (pass.empty() || this->_pass != pass) {
-		std::string errorMsg = ":" + this->_servername + "464" + " " + _clients[clientFd].getNick() + " :Wrong password\r\n";
+		std::string errorMsg = ":" + this->_servername + "464" + " " + _clients[clientFd].getNick() + " Wrong password\r\n";
 		this->sendAndLog(clientFd, errorMsg);
 		disconnectClient(clientFd, errorMsg);
 		return;
