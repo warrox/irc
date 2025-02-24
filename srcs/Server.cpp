@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/24 11:03:43 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:35:39 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,25 +35,33 @@ std::string Server::isClientInAChannel(std::string name) {
 	return "";
 }
 
-std::string getTime() {
-	std::time_t now = std::time(0);
-	std::tm* now_tm = std::localtime(&now);
+// std::string getTime() {
+// 	std::time_t now = std::time(0);
+// 	std::tm* now_tm = std::localtime(&now);
 
-	char buffer[20];
-	std::strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", now_tm);
+// 	char buffer[20];
+// 	std::strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", now_tm);
 
-	return std::string(buffer);
-}
+// 	return std::string(buffer);
+// }
 
 std::map<int,Client> Server::getClients()const
 {
 	return(this->_clients);
 }
-void Server::sendMessageto(int clientFd, int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name)
+
+
+void Server::sendMessageto(int clientFd, int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name, bool is_nick_up)
 {
+	if (is_nick_up) {
+		sendAndLog(receiver_fd, msg);
+		return;
+	}
 	std::cout << "Message before sending to client : " << msg << std::endl;
 	// std::string formatedMsg = ":" + sender_name + " PRIVMSG " + receiver_name + " :" + msg + "\r\n";
-	(void)sender_name;	
+	(void)sender_name;
+
+	std::cout << this->get_prefix(clientFd) << std::endl;
 	
 	std::string formatedMsg = this->get_prefix(clientFd) + " PRIVMSG " + receiver_name + " :" + msg + "\r\n";
 	std::cout << "Message size: " << formatedMsg.size() << std::endl;

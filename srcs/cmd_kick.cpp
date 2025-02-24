@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 10:43:16 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/21 14:52:44 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:38:23 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void Server::kick(int clientFd, std::string cmd){
 			kick_answer += reason;
 		kick_answer += "\r\n";
 		this->sendAndLog(clientFd, kick_answer);
-		this->_channels[chan_name].broadcast(clientFd, *this, kick_answer,true);
+		this->_channels[chan_name].broadcast(clientFd, *this, kick_answer,true, false);
 		// std::cout << "DOuble bozlard : " << kick_answer << std::endl;
 	}else{
 		// t'as pas les droit et tu refuses

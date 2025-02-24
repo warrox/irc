@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:41:57 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/24 10:57:52 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:36:15 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void Server::nick(int clientFd, std::string cmd) {
 	}
 	std::string old_nick = _clients[clientFd].getNick();
 	_clients[clientFd].setNick(nickname);
-	std::string response = ":" + old_nick + "!user@localhost NICK :" + nickname + "\r\n";
+	std::string response = ":" + old_nick + "!" + _clients[clientFd].getUser() + "@" + _clients[clientFd].getHost() + " NICK :" + nickname + "\r\n";
 	sendAndLog(clientFd, response);
 
 	std::string is_in_channel = isClientInAChannel(_clients[clientFd].getNick());
@@ -73,6 +73,7 @@ void Server::nick(int clientFd, std::string cmd) {
 		return;
 	else {
 		std::cout << "ICI" << std::endl;
-		_channels[is_in_channel].broadcast(clientFd, *this, response, true);
+		// this->sendNickChange(clientFd, old_nick, nickname);
+		_channels[is_in_channel].broadcast(clientFd, *this, response, false, true);
 	}
 }

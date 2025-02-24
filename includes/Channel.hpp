@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:44:14 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/21 14:33:54 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:37:13 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,21 @@ class Channel {
 		int _limitValue;
 		std::string _keyChannel;
 		
-		std::vector<Client*> _usersInChannel;
 		std::vector<std::string> _userNameList;
 		
-	public :
-
+		public :
+		
 		Channel();
 		Channel(std::string name, Server &);
-
+		
+		std::vector<Client*> _usersInChannel;
 		std::vector<std::string> client_invite_lst;
 		bool		addUser(int fd);
 		bool 		delUser(int fd);
 		void 		setTopic(std::string topic);
 		std::string		getChanName(void);
 		std::string getTopic(void);
-		void		broadcast(int, Server&, std::string, bool);	
+		void		broadcast(int clientToIgnore, Server &server, std::string msg, bool is_for_topic, bool is_nick_up);	
 		void printClientInChan(std::vector<int> user);
 		std::vector<Client> getUsers(void);
 
@@ -81,7 +81,7 @@ class Channel {
 
 		void displayChannelInfos();
 		size_t getNbUsersInChannel();
-				
+
 		~Channel() {}
 	};
 	

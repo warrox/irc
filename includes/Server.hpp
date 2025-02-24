@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 12:07:03 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/23 22:38:34 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:33:35 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ class Server
 		void fatal(std::string);
 		void recvLog(int clientFd, std::string message);
 		void displayClientsInfo(void);
-		void sendMessageto(int clientFd, int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name);	
+		void sendMessageto(int clientFd, int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name, bool);	
 		void sendingUserListToClient(std::string chanName,int clientFd, bool);
 		//-------------------- SERVER COMMANDS --------------- //
 		void nick(int, std::string);

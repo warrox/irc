@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:45:59 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/21 14:53:48 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:37:32 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void Server::privmsg(int clientFd, std::string cmd)
 			return ;
 		// this->log("Broadcasting on channel: " + dest);
 		// std::cout << message << std::endl;
-		it->second.broadcast(clientFd, *this, message,false); //ici 
+		it->second.broadcast(clientFd, *this, message,false, false); //ici 
 	}
 	else{
 		//je cherche le fd du client destinataire
@@ -54,7 +54,7 @@ void Server::privmsg(int clientFd, std::string cmd)
 		{
 			if(it->second.getNick() == dest) {
 				// this->sendAndLog(it->first, message);
-				this->sendMessageto(clientFd, fdOfReceiver, message, this->getClient(fdOfReceiver).getNick(), dest);
+				this->sendMessageto(clientFd, fdOfReceiver, message, this->getClient(fdOfReceiver).getNick(), dest, false);
 			}
 		}
 	}

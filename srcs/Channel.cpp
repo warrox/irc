@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:43:54 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/23 23:06:06 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:36:52 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ std::string Channel::getTopic(void){
 	return(this->_topic);
 }
 
-void Channel::broadcast(int clientToIgnore, Server &server, std::string msg, bool is_for_topic) {
+void Channel::broadcast(int clientToIgnore, Server &server, std::string msg, bool is_for_topic, bool is_nick_up) {
 
 	std::vector<int>::iterator it;
 	// printClientInChan(this->_users);
@@ -97,7 +97,7 @@ void Channel::broadcast(int clientToIgnore, Server &server, std::string msg, boo
 		if(is_for_topic){
 			server.sendAndLog(*it, msg);
 		}else{
-			server.sendMessageto(clientToIgnore,*it, msg, server.getClient(clientToIgnore).getNick(), this->getChanName()); 
+			server.sendMessageto(clientToIgnore,*it, msg, server.getClient(clientToIgnore).getNick(), this->getChanName(), is_nick_up); 
 		}
 	}
 }
