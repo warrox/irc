@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/23 22:40:18 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 11:03:43 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ std::string Server::isClientInAChannel(std::string name) {
 	}
 	return "";
 }
-
 
 std::string getTime() {
 	std::time_t now = std::time(0);
@@ -66,7 +65,7 @@ Server::Server(std::string port, std::string password) {
 	this->_port = port;
 	this->_pass = password;
 	this->_servername = "ft_irc";
-	this->_time = getTime();
+	this->_time = "24-02-2025 12::00";
 
 	struct sockaddr_in adress;
 	this->_address	   = adress;

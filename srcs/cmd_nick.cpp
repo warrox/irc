@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:41:57 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/23 23:12:16 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/24 10:57:52 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,4 @@ void Server::nick(int clientFd, std::string cmd) {
 		std::cout << "ICI" << std::endl;
 		_channels[is_in_channel].broadcast(clientFd, *this, response, true);
 	}
-	
 }
