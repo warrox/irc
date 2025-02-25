@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/24 19:03:11 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/25 12:07:55 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ Server::Server(std::string port, std::string password) {
 	this->_port = port;
 	this->_pass = password;
 	this->_servername = "ft_irc";
-	this->_time = "24-02-2025 12::00";
+	this->_time = "25-02-2025 12:00";
 
 	struct sockaddr_in adress;
 	this->_address	   = adress;
