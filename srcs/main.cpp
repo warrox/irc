@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:07 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/25 09:00:30 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/25 09:36:49 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void handle_signal(int signal) {
 	(void)signal;
 	if (g_server) {
 		std::cout << "[SERVER] SIGINT received, closing the IRC server" << std::endl;
+		g_server->shutDown();
 		delete g_server;
 		g_server = NULL;
 	}

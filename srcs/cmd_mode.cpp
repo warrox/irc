@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:38:25 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/20 17:30:59 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/25 09:21:55 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void Server::mode_l(int clientFd, bool addMode, std::string target, std::string 
 	int limit;
 	iss >> limit;
 	
-	//? Check overflow ?
 	if (!addMode) {
 		match->second.setModeL(addMode);
 		match->second.setLimitValue(0);
@@ -205,9 +204,7 @@ void Server::case_mode_channel(std::string target, std::string mode, std::string
 
 void Server::case_mode_user(std::string target, std::string mode, int clientFd) {
 	
-	// std::cout << BOLD_ON << "mode USER" << BOLD_OFF << std::endl;
 	if ((mode[0] != '+' && mode[0] != '-') || mode.empty())
-		//!error
 		std::cout << YELLOW << "[WRGANSWER]: trouble +/-!" << BOLD_OFF << std::endl;
 	
 	bool add_mode = (mode[0] == '+');
@@ -258,7 +255,6 @@ void Server::mode(int clientFd, std::string cmd) {
 	else if (is_user(target))
 	 	case_mode_user(target, mode, clientFd);
 	else
-		//!error
 		(void)clientFd;
 }
 

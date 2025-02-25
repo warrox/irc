@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/20 17:23:22 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/25 09:27:52 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,12 @@ void Server::join(int clientFd, std::string cmd)
 		std::cout << "FIRST call" << std::endl;
 		channelEntry newEntry(chanName, Channel(chanName,*this));
 		this->_channels.insert(newEntry);
-		// this->log("Channel created: " + chanName);
 
 		it = this->_channels.find(chanName);
 		this->_clients[clientFd].setModeO(true);
 		it->second.addUser(clientFd);
-		//TEST
 		it->second.addUserInChannel(_clients[clientFd]);
-		// this->log("Added client to " + chanName);
-		this->sendAndLog(clientFd, ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n");
+		this->sendAndLog(clientFd, this->get_prefix(clientFd) + " JOIN :" + chanName + "\r\n");
 		sendingUserListToClient(chanName, clientFd, true);
     }
 	else 

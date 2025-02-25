@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 12:07:03 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/24 15:41:57 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/25 09:36:15 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class Server
 		std::string _pass; //You might consider hashing the password, storing a plain text password is bullshit
 		std::string _servername;
 		std::string _time;
+		int16_t _socket;
 
 		// ----- Socket related ------ //
 		std::vector<pollfd> _pfds;
@@ -62,6 +63,7 @@ class Server
 		std::string getPass(void);
 		void start();
 		void run();
+		void shutDown();
 		void acceptNewClient();
 		void scanClients();
  		void commandHandler(int clientFd, std::string cmd);

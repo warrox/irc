@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/24 16:36:51 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/25 09:42:04 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,16 @@ Server::Server(std::string port, std::string password) {
 	this->_commands["INVITE"] = &Server::invite;
 }
 
+void Server::shutDown(void) {
+	std::map<int, Client>::iterator it = this->_clients.begin();
+	for (; it != this->_clients.end(); ++it) {
+		close(it->first);
+	}
+	close(this->_socket);
+}
+
 void Server::start() {
 	struct sockaddr_in server_address = {};
-	int32_t server_socket = -1;
 	const socklen_t socklen	= sizeof(struct sockaddr_in);
 	int32_t optname	= 1;
 
@@ -102,40 +109,40 @@ void Server::start() {
 	}
 
 	// here IPPROTO_TCP is what you will get anyway but it's explicit.
-	server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (server_socket == -1) {
+	this->_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (this->_socket == -1) {
 		this->fatal("Failed to create socket");
 		return;
 	}
 
 	// this is just a convenience to always have the same port and not have to wait for the kernel to release it.
-	if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &optname, socklen) == -1) {
-		close(server_socket);
+	if (setsockopt(this->_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &optname, socklen) == -1) {
+		close(this->_socket);
 		this->fatal("Failed to configure socket to SO_REUSEADDR | SO_REUSEPORT");
 		return;
 	}
 
 	// you need to make sure client's are also configured in non-blocking mode.
-	if (fcntl(server_socket, F_SETFL, O_NONBLOCK) == -1) {
-		close(server_socket);
+	if (fcntl(this->_socket, F_SETFL, O_NONBLOCK) == -1) {
+		close(this->_socket);
 		this->fatal("Failed to configure socket to O_NONBLOCK");
 		return;
 	}
 
-	if (bind(server_socket, (struct sockaddr *)&server_address, socklen) == -1) {
-		close(server_socket);
+	if (bind(this->_socket, (struct sockaddr *)&server_address, socklen) == -1) {
+		close(this->_socket);
 		this->fatal("Failed to bind socket.");
 		return;
 	}
 
-	if (listen(server_socket, SOMAXCONN) == -1) {
-		close(server_socket);
+	if (listen(this->_socket, SOMAXCONN) == -1) {
+		close(this->_socket);
 		this->fatal("Failed to listen with socket.");
 		return;
 	}
 
 	this->_address   = server_address;
-	this->_server_fd = server_socket;
+	this->_server_fd = this->_socket;
 	std::string log = "Server started listening on port " + this->_port;
 	this->log(log);
 }

@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:45:59 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/19 17:13:12 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/25 09:20:52 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,10 @@ void Server::privmsg(int clientFd, std::string cmd)
 		channelIterator it = this->_channels.find(dest);
 		if (it == this->_channels.end())
 			return ;
-		// this->log("Broadcasting on channel: " + dest);
 		std::cout << message << std::endl;
 		it->second.broadcast(clientFd, *this, message,false); //ici 
 	}
 	else{
-		//je cherche le fd du client destinataire
-		//j'ai comme information, le 'nick' de ce client
-		//comment l'obtenir ?
 		clientIterator it = this->_clients.begin();
 		int fdOfReceiver = findClientByName(dest,this->_clients);
 		if(fdOfReceiver == -1)
@@ -53,11 +49,9 @@ void Server::privmsg(int clientFd, std::string cmd)
 		for(; it != this->_clients.end(); ++it)
 		{
 			if(it->second.getNick() == dest) {
-				// this->sendAndLog(it->first, message);
 				this->sendMessageto(clientFd, fdOfReceiver, message, this->getClient(fdOfReceiver).getNick(), dest);
 			}
 		}
 	}
 	(void)clientFd;
-	// clientIterator it = _clients.begin();
 }

@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:50 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/15 12:29:09 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/25 09:23:56 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,6 @@
 #include <string>
 #include <unistd.h>
 
-//? <prefix>   ::= <servername> | <nick> [ '!' <user> ] [ '@' <host> ]
-
-//? <message>  ::= [':' <prefix> <SPACE> ] <command> <params> <crlf>
-//? ex --> his->get_prefix(clientFd) + " " + "MODE " + _clients[clientFd].getUser() + " " + mode + "\r\n");
 
 std::string Server::get_prefix(int clientFd) {
 

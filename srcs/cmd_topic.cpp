@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:44:28 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/24 14:57:37 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/25 09:22:25 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,6 @@ void Server::topic(int clientFd, std::string cmd)
 
 		this->sendAndLog(clientFd, response);	
 		this->_channels[chan].broadcast(clientFd, *this, response, true);
-		// this->_channels[chan].topicBroadcast(ClientFd, *this, response);
-		// [server] --> :whamdi!whamdi@localhost TOPIC #pd :haah
-        // send(clientFd, response.c_str(), response.size(), 0);
     }else if(actual_chan != "NO" && this->_channels[chan].getModeT())
 	{
 		if(this->_clients[clientFd].getModeO())
