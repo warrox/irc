@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:50 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/25 09:23:56 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/25 15:14:00 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,10 @@ void Server::commandHandler(int clientFd, std::string cmd) {
 			if (line.at(line.size() - 1) == '\r') {
 				line.erase(line.end() - 1);
 			}
+			this->log(cmd);
 			(this->*_commands[commandName])(clientFd, line);
-		} else {
-			std::cout << YELLOW << "Unknown or unhandled cmd!" << std::endl;
+		// } else {
+		// 	std::cout << YELLOW << "Unknown or unhandled cmd!" << std::endl;
 		}
 	}
 }

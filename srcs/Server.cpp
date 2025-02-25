@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/25 14:36:17 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/25 15:03:51 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,11 +196,11 @@ void Server::scanClients() {
 				close(client.fd);
 				_pfds.erase(_pfds.begin() + i);		
 				break;
-			} else {
+			} else if(rbytes > 0) {
 				buffer[rbytes] = '\0';
 				input.append(buffer, rbytes);
 				size_t pos;
-				this->recvLog(client.fd, input);
+				// this->recvLog(client.fd, input);
 				while ((pos = input.find('\n')) != std::string::npos) {
 					std::string command = input.substr(0, pos);
 					input.erase(0, pos + 1);

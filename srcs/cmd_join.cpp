@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/24 18:42:42 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:39:51 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void Server::join(int clientFd, std::string cmd)
 		it->second.addUserInChannel(_clients[clientFd]);
 		it->second.addNameInListChannel(_clients[clientFd].getNick());
 
-		std::string joinMsg = ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n";
+		std::string joinMsg = ":" + this->get_prefix(clientFd) + " JOIN :" + chanName + "\r\n";
 		this->sendAndLog(clientFd, joinMsg);
 
 		if (!it->second.getTopic().empty()) {
