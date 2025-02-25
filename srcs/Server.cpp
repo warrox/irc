@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/25 15:03:51 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/25 15:44:57 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ Server::Server(std::string port, std::string password) {
 	this->_commands["PING"] = &Server::ping;
 	this->_commands["KICK"] = &Server::kick;
 	this->_commands["INVITE"] = &Server::invite;
-	this->_commands["PART"] = &Server::part;
+	// this->_commands["PART"] = &Server::part;
 
 }
 
@@ -188,7 +188,7 @@ void Server::scanClients() {
 			int32_t rbytes = recv(client.fd, buffer, buffsize, 0);
 			
 			if (rbytes == -1) {
-				this->fatal("Failed to read client's request.");
+				//this->fatal("Failed to read client's request.");
 				close(client.fd);
 				_pfds.erase(_pfds.begin() + i);
 				break;
@@ -219,7 +219,7 @@ void Server::scanClients() {
 
 			int32_t wbytes = send(client.fd, "Hi", 2, 0);
 			if (wbytes == -1) {
-				this->fatal("Failed to read client's request.");
+				//this->fatal("Failed to read client's request.");
 				close(client.fd);
 				_pfds.erase(_pfds.begin() + i);
 				break;
