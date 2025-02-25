@@ -43,7 +43,8 @@ void Server::nick(int clientFd, std::string cmd) {
 
 	iss >> command >> nickname;
 	if (_clients[clientFd].getPassword().empty() || _clients[clientFd].getPassword() != this->_pass) {
-		std::string errorMsg = ":" + this->_servername + "464" + " " + _clients[clientFd].getNick() + " :Wrong password\r\n";
+		// std::cout << RED << "Wrong Password connection denied" << RESET << std::endl;
+		std::string errorMsg = ":" + this->_servername + "464" + " " + _clients[clientFd].getNick() + " Wrong password\r\n";
 		this->sendAndLog(clientFd, errorMsg);
 
 		disconnectClient(clientFd, "Incorrect password");

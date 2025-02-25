@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/25 12:07:55 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:36:17 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,19 @@ std::map<int,Client> Server::getClients()const
 {
 	return(this->_clients);
 }
-
+void setNonBlocking(int socket) {
+    if (fcntl(socket, F_SETFL, O_NONBLOCK) == -1) {
+        perror("fcntl F_SETFL");
+        exit(EXIT_FAILURE);
+    }
+}
+void Server::shutDown(void) {
+	std::map<int, Client>::iterator it = this->_clients.begin();
+	for (; it != this->_clients.end(); ++it) {
+		close(it->first);
+	}
+	close(this->_socket);
+}
 
 void Server::sendMessageto(int clientFd, int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name)
 {
@@ -77,7 +89,6 @@ Server::Server(std::string port, std::string password) {
 
 void Server::start() {
 	struct sockaddr_in server_address = {};
-	int32_t server_socket = -1;
 	const socklen_t socklen	= sizeof(struct sockaddr_in);
 	int32_t optname	= 1;
 
@@ -92,40 +103,40 @@ void Server::start() {
 	}
 
 	// here IPPROTO_TCP is what you will get anyway but it's explicit.
-	server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (server_socket == -1) {
+	this->_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (this->_socket == -1) {
 		this->fatal("Failed to create socket");
 		return;
 	}
 
 	// this is just a convenience to always have the same port and not have to wait for the kernel to release it.
-	if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &optname, socklen) == -1) {
-		close(server_socket);
+	if (setsockopt(this->_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &optname, socklen) == -1) {
+		close(this->_socket);
 		this->fatal("Failed to configure socket to SO_REUSEADDR | SO_REUSEPORT");
 		return;
 	}
 
 	// you need to make sure client's are also configured in non-blocking mode.
-	if (fcntl(server_socket, F_SETFL, O_NONBLOCK) == -1) {
-		close(server_socket);
+	if (fcntl(this->_socket, F_SETFL, O_NONBLOCK) == -1) {
+		close(this->_socket);
 		this->fatal("Failed to configure socket to O_NONBLOCK");
 		return;
 	}
 
-	if (bind(server_socket, (struct sockaddr *)&server_address, socklen) == -1) {
-		close(server_socket);
+	if (bind(this->_socket, (struct sockaddr *)&server_address, socklen) == -1) {
+		close(this->_socket);
 		this->fatal("Failed to bind socket.");
 		return;
 	}
 
-	if (listen(server_socket, SOMAXCONN) == -1) {
-		close(server_socket);
+	if (listen(this->_socket, SOMAXCONN) == -1) {
+		close(this->_socket);
 		this->fatal("Failed to listen with socket.");
 		return;
 	}
 
 	this->_address   = server_address;
-	this->_server_fd = server_socket;
+	this->_server_fd = this->_socket;
 	std::string log = "Server started listening on port " + this->_port;
 	this->log(log);
 }
@@ -154,6 +165,7 @@ void Server::acceptNewClient() {
 
 void Server::scanClients() {
 	char buffer[BUFFER_SIZE] = {0};
+	static std::string input;
 	for (size_t i = 1; i < this->_pfds.size(); ++i) {
 		struct pollfd &client = _pfds[i];
 
@@ -174,7 +186,7 @@ void Server::scanClients() {
 		if (client.revents & POLLIN) {
 			const int32_t buffsize = sizeof(buffer) / sizeof(buffer[0]);
 			int32_t rbytes = recv(client.fd, buffer, buffsize, 0);
-
+			
 			if (rbytes == -1) {
 				this->fatal("Failed to read client's request.");
 				close(client.fd);
@@ -183,12 +195,17 @@ void Server::scanClients() {
 			} else if (rbytes == 0) {
 				close(client.fd);
 				_pfds.erase(_pfds.begin() + i);		
-				// disconnectClient(client.fd, "Read error");
 				break;
 			} else {
 				buffer[rbytes] = '\0';
-				this->recvLog(client.fd, buffer);
-				this->commandHandler(client.fd, std::string(buffer));
+				input.append(buffer, rbytes);
+				size_t pos;
+				this->recvLog(client.fd, input);
+				while ((pos = input.find('\n')) != std::string::npos) {
+					std::string command = input.substr(0, pos);
+					input.erase(0, pos + 1);
+					this->commandHandler(client.fd, command);
+				}
 			}
 
 			client.revents = POLLOUT; // always change POLLIN --> POLLOUT.
@@ -214,7 +231,7 @@ void Server::scanClients() {
 	}
 }
 
-void Server::run() {
+void Server::run(){
 	pollfd server_pollfd;
 	server_pollfd.fd = this->_server_fd;
 	server_pollfd.events = POLLIN;
@@ -231,6 +248,7 @@ void Server::run() {
 		}
 	}
 }
+
 
 void Server::removeChannel(std::string channel_name) {
 

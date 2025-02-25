@@ -18,7 +18,7 @@ void Server::user(int clientFd, std::string cmd) {
 
 	std::string pass = this->_clients[clientFd].getPassword();	
 	if (pass.empty() || this->_pass != pass) {
-		std::string errorMsg = ":" + this->_servername + "464" + " " + _clients[clientFd].getNick() + " :Wrong password\r\n";
+		std::string errorMsg = ":" + this->_servername + "464" + " " + _clients[clientFd].getNick() + " Wrong password\r\n";
 		this->sendAndLog(clientFd, errorMsg);
 		disconnectClient(clientFd, errorMsg);
 		return;

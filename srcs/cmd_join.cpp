@@ -48,16 +48,17 @@ void Server::join(int clientFd, std::string cmd)
 	channelIterator it = this->_channels.find(chanName);
 	if (it == this->_channels.end()) 
 	{
-		this->_channels.insert(channelEntry(chanName, Channel(chanName, *this)));
+		channelEntry newEntry(chanName, Channel(chanName,*this));
+		this->_channels.insert(newEntry);
+
 		it = this->_channels.find(chanName);
 
 		this->_clients[clientFd].setModeO(true);
 		it->second.addUser(clientFd);
 		it->second.addUserInChannel(_clients[clientFd]);
 		it->second.addNameInListChannel(_clients[clientFd].getNick());
-
-		std::string joinMsg = ":" + this->_clients[clientFd].getNick() + " JOIN :" + chanName + "\r\n";
-		this->sendAndLog(clientFd, joinMsg);
+ 
+		this->sendAndLog(clientFd, this->get_prefix(clientFd) + " JOIN :" + chanName + "\r\n");
 		sendingUserListToClient(chanName, clientFd, true);
 	}
 	else 

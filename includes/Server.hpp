@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 12:07:03 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/24 18:41:22 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/20 15:44:01 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class Server
 		std::string _pass; //You might consider hashing the password, storing a plain text password is bullshit
 		std::string _servername;
 		std::string _time;
+		int16_t _socket;
 
 		// ----- Socket related ------ //
 		std::vector<pollfd> _pfds;
@@ -55,11 +56,14 @@ class Server
 		
 	public :
 		Server(std::string port, std::string password);
+
+		//You desctructor shouldn't be empty, but if it, you can initialise it here via syntax {}
 		~Server() {}
 		
 		std::string getPass(void);
 		void start();
 		void run();
+		void shutDown();
 		void acceptNewClient();
 		void scanClients();
  		void commandHandler(int clientFd, std::string cmd);

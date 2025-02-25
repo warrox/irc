@@ -224,7 +224,6 @@ void Server::case_mode_channel(std::string target, std::string mode, std::string
 void Server::case_mode_user(std::string target, std::string mode, int clientFd) {
 	
 	if ((mode[0] != '+' && mode[0] != '-') || mode.empty())
-		//!error
 		std::cout << YELLOW << "[WRGANSWER]: trouble +/-!" << BOLD_OFF << std::endl;
 	
 	bool add_mode = (mode[0] == '+');
@@ -273,7 +272,6 @@ void Server::mode(int clientFd, std::string cmd) {
 	else if (is_user(target))
 	 	case_mode_user(target, mode, clientFd);
 	else
-		//!error
 		(void)clientFd;
 }
 
