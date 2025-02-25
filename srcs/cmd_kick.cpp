@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 10:43:16 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/24 18:14:18 by cyferrei         ###   ########.fr       */
+/*   Updated: 2025/02/25 16:37:55 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void Server::kick(int clientFd, std::string cmd){
 		kick_answer += "\r\n";
 		this->sendAndLog(clientFd, kick_answer);
 		this->_channels[chan_name].broadcast(clientFd, *this, kick_answer,true);
+		this->_channels[chan_name].delUser(this->findClientByName(client_to_kick, this->_clients));
 	}else{
 		std::string kick_not_allowed;
 		kick_not_allowed += "482 " + chan_name + " :Not enough privilege"; 
