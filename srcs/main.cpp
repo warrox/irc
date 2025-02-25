@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:07 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/24 16:25:50 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/25 09:00:30 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <string>
 #include <csignal>
 
-Server* g_server = NULL; // Pointeur global pour accéder au serveur
+Server* g_server = NULL;
 
 void assertPortIsValid(const std::string &maybePort) {
 	char* end;
@@ -39,7 +39,7 @@ void handle_signal(int signal) {
 }
 
 int main(int argc, char **argv) {
-	signal(SIGINT, handle_signal); // Capture CTRL+C
+	signal(SIGINT, handle_signal);
 
 	if (argc < 3) {
 		std::cout << "./ircserv <port> <password>" << std::endl;
