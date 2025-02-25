@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:48:24 by cyferrei          #+#    #+#             */
-/*   Updated: 2025/02/25 09:42:04 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/25 13:12:58 by whamdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ std::map<int,Client> Server::getClients()const
 }
 void Server::sendMessageto(int clientFd, int receiver_fd, std::string msg, std::string sender_name, std::string receiver_name)
 {
-	std::cout << "Message before sending to client : " << msg << std::endl;
+	// std::cout << "Message before sending to client : " << msg << std::endl;
 	// std::string formatedMsg = ":" + sender_name + " PRIVMSG " + receiver_name + " :" + msg + "\r\n";
 	(void)sender_name;	
 	
@@ -193,7 +193,7 @@ void Server::scanClients() {
 			int32_t rbytes = recv(client.fd, buffer, buffsize, 0);
 
 			if (rbytes == -1) {
-				this->fatal("Failed to read client's request.");
+				// this->fatal("Failed to read client's request.");
 				close(client.fd);
 				_pfds.erase(_pfds.begin() + i);
 				break;
