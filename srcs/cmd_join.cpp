@@ -6,7 +6,7 @@
 /*   By: cyferrei <cyferrei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:13:09 by whamdi            #+#    #+#             */
-/*   Updated: 2025/02/26 09:17:45 by whamdi           ###   ########.fr       */
+/*   Updated: 2025/02/25 16:08:54 by cyferrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,16 @@ void Server::join(int clientFd, std::string cmd)
 	channelIterator it = this->_channels.find(chanName);
 	if (it == this->_channels.end()) 
 	{
-		channelEntry newEntry(chanName, Channel(chanName,*this));
-		this->_channels.insert(newEntry);
-
+		this->_channels.insert(channelEntry(chanName, Channel(chanName, *this)));
 		it = this->_channels.find(chanName);
 
 		this->_clients[clientFd].setModeO(true);
 		it->second.addUser(clientFd);
 		it->second.addUserInChannel(_clients[clientFd]);
 		it->second.addNameInListChannel(_clients[clientFd].getNick());
- 
-		this->sendAndLog(clientFd, this->get_prefix(clientFd) + " JOIN :" + chanName + "\r\n");
+
+		std::string joinMsg = this->get_prefix(clientFd) + " JOIN :" + chanName + "\r\n";
+		this->sendAndLog(clientFd, joinMsg);
 		sendingUserListToClient(chanName, clientFd, true);
 	}
 	else 
@@ -91,3 +90,4 @@ void Server::join(int clientFd, std::string cmd)
 		sendingUserListToClient(chanName, clientFd, false);
 	}
 }
+
